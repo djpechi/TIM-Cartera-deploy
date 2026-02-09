@@ -164,3 +164,13 @@
 - [x] Crear plantilla Excel para Tim Value
 - [x] Crear plantilla Excel para Pendientes de Pago
 - [x] Agregar funcionalidad de descarga en la interfaz
+
+## Revisión y Eliminación de Duplicados
+- [x] Analizar tabla de facturas para detectar duplicados por folio
+- [x] Analizar tabla de clientes para detectar duplicados por nombre/razón social
+- [x] Crear script para eliminar duplicados en facturas
+- [x] Crear script para eliminar duplicados en clientes
+- [x] Implementar validación de unicidad en backend (facturas)
+- [x] Implementar validación de unicidad en backend (clientes)
+- [x] Agregar índices únicos en base de datos
+- [x] Crear tests para validaciones de unicidad

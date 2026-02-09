@@ -1,0 +1,60 @@
+{
+  "query": "SELECT BINARY nombre as nombre_bin, COUNT(*) as count, GROUP_CONCAT(id ORDER BY id) as ids\nFROM clientes\nGROUP BY BINARY nombre\nHAVING COUNT(*) > 1\nORDER BY count DESC\nLIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute SELECT BINARY nombre as nombre_bin, COUNT(*) as count, GROUP_CONCAT(id ORDER BY id) as ids\nFROM clientes\nGROUP BY BINARY nombre\nHAVING COUNT(*) > 1\nORDER BY count DESC\nLIMIT 10;",
+  "rows": [
+    {
+      "nombre_bin": "LOMAS RAQUET CLUB",
+      "count": "2",
+      "ids": "30009,30145"
+    },
+    {
+      "nombre_bin": "AA DE SAN LUIS",
+      "count": "2",
+      "ids": "30010,30146"
+    },
+    {
+      "nombre_bin": "ADMINISTRADORA GASTRONOMICA LA JAULA",
+      "count": "2",
+      "ids": "30011,30147"
+    },
+    {
+      "nombre_bin": "ADRIAN RODRIGUEZ ZAMUDIO",
+      "count": "2",
+      "ids": "30012,30148"
+    },
+    {
+      "nombre_bin": "AEROGAS DE SAN LUIS",
+      "count": "2",
+      "ids": "30013,30149"
+    },
+    {
+      "nombre_bin": "AFIMSA",
+      "count": "2",
+      "ids": "30014,30150"
+    },
+    {
+      "nombre_bin": "AGRICOLA TAMOHI SEIS",
+      "count": "2",
+      "ids": "30015,30151"
+    },
+    {
+      "nombre_bin": "ALMACENES LOGISTICOS TORANZO",
+      "count": "2",
+      "ids": "30016,30152"
+    },
+    {
+      "nombre_bin": "ALPHA PACK DEL BAJIO",
+      "count": "2",
+      "ids": "30017,30153"
+    },
+    {
+      "nombre_bin": "ALTOSPAZIO EXCLUSIVO",
+      "count": "2",
+      "ids": "30018,30154"
+    }
+  ],
+  "messages": [],
+  "stdout": "nombre_bin\tcount\tids\nLOMAS RAQUET CLUB\t2\t30009,30145\nAA DE SAN LUIS\t2\t30010,30146\nADMINISTRADORA GASTRONOMICA LA JAULA\t2\t30011,30147\nADRIAN RODRIGUEZ ZAMUDIO\t2\t30012,30148\nAEROGAS DE SAN LUIS\t2\t30013,30149\nAFIMSA\t2\t30014,30150\nAGRICOLA TAMOHI SEIS\t2\t30015,30151\nALMACENES LOGISTICOS TORANZO\t2\t30016,30152\nALPHA PACK DEL BAJIO\t2\t30017,30153\nALTOSPAZIO EXCLUSIVO\t2\t30018,30154\n",
+  "stderr": "",
+  "execution_time_ms": 363
+}

@@ -107,6 +107,12 @@ export async function createCliente(cliente: InsertCliente) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   
+  // Validar que no exista un cliente con el mismo nombre
+  const existing = await getClienteByNombre(cliente.nombre);
+  if (existing) {
+    throw new Error(`Ya existe un cliente con el nombre "${cliente.nombre}"`);
+  }
+  
   const result = await db.insert(clientes).values(cliente);
   return result[0].insertId;
 }
@@ -168,6 +174,13 @@ export async function updateFacturaEstatus(id: number, estatus: string) {
 export async function createFactura(factura: InsertFactura) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
+  
+  // Validar que no exista una factura con el mismo folio
+  const existing = await getFacturaByFolio(factura.folio);
+  if (existing) {
+    throw new Error(`Ya existe una factura con el folio "${factura.folio}"`);
+  }
+  
   const result = await db.insert(facturas).values(factura);
   return { id: Number(result[0].insertId), ...factura };
 }

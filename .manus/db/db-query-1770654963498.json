@@ -1,0 +1,35 @@
+{
+  "query": "SELECT nombre, MIN(id) as keep_id, COUNT(*) as count\nFROM clientes\nGROUP BY nombre\nHAVING COUNT(*) > 1\nORDER BY count DESC\nLIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute SELECT nombre, MIN(id) as keep_id, COUNT(*) as count\nFROM clientes\nGROUP BY nombre\nHAVING COUNT(*) > 1\nORDER BY count DESC\nLIMIT 5;",
+  "rows": [
+    {
+      "nombre": "PATRICIA TREVIÑO DELGADO",
+      "keep_id": "30142",
+      "count": "2"
+    },
+    {
+      "nombre": "CINTHYA ANDREA SALINAS FLORES",
+      "keep_id": "30035",
+      "count": "2"
+    },
+    {
+      "nombre": "COD PRODUCTOS DE MEXICO",
+      "keep_id": "30038",
+      "count": "2"
+    },
+    {
+      "nombre": "FRESAN INGENIEROS",
+      "keep_id": "30076",
+      "count": "2"
+    },
+    {
+      "nombre": "GUSTAVO VANZULLI FOGLIANI",
+      "keep_id": "30088",
+      "count": "2"
+    }
+  ],
+  "messages": [],
+  "stdout": "nombre\tkeep_id\tcount\nPATRICIA TREVIÑO DELGADO\t30142\t2\nCINTHYA ANDREA SALINAS FLORES\t30035\t2\nCOD PRODUCTOS DE MEXICO\t30038\t2\nFRESAN INGENIEROS\t30076\t2\nGUSTAVO VANZULLI FOGLIANI\t30088\t2\n",
+  "stderr": "",
+  "execution_time_ms": 360
+}

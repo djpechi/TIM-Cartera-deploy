@@ -40,7 +40,7 @@ export type InsertGrupoCliente = typeof gruposClientes.$inferInsert;
  */
 export const clientes = mysqlTable("clientes", {
   id: int("id").autoincrement().primaryKey(),
-  nombre: varchar("nombre", { length: 255 }).notNull(),
+  nombre: varchar("nombre", { length: 255 }).notNull().unique(),
   rfc: varchar("rfc", { length: 13 }),
   alias: varchar("alias", { length: 100 }),
   grupoId: int("grupoId").references(() => gruposClientes.id),

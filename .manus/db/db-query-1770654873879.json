@@ -1,0 +1,90 @@
+{
+  "query": "SELECT nombre, COUNT(*) as count FROM clientes GROUP BY nombre HAVING COUNT(*) > 1 ORDER BY count DESC LIMIT 20;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute SELECT nombre, COUNT(*) as count FROM clientes GROUP BY nombre HAVING COUNT(*) > 1 ORDER BY count DESC LIMIT 20;",
+  "rows": [
+    {
+      "nombre": "LOMAS RAQUET CLUB",
+      "count": "2"
+    },
+    {
+      "nombre": "FESTIPAM",
+      "count": "2"
+    },
+    {
+      "nombre": "PROCESADORA ALIMENTICIA MALBA",
+      "count": "2"
+    },
+    {
+      "nombre": "CONCRE ASESORES",
+      "count": "2"
+    },
+    {
+      "nombre": "JOSE ALEJANDRO SILVA AYALA",
+      "count": "2"
+    },
+    {
+      "nombre": "EUROSERVICIOS",
+      "count": "2"
+    },
+    {
+      "nombre": "OUTOKUMPU MEXINOX",
+      "count": "2"
+    },
+    {
+      "nombre": "CORPORACION FERRUM CMR",
+      "count": "2"
+    },
+    {
+      "nombre": "FASE 703",
+      "count": "2"
+    },
+    {
+      "nombre": "ESTRUCTURAS Y PAILERIA ESPECIALIZADA",
+      "count": "2"
+    },
+    {
+      "nombre": "MOTEL TUNA",
+      "count": "2"
+    },
+    {
+      "nombre": "GRUPO ALCALDE",
+      "count": "2"
+    },
+    {
+      "nombre": "JOSE LUIS RODRIGUEZ CANO",
+      "count": "2"
+    },
+    {
+      "nombre": "GASOPIPAS",
+      "count": "2"
+    },
+    {
+      "nombre": "JUAN MANUEL VALDES RIVERA",
+      "count": "2"
+    },
+    {
+      "nombre": "CARONTE LOGISTICA INTEGRAL",
+      "count": "2"
+    },
+    {
+      "nombre": "EQUIPOS QUIRURGICOS POTOSINOS",
+      "count": "2"
+    },
+    {
+      "nombre": "BESTPACK SOLUTIONS",
+      "count": "2"
+    },
+    {
+      "nombre": "ALMACENES LOGISTICOS TORANZO",
+      "count": "2"
+    },
+    {
+      "nombre": "ADMINISTRADORA GASTRONOMICA LA JAULA",
+      "count": "2"
+    }
+  ],
+  "messages": [],
+  "stdout": "nombre\tcount\nLOMAS RAQUET CLUB\t2\nFESTIPAM\t2\nPROCESADORA ALIMENTICIA MALBA\t2\nCONCRE ASESORES\t2\nJOSE ALEJANDRO SILVA AYALA\t2\nEUROSERVICIOS\t2\nOUTOKUMPU MEXINOX\t2\nCORPORACION FERRUM CMR\t2\nFASE 703\t2\nESTRUCTURAS Y PAILERIA ESPECIALIZADA\t2\nMOTEL TUNA\t2\nGRUPO ALCALDE\t2\nJOSE LUIS RODRIGUEZ CANO\t2\nGASOPIPAS\t2\nJUAN MANUEL VALDES RIVERA\t2\nCARONTE LOGISTICA INTEGRAL\t2\nEQUIPOS QUIRURGICOS POTOSINOS\t2\nBESTPACK SOLUTIONS\t2\nALMACENES LOGISTICOS TORANZO\t2\nADMINISTRADORA GASTRONOMICA LA JAULA\t2\n",
+  "stderr": "",
+  "execution_time_ms": 362
+}

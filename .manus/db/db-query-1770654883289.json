@@ -1,0 +1,710 @@
+{
+  "query": "SELECT c.id, c.nombre, c.rfc, c.grupoId, g.nombre as grupoNombre \nFROM clientes c \nLEFT JOIN gruposClientes g ON c.grupoId = g.id\nWHERE c.nombre IN (\n  SELECT nombre FROM clientes GROUP BY nombre HAVING COUNT(*) > 1\n)\nORDER BY c.nombre, c.id\nLIMIT 100;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute SELECT c.id, c.nombre, c.rfc, c.grupoId, g.nombre as grupoNombre \nFROM clientes c \nLEFT JOIN gruposClientes g ON c.grupoId = g.id\nWHERE c.nombre IN (\n  SELECT nombre FROM clientes GROUP BY nombre HAVING COUNT(*) > 1\n)\nORDER BY c.nombre, c.id\nLIMIT 100;",
+  "rows": [
+    {
+      "id": "30010",
+      "nombre": "AA DE SAN LUIS",
+      "rfc": "NULL",
+      "grupoId": "30008",
+      "grupoNombre": "INMOBILIARIA LOPEZ"
+    },
+    {
+      "id": "30146",
+      "nombre": "AA DE SAN LUIS",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30011",
+      "nombre": "ADMINISTRADORA GASTRONOMICA LA JAULA",
+      "rfc": "NULL",
+      "grupoId": "30009",
+      "grupoNombre": "GRUPO LA LECHE"
+    },
+    {
+      "id": "30147",
+      "nombre": "ADMINISTRADORA GASTRONOMICA LA JAULA",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30012",
+      "nombre": "ADRIAN RODRIGUEZ ZAMUDIO",
+      "rfc": "NULL",
+      "grupoId": "30010",
+      "grupoNombre": "ADRIAN RODRIGUEZ ZAMUDIO"
+    },
+    {
+      "id": "30148",
+      "nombre": "ADRIAN RODRIGUEZ ZAMUDIO",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30013",
+      "nombre": "AEROGAS DE SAN LUIS",
+      "rfc": "NULL",
+      "grupoId": "30011",
+      "grupoNombre": "GRUPO EURO"
+    },
+    {
+      "id": "30149",
+      "nombre": "AEROGAS DE SAN LUIS",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30014",
+      "nombre": "AFIMSA",
+      "rfc": "NULL",
+      "grupoId": "30012",
+      "grupoNombre": "AFIMSA"
+    },
+    {
+      "id": "30150",
+      "nombre": "AFIMSA",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30015",
+      "nombre": "AGRICOLA TAMOHI SEIS",
+      "rfc": "NULL",
+      "grupoId": "30013",
+      "grupoNombre": "AGRICOLA TAMOHI SEIS"
+    },
+    {
+      "id": "30151",
+      "nombre": "AGRICOLA TAMOHI SEIS",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30016",
+      "nombre": "ALMACENES LOGISTICOS TORANZO",
+      "rfc": "NULL",
+      "grupoId": "30014",
+      "grupoNombre": "ALMACENES LOGISTICOS TORANZO"
+    },
+    {
+      "id": "30152",
+      "nombre": "ALMACENES LOGISTICOS TORANZO",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30017",
+      "nombre": "ALPHA PACK DEL BAJIO",
+      "rfc": "NULL",
+      "grupoId": "30015",
+      "grupoNombre": "GRUPO JORGE STAHL"
+    },
+    {
+      "id": "30153",
+      "nombre": "ALPHA PACK DEL BAJIO",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30018",
+      "nombre": "ALTOSPAZIO EXCLUSIVO",
+      "rfc": "NULL",
+      "grupoId": "30016",
+      "grupoNombre": "GRUPO GUADARRAMA"
+    },
+    {
+      "id": "30154",
+      "nombre": "ALTOSPAZIO EXCLUSIVO",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30019",
+      "nombre": "AUTOEDICIONES DEL POTOSI",
+      "rfc": "NULL",
+      "grupoId": "30017",
+      "grupoNombre": "AUTOEDICIONES DEL POTOSI"
+    },
+    {
+      "id": "30155",
+      "nombre": "AUTOEDICIONES DEL POTOSI",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30020",
+      "nombre": "B2B LATAM",
+      "rfc": "NULL",
+      "grupoId": "30018",
+      "grupoNombre": "B2B LATAM"
+    },
+    {
+      "id": "30156",
+      "nombre": "B2B LATAM",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30021",
+      "nombre": "BALEROS Y ABASTOS DE SAN LUIS",
+      "rfc": "NULL",
+      "grupoId": "30019",
+      "grupoNombre": "GRUPO JOSE LUIS MADRID"
+    },
+    {
+      "id": "30157",
+      "nombre": "BALEROS Y ABASTOS DE SAN LUIS",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30022",
+      "nombre": "BALEROS Y ABASTOS INDUSTRIALES",
+      "rfc": "NULL",
+      "grupoId": "30019",
+      "grupoNombre": "GRUPO JOSE LUIS MADRID"
+    },
+    {
+      "id": "30158",
+      "nombre": "BALEROS Y ABASTOS INDUSTRIALES",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30023",
+      "nombre": "BAZA TOUR",
+      "rfc": "NULL",
+      "grupoId": "30020",
+      "grupoNombre": "BAZA TOUR"
+    },
+    {
+      "id": "30159",
+      "nombre": "BAZA TOUR",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30024",
+      "nombre": "BESTPACK SOLUTIONS",
+      "rfc": "NULL",
+      "grupoId": "30015",
+      "grupoNombre": "GRUPO JORGE STAHL"
+    },
+    {
+      "id": "30160",
+      "nombre": "BESTPACK SOLUTIONS",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30025",
+      "nombre": "BOKUBA",
+      "rfc": "NULL",
+      "grupoId": "30021",
+      "grupoNombre": "BOKUBA"
+    },
+    {
+      "id": "30161",
+      "nombre": "BOKUBA",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30026",
+      "nombre": "BOTANAS CAMPESINAS",
+      "rfc": "NULL",
+      "grupoId": "30022",
+      "grupoNombre": "GRUPO GOUNTER STAHL"
+    },
+    {
+      "id": "30162",
+      "nombre": "BOTANAS CAMPESINAS",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30027",
+      "nombre": "CARGA Y DISTRIBUCION MERCANTIL",
+      "rfc": "NULL",
+      "grupoId": "30023",
+      "grupoNombre": "GRUPO FERNANDO JASSO"
+    },
+    {
+      "id": "30163",
+      "nombre": "CARGA Y DISTRIBUCION MERCANTIL",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30028",
+      "nombre": "CARLOS EDUARDO SARABIA MELENDEZ",
+      "rfc": "NULL",
+      "grupoId": "30024",
+      "grupoNombre": "CARLOS EDUARDO SARABIA MELENDEZ"
+    },
+    {
+      "id": "30164",
+      "nombre": "CARLOS EDUARDO SARABIA MELENDEZ",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30029",
+      "nombre": "CARONTE LOGISTICA INTEGRAL",
+      "rfc": "NULL",
+      "grupoId": "30025",
+      "grupoNombre": "GRUPO CARLOS VAZQUEZ"
+    },
+    {
+      "id": "30165",
+      "nombre": "CARONTE LOGISTICA INTEGRAL",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30030",
+      "nombre": "CEDIS VALTOCA",
+      "rfc": "NULL",
+      "grupoId": "30026",
+      "grupoNombre": "GRUPO PETRO"
+    },
+    {
+      "id": "30166",
+      "nombre": "CEDIS VALTOCA",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30031",
+      "nombre": "CENTRO POTOSINO DE CONVENCIONES",
+      "rfc": "NULL",
+      "grupoId": "30027",
+      "grupoNombre": "CENTRO POTOSINO DE CONVENCIONES"
+    },
+    {
+      "id": "30167",
+      "nombre": "CENTRO POTOSINO DE CONVENCIONES",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30032",
+      "nombre": "CHAPAS Y HERRAJES DE MEXICO",
+      "rfc": "NULL",
+      "grupoId": "30028",
+      "grupoNombre": "GRUPO SALOMON RIVERA"
+    },
+    {
+      "id": "30168",
+      "nombre": "CHAPAS Y HERRAJES DE MEXICO",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30033",
+      "nombre": "CHRONOS FULFILLMENT",
+      "rfc": "NULL",
+      "grupoId": "30029",
+      "grupoNombre": "GRUPO MERCA"
+    },
+    {
+      "id": "30169",
+      "nombre": "CHRONOS FULFILLMENT",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30034",
+      "nombre": "CINCO AL CUADRADO",
+      "rfc": "NULL",
+      "grupoId": "30029",
+      "grupoNombre": "GRUPO MERCA"
+    },
+    {
+      "id": "30170",
+      "nombre": "CINCO AL CUADRADO",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30035",
+      "nombre": "CINTHYA ANDREA SALINAS FLORES",
+      "rfc": "NULL",
+      "grupoId": "30030",
+      "grupoNombre": "CINTHYA ANDREA SALINAS FLORES"
+    },
+    {
+      "id": "30171",
+      "nombre": "CINTHYA ANDREA SALINAS FLORES",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30036",
+      "nombre": "CLAUDIO CAYETANO CASTILLO MARTINEZ",
+      "rfc": "NULL",
+      "grupoId": "30031",
+      "grupoNombre": "CLAUDIO CAYETANO CASTILLO MARTINEZ"
+    },
+    {
+      "id": "30172",
+      "nombre": "CLAUDIO CAYETANO CASTILLO MARTINEZ",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30037",
+      "nombre": "CLEVER INDUSTRIAL SERVICES DE MEXICO",
+      "rfc": "NULL",
+      "grupoId": "30032",
+      "grupoNombre": "CLEVER INDUSTRIAL SERVICES DE MEXICO"
+    },
+    {
+      "id": "30173",
+      "nombre": "CLEVER INDUSTRIAL SERVICES DE MEXICO",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30038",
+      "nombre": "COD PRODUCTOS DE MEXICO",
+      "rfc": "NULL",
+      "grupoId": "30029",
+      "grupoNombre": "GRUPO MERCA"
+    },
+    {
+      "id": "30174",
+      "nombre": "COD PRODUCTOS DE MEXICO",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30039",
+      "nombre": "COEDESSA",
+      "rfc": "NULL",
+      "grupoId": "30033",
+      "grupoNombre": "GRUPO RAFAEL ESPINOZA"
+    },
+    {
+      "id": "30175",
+      "nombre": "COEDESSA",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30040",
+      "nombre": "COLLINS COFFEE",
+      "rfc": "NULL",
+      "grupoId": "30022",
+      "grupoNombre": "GRUPO GOUNTER STAHL"
+    },
+    {
+      "id": "30176",
+      "nombre": "COLLINS COFFEE",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30041",
+      "nombre": "COMBUSTIBLES LA PURISIMA",
+      "rfc": "NULL",
+      "grupoId": "30026",
+      "grupoNombre": "GRUPO PETRO"
+    },
+    {
+      "id": "30177",
+      "nombre": "COMBUSTIBLES LA PURISIMA",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30042",
+      "nombre": "COMBUSTIBLES Y LUBRICANTES OJUELOS",
+      "rfc": "NULL",
+      "grupoId": "30034",
+      "grupoNombre": "ATG"
+    },
+    {
+      "id": "30178",
+      "nombre": "COMBUSTIBLES Y LUBRICANTES OJUELOS",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30043",
+      "nombre": "COMERCIALIZADORA POQUE",
+      "rfc": "NULL",
+      "grupoId": "30035",
+      "grupoNombre": "GRUPO BAEZ TOBIAS"
+    },
+    {
+      "id": "30179",
+      "nombre": "COMERCIALIZADORA POQUE",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30044",
+      "nombre": "COMERCIALIZADORA Y DISTRIBUIDORA HC GANKU",
+      "rfc": "NULL",
+      "grupoId": "30036",
+      "grupoNombre": "COMERCIALIZADORA Y DISTRIBUIDORA HC GANKU"
+    },
+    {
+      "id": "30180",
+      "nombre": "COMERCIALIZADORA Y DISTRIBUIDORA HC GANKU",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30045",
+      "nombre": "CONCRE ASESORES",
+      "rfc": "NULL",
+      "grupoId": "30037",
+      "grupoNombre": "CONCRE ASESORES"
+    },
+    {
+      "id": "30181",
+      "nombre": "CONCRE ASESORES",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30046",
+      "nombre": "CONSTRU5",
+      "rfc": "NULL",
+      "grupoId": "30029",
+      "grupoNombre": "GRUPO MERCA"
+    },
+    {
+      "id": "30182",
+      "nombre": "CONSTRU5",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30047",
+      "nombre": "CONSTRUALCALDE",
+      "rfc": "NULL",
+      "grupoId": "30038",
+      "grupoNombre": "CONSTRUALCALDE"
+    },
+    {
+      "id": "30183",
+      "nombre": "CONSTRUALCALDE",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30048",
+      "nombre": "CONSTRUCCIONES Y COMERCIALIZACIONES ELECTRICAS SANESPI",
+      "rfc": "NULL",
+      "grupoId": "30039",
+      "grupoNombre": "CONSTRUCCIONES Y COMERCIALIZACIONES ELECTRICAS SANESPI"
+    },
+    {
+      "id": "30184",
+      "nombre": "CONSTRUCCIONES Y COMERCIALIZACIONES ELECTRICAS SANESPI",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30049",
+      "nombre": "CORPORACION FERRUM CMR",
+      "rfc": "NULL",
+      "grupoId": "30040",
+      "grupoNombre": "CORPORACION FERRUM CMR"
+    },
+    {
+      "id": "30185",
+      "nombre": "CORPORACION FERRUM CMR",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30050",
+      "nombre": "CORPORATIVO EMPRESARIAL LTO",
+      "rfc": "NULL",
+      "grupoId": "30034",
+      "grupoNombre": "ATG"
+    },
+    {
+      "id": "30186",
+      "nombre": "CORPORATIVO EMPRESARIAL LTO",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30051",
+      "nombre": "CORPORATIVO VALORAN",
+      "rfc": "NULL",
+      "grupoId": "30041",
+      "grupoNombre": "GRUPO VALORAN"
+    },
+    {
+      "id": "30187",
+      "nombre": "CORPORATIVO VALORAN",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30052",
+      "nombre": "COVAC",
+      "rfc": "NULL",
+      "grupoId": "30042",
+      "grupoNombre": "COVAC"
+    },
+    {
+      "id": "30188",
+      "nombre": "COVAC",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30053",
+      "nombre": "DAVID AXEL MARMOLEJO HERNANDEZ",
+      "rfc": "NULL",
+      "grupoId": "30043",
+      "grupoNombre": "DAVID AXEL MARMOLEJO HERNANDEZ"
+    },
+    {
+      "id": "30189",
+      "nombre": "DAVID AXEL MARMOLEJO HERNANDEZ",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30054",
+      "nombre": "DESARROLLOS INMOBILIARIOS A TU MEDIDA",
+      "rfc": "NULL",
+      "grupoId": "30015",
+      "grupoNombre": "GRUPO JORGE STAHL"
+    },
+    {
+      "id": "30190",
+      "nombre": "DESARROLLOS INMOBILIARIOS A TU MEDIDA",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30055",
+      "nombre": "DICOMIM",
+      "rfc": "NULL",
+      "grupoId": "30044",
+      "grupoNombre": "DICOMIM"
+    },
+    {
+      "id": "30191",
+      "nombre": "DICOMIM",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30056",
+      "nombre": "DISTRIBUCION DE PRODUCTOS EMPRESARIALES DEL CENTRO",
+      "rfc": "NULL",
+      "grupoId": "30045",
+      "grupoNombre": "DISTRIBUCION DE PRODUCTOS EMPRESARIALES DEL CENTRO"
+    },
+    {
+      "id": "30192",
+      "nombre": "DISTRIBUCION DE PRODUCTOS EMPRESARIALES DEL CENTRO",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30057",
+      "nombre": "DISTRIBUIDORA JIPAM",
+      "rfc": "NULL",
+      "grupoId": "30046",
+      "grupoNombre": "FESTIPAM"
+    },
+    {
+      "id": "30193",
+      "nombre": "DISTRIBUIDORA JIPAM",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30058",
+      "nombre": "EMBUTIDOS SAN LUIS",
+      "rfc": "NULL",
+      "grupoId": "30047",
+      "grupoNombre": "EMBUTIDOS SAN LUIS"
+    },
+    {
+      "id": "30194",
+      "nombre": "EMBUTIDOS SAN LUIS",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    },
+    {
+      "id": "30059",
+      "nombre": "EMELIA MARIA JUVENTINA GOMEZ AVILA",
+      "rfc": "NULL",
+      "grupoId": "30026",
+      "grupoNombre": "GRUPO PETRO"
+    },
+    {
+      "id": "30195",
+      "nombre": "EMELIA MARIA JUVENTINA GOMEZ AVILA",
+      "rfc": "NULL",
+      "grupoId": "NULL",
+      "grupoNombre": "NULL"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tnombre\trfc\tgrupoId\tgrupoNombre\n30010\tAA DE SAN LUIS\tNULL\t30008\tINMOBILIARIA LOPEZ\n30146\tAA DE SAN LUIS\tNULL\tNULL\tNULL\n30011\tADMINISTRADORA GASTRONOMICA LA JAULA\tNULL\t30009\tGRUPO LA LECHE\n30147\tADMINISTRADORA GASTRONOMICA LA JAULA\tNULL\tNULL\tNULL\n30012\tADRIAN RODRIGUEZ ZAMUDIO\tNULL\t30010\tADRIAN RODRIGUEZ ZAMUDIO\n30148\tADRIAN RODRIGUEZ ZAMUDIO\tNULL\tNULL\tNULL\n30013\tAEROGAS DE SAN LUIS\tNULL\t30011\tGRUPO EURO\n30149\tAEROGAS DE SAN LUIS\tNULL\tNULL\tNULL\n30014\tAFIMSA\tNULL\t30012\tAFIMSA\n30150\tAFIMSA\tNULL\tNULL\tNULL\n30015\tAGRICOLA TAMOHI SEIS\tNULL\t30013\tAGRICOLA TAMOHI SEIS\n30151\tAGRICOLA TAMOHI SEIS\tNULL\tNULL\tNULL\n30016\tALMACENES LOGISTICOS TORANZO\tNULL\t30014\tALMACENES LOGISTICOS TORANZO\n30152\tALMACENES LOGISTICOS TORANZO\tNULL\tNULL\tNULL\n30017\tALPHA PACK DEL BAJIO\tNULL\t30015\tGRUPO JORGE STAHL\n30153\tALPHA PACK DEL BAJIO\tNULL\tNULL\tNULL\n30018\tALTOSPAZIO EXCLUSIVO\tNULL\t30016\tGRUPO GUADARRAMA\n30154\tALTOSPAZIO EXCLUSIVO\tNULL\tNULL\tNULL\n30019\tAUTOEDICIONES DEL POTOSI\tNULL\t30017\tAUTOEDICIONES DEL POTOSI\n30155\tAUTOEDICIONES DEL POTOSI\tNULL\tNULL\tNULL\n30020\tB2B LATAM\tNULL\t30018\tB2B LATAM\n30156\tB2B LATAM\tNULL\tNULL\tNULL\n30021\tBALEROS Y ABASTOS DE SAN LUIS\tNULL\t30019\tGRUPO JOSE LUIS MADRID\n30157\tBALEROS Y ABASTOS DE SAN LUIS\tNULL\tNULL\tNULL\n30022\tBALEROS Y ABASTOS INDUSTRIALES\tNULL\t30019\tGRUPO JOSE LUIS MADRID\n30158\tBALEROS Y ABASTOS INDUSTRIALES\tNULL\tNULL\tNULL\n30023\tBAZA TOUR\tNULL\t30020\tBAZA TOUR\n30159\tBAZA TOUR\tNULL\tNULL\tNULL\n30024\tBESTPACK SOLUTIONS\tNULL\t30015\tGRUPO JORGE STAHL\n30160\tBESTPACK SOLUTIONS\tNULL\tNULL\tNULL\n30025\tBOKUBA\tNULL\t30021\tBOKUBA\n30161\tBOKUBA\tNULL\tNULL\tNULL\n30026\tBOTANAS CAMPESINAS\tNULL\t30022\tGRUPO GOUNTER STAHL\n30162\tBOTANAS CAMPESINAS\tNULL\tNULL\tNULL\n30027\tCARGA Y DISTRIBUCION MERCANTIL\tNULL\t30023\tGRUPO FERNANDO JASSO\n30163\tCARGA Y DISTRIBUCION MERCANTIL\tNULL\tNULL\tNULL\n30028\tCARLOS EDUARDO SARABIA MELENDEZ\tNULL\t30024\tCARLOS EDUARDO SARABIA MELENDEZ\n30164\tCARLOS EDUARDO SARABIA MELENDEZ\tNULL\tNULL\tNULL\n30029\tCARONTE LOGISTICA INTEGRAL\tNULL\t30025\tGRUPO CARLOS VAZQUEZ\n30165\tCARONTE LOGISTICA INTEGRAL\tNULL\tNULL\tNULL\n30030\tCEDIS VALTOCA\tNULL\t30026\tGRUPO PETRO\n30166\tCEDIS VALTOCA\tNULL\tNULL\tNULL\n30031\tCENTRO POTOSINO DE CONVENCIONES\tNULL\t30027\tCENTRO POTOSINO DE CONVENCIONES\n30167\tCENTRO POTOSINO DE CONVENCIONES\tNULL\tNULL\tNULL\n30032\tCHAPAS Y HERRAJES DE MEXICO\tNULL\t30028\tGRUPO SALOMON RIVERA\n30168\tCHAPAS Y HERRAJES DE MEXICO\tNULL\tNULL\tNULL\n30033\tCHRONOS FULFILLMENT\tNULL\t30029\tGRUPO MERCA\n30169\tCHRONOS FULFILLMENT\tNULL\tNULL\tNULL\n30034\tCINCO AL CUADRADO\tNULL\t30029\tGRUPO MERCA\n30170\tCINCO AL CUADRADO\tNULL\tNULL\tNULL\n30035\tCINTHYA ANDREA SALINAS FLORES\tNULL\t30030\tCINTHYA ANDREA SALINAS FLORES\n30171\tCINTHYA ANDREA SALINAS FLORES\tNULL\tNULL\tNULL\n30036\tCLAUDIO CAYETANO CASTILLO MARTINEZ\tNULL\t30031\tCLAUDIO CAYETANO CASTILLO MARTINEZ\n30172\tCLAUDIO CAYETANO CASTILLO MARTINEZ\tNULL\tNULL\tNULL\n30037\tCLEVER INDUSTRIAL SERVICES DE MEXICO\tNULL\t30032\tCLEVER INDUSTRIAL SERVICES DE MEXICO\n30173\tCLEVER INDUSTRIAL SERVICES DE MEXICO\tNULL\tNULL\tNULL\n30038\tCOD PRODUCTOS DE MEXICO\tNULL\t30029\tGRUPO MERCA\n30174\tCOD PRODUCTOS DE MEXICO\tNULL\tNULL\tNULL\n30039\tCOEDESSA\tNULL\t30033\tGRUPO RAFAEL ESPINOZA\n30175\tCOEDESSA\tNULL\tNULL\tNULL\n30040\tCOLLINS COFFEE\tNULL\t30022\tGRUPO GOUNTER STAHL\n30176\tCOLLINS COFFEE\tNULL\tNULL\tNULL\n30041\tCOMBUSTIBLES LA PURISIMA\tNULL\t30026\tGRUPO PETRO\n30177\tCOMBUSTIBLES LA PURISIMA\tNULL\tNULL\tNULL\n30042\tCOMBUSTIBLES Y LUBRICANTES OJUELOS\tNULL\t30034\tATG\n30178\tCOMBUSTIBLES Y LUBRICANTES OJUELOS\tNULL\tNULL\tNULL\n30043\tCOMERCIALIZADORA POQUE\tNULL\t30035\tGRUPO BAEZ TOBIAS\n30179\tCOMERCIALIZADORA POQUE\tNULL\tNULL\tNULL\n30044\tCOMERCIALIZADORA Y DISTRIBUIDORA HC GANKU\tNULL\t30036\tCOMERCIALIZADORA Y DISTRIBUIDORA HC GANKU\n30180\tCOMERCIALIZADORA Y DISTRIBUIDORA HC GANKU\tNULL\tNULL\tNULL\n30045\tCONCRE ASESORES\tNULL\t30037\tCONCRE ASESORES\n30181\tCONCRE ASESORES\tNULL\tNULL\tNULL\n30046\tCONSTRU5\tNULL\t30029\tGRUPO MERCA\n30182\tCONSTRU5\tNULL\tNULL\tNULL\n30047\tCONSTRUALCALDE\tNULL\t30038\tCONSTRUALCALDE\n30183\tCONSTRUALCALDE\tNULL\tNULL\tNULL\n30048\tCONSTRUCCIONES Y COMERCIALIZACIONES ELECTRICAS SANESPI\tNULL\t30039\tCONSTRUCCIONES Y COMERCIALIZACIONES ELECTRICAS SANESPI\n30184\tCONSTRUCCIONES Y COMERCIALIZACIONES ELECTRICAS SANESPI\tNULL\tNULL\tNULL\n30049\tCORPORACION FERRUM CMR\tNULL\t30040\tCORPORACION FERRUM CMR\n30185\tCORPORACION FERRUM CMR\tNULL\tNULL\tNULL\n30050\tCORPORATIVO EMPRESARIAL LTO\tNULL\t30034\tATG\n30186\tCORPORATIVO EMPRESARIAL LTO\tNULL\tNULL\tNULL\n30051\tCORPORATIVO VALORAN\tNULL\t30041\tGRUPO VALORAN\n30187\tCORPORATIVO VALORAN\tNULL\tNULL\tNULL\n30052\tCOVAC\tNULL\t30042\tCOVAC\n30188\tCOVAC\tNULL\tNULL\tNULL\n30053\tDAVID AXEL MARMOLEJO HERNANDEZ\tNULL\t30043\tDAVID AXEL MARMOLEJO HERNANDEZ\n30189\tDAVID AXEL MARMOLEJO HERNANDEZ\tNULL\tNULL\tNULL\n30054\tDESARROLLOS INMOBILIARIOS A TU MEDIDA\tNULL\t30015\tGRUPO JORGE STAHL\n30190\tDESARROLLOS INMOBILIARIOS A TU MEDIDA\tNULL\tNULL\tNULL\n30055\tDICOMIM\tNULL\t30044\tDICOMIM\n30191\tDICOMIM\tNULL\tNULL\tNULL\n30056\tDISTRIBUCION DE PRODUCTOS EMPRESARIALES DEL CENTRO\tNULL\t30045\tDISTRIBUCION DE PRODUCTOS EMPRESARIALES DEL CENTRO\n30192\tDISTRIBUCION DE PRODUCTOS EMPRESARIALES DEL CENTRO\tNULL\tNULL\tNULL\n30057\tDISTRIBUIDORA JIPAM\tNULL\t30046\tFESTIPAM\n30193\tDISTRIBUIDORA JIPAM\tNULL\tNULL\tNULL\n30058\tEMBUTIDOS SAN LUIS\tNULL\t30047\tEMBUTIDOS SAN LUIS\n30194\tEMBUTIDOS SAN LUIS\tNULL\tNULL\tNULL\n30059\tEMELIA MARIA JUVENTINA GOMEZ AVILA\tNULL\t30026\tGRUPO PETRO\n30195\tEMELIA MARIA JUVENTINA GOMEZ AVILA\tNULL\tNULL\tNULL\n",
+  "stderr": "",
+  "execution_time_ms": 358
+}
