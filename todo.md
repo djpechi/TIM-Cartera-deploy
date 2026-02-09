@@ -174,3 +174,10 @@
 - [x] Implementar validación de unicidad en backend (clientes)
 - [x] Agregar índices únicos en base de datos
 - [x] Crear tests para validaciones de unicidad
+
+## Verificación de Carga de Folios Pendientes
+- [x] Analizar estructura del archivo de folios pendientes proporcionado
+- [x] Verificar que el procesador reconozca correctamente las columnas
+- [x] Probar carga del archivo en el sistema
+- [x] Verificar que la lógica de estado de pago funcione correctamente
+- [x] Documentar formato esperado del archivo

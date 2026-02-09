@@ -279,7 +279,7 @@ export function processPendientesFile(buffer: Buffer): ProcessResult {
       const row = data[i] as any[];
       if (row.some(cell => 
         typeof cell === 'string' && 
-        (cell.toLowerCase().includes('folio') || cell.toLowerCase().includes('alias'))
+        (cell.toLowerCase().includes('folio') || cell.toLowerCase().includes('saldo'))
       )) {
         headerRow = i;
         break;
@@ -298,12 +298,20 @@ export function processPendientesFile(buffer: Buffer): ProcessResult {
     }
     
     const headers = (data[headerRow] as any[]).map(h => String(h || '').toLowerCase().trim());
-    const aliasIdx = headers.findIndex(h => h.includes('alias'));
     const folioIdx = headers.findIndex(h => h.includes('folio'));
-    const clienteIdx = headers.findIndex(h => h.includes('cliente') || h.includes('nombre'));
-    const descripcionIdx = headers.findIndex(h => h.includes('descripci'));
-    const diasIdx = headers.findIndex(h => h.includes('d') && h.includes('vencid'));
-    const saldoIdx = headers.findIndex(h => h.includes('saldo') || h.includes('sum') || h.includes('valor'));
+    const saldoIdx = headers.findIndex(h => h.includes('saldo'));
+    const atrasoIdx = headers.findIndex(h => h.includes('atraso'));
+    
+    if (folioIdx === -1) {
+      errores.push('No se encontró columna de Folio en el archivo');
+      return {
+        success: false,
+        registrosProcesados: 0,
+        registrosExitosos: 0,
+        registrosError: 1,
+        errores,
+      };
+    }
     
     // Procesar filas de datos
     for (let i = headerRow + 1; i < data.length; i++) {
@@ -314,22 +322,16 @@ export function processPendientesFile(buffer: Buffer): ProcessResult {
       if (!folio) continue;
       
       try {
-        const alias = row[aliasIdx] ? String(row[aliasIdx]).trim() : '';
-        const nombreCliente = row[clienteIdx] ? String(row[clienteIdx]).trim() : '';
-        const descripcion = row[descripcionIdx] ? String(row[descripcionIdx]) : '';
-        const diasVencido = parseNumber(row[diasIdx]);
-        const saldo = parseNumber(row[saldoIdx]);
+        const saldo = saldoIdx !== -1 ? parseNumber(row[saldoIdx]) : 0;
+        const diasVencido = atrasoIdx !== -1 ? parseNumber(row[atrasoIdx]) : 0;
         
-        if (!nombreCliente || saldo === 0) {
-          errores.push(`Fila ${i + 1}: Datos incompletos para folio ${folio}`);
-          continue;
-        }
-        
+        // Si el folio aparece en pendientes, significa que NO está pagado
+        // Guardamos solo el folio y saldo para marcar como pendiente
         pendientes.push({
           folio,
-          nombreCliente,
-          alias,
-          descripcion,
+          nombreCliente: '', // Se llenará al cruzar con facturas
+          alias: '',
+          descripcion: '',
           diasVencido,
           saldo: saldo.toString(),
           interesesMoratorios: '0.00',

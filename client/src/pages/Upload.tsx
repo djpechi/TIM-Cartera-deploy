@@ -300,7 +300,7 @@ export default function Upload() {
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Pendientes de Pago</AlertTitle>
             <AlertDescription>
-              Debe contener columnas: Folio, Alias, Cliente, Descripción, Días Vencido, Saldo
+              Debe contener columnas: Concepto, Folio, Fecha, Vence, Atraso, Saldo. Los folios que aparecen en este archivo se marcan como NO PAGADOS.
             </AlertDescription>
           </Alert>
         </CardContent>
