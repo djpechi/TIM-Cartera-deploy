@@ -1,0 +1,16 @@
+{
+  "query": "SELECT \n  (SELECT COUNT(*) FROM gruposClientes) as grupos,\n  (SELECT COUNT(*) FROM clientes) as clientes,\n  (SELECT COUNT(*) FROM facturas) as facturas,\n  (SELECT COUNT(*) FROM contratos) as contratos;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute SELECT \n  (SELECT COUNT(*) FROM gruposClientes) as grupos,\n  (SELECT COUNT(*) FROM clientes) as clientes,\n  (SELECT COUNT(*) FROM facturas) as facturas,\n  (SELECT COUNT(*) FROM contratos) as contratos;",
+  "rows": [
+    {
+      "grupos": "129",
+      "clientes": "331",
+      "facturas": "0",
+      "contratos": "0"
+    }
+  ],
+  "messages": [],
+  "stdout": "grupos\tclientes\tfacturas\tcontratos\n129\t331\t0\t0\n",
+  "stderr": "",
+  "execution_time_ms": 372
+}

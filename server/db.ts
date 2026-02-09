@@ -126,33 +126,50 @@ export async function getAllClientes() {
   return await db.select().from(clientes).orderBy(clientes.nombre);
 }
 
-export async function upsertCliente(cliente: InsertCliente) {
+export async function upsertCliente(cliente: any) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   
-  await db.insert(clientes).values(cliente).onDuplicateKeyUpdate({
-    set: {
-      nombre: cliente.nombre,
-      rfc: cliente.rfc,
-      alias: cliente.alias,
-      grupoId: cliente.grupoId,
-      responsableCobranza: cliente.responsableCobranza,
-      correoCobranza: cliente.correoCobranza,
-      telefono: cliente.telefono,
-      direccion: cliente.direccion,
-      notas: cliente.notas,
-      activo: cliente.activo,
-    },
+  const insertData: any = {
+    nombre: cliente.razonSocial || cliente.nombre,
+    rfc: cliente.rfc,
+    grupoId: cliente.grupoId,
+    telefono: cliente.telefono,
+    direccion: cliente.direccion,
+    notas: cliente.notas,
+  };
+  
+  await db.insert(clientes).values(insertData).onDuplicateKeyUpdate({
+    set: insertData,
   });
+}
+
+export async function getClienteByRazonSocial(razonSocial: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(clientes).where(eq(clientes.nombre, razonSocial)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function createGrupoCliente(grupo: any) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.insert(gruposClientes).values(grupo);
+  return { id: Number(result[0].insertId), ...grupo };
+}
+
+export async function updateFacturaEstatus(id: number, estatus: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.update(facturas).set({ estatus: estatus as any }).where(eq(facturas.id, id));
 }
 
 // ============ Facturas ============
 export async function createFactura(factura: InsertFactura) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
-  
   const result = await db.insert(facturas).values(factura);
-  return result;
+  return { id: Number(result[0].insertId), ...factura };
 }
 
 export async function getFacturaByFolio(folio: string) {

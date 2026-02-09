@@ -132,3 +132,16 @@
 - [x] Agregar totales por mes y por contrato
 - [x] Implementar selector de año
 - [x] Agregar exportación de tabla a CSV/Excel
+
+## Carga Inicial de Datos desde Google Sheets
+- [x] Extraer datos de la hoja "Clientes y Gupos"
+- [x] Extraer datos de "Facturacion Tim Transp 2025"
+- [x] Extraer datos de "Facturacion Tim Value 2025"
+- [x] Extraer datos de "Actualizar folios pendientes"
+- [x] Crear script de importación de datos
+- [x] Importar clientes y grupos al sistema
+- [x] Importar facturas de ambas empresas
+- [x] Importar pendientes de pago
+- [x] Procesar partidas y generar contratos automáticamente
+- [x] Generar proyecciones mensuales
+- [x] Verificar integridad de datos cargados
