@@ -1,0 +1,49 @@
+{
+  "query": "SHOW TABLES;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute SHOW TABLES;",
+  "rows": [
+    {
+      "Tables_in_bUSGvjzrZfvVXNhQ347wq4": "__drizzle_migrations"
+    },
+    {
+      "Tables_in_bUSGvjzrZfvVXNhQ347wq4": "auditLogs"
+    },
+    {
+      "Tables_in_bUSGvjzrZfvVXNhQ347wq4": "clientes"
+    },
+    {
+      "Tables_in_bUSGvjzrZfvVXNhQ347wq4": "configuracion"
+    },
+    {
+      "Tables_in_bUSGvjzrZfvVXNhQ347wq4": "contratos"
+    },
+    {
+      "Tables_in_bUSGvjzrZfvVXNhQ347wq4": "facturas"
+    },
+    {
+      "Tables_in_bUSGvjzrZfvVXNhQ347wq4": "googleSheetsConfig"
+    },
+    {
+      "Tables_in_bUSGvjzrZfvVXNhQ347wq4": "gruposClientes"
+    },
+    {
+      "Tables_in_bUSGvjzrZfvVXNhQ347wq4": "historialCargas"
+    },
+    {
+      "Tables_in_bUSGvjzrZfvVXNhQ347wq4": "partidasFactura"
+    },
+    {
+      "Tables_in_bUSGvjzrZfvVXNhQ347wq4": "pendientesPago"
+    },
+    {
+      "Tables_in_bUSGvjzrZfvVXNhQ347wq4": "proyeccionMensual"
+    },
+    {
+      "Tables_in_bUSGvjzrZfvVXNhQ347wq4": "users"
+    }
+  ],
+  "messages": [],
+  "stdout": "Tables_in_bUSGvjzrZfvVXNhQ347wq4\n__drizzle_migrations\nauditLogs\nclientes\nconfiguracion\ncontratos\nfacturas\ngoogleSheetsConfig\ngruposClientes\nhistorialCargas\npartidasFactura\npendientesPago\nproyeccionMensual\nusers\n",
+  "stderr": "",
+  "execution_time_ms": 343
+}

@@ -18,8 +18,11 @@ function parseExcelDate(value: any): Date | null {
   
   // Si es un número (serial date de Excel)
   if (typeof value === 'number') {
-    const date = XLSX.SSF.parse_date_code(value);
-    return new Date(date.y, date.m - 1, date.d);
+    // Excel serial date: días desde 1900-01-01
+    const excelEpoch = new Date(1900, 0, 1);
+    const days = value - 2; // Ajuste por bug de Excel (1900 no fue bisiesto)
+    const date = new Date(excelEpoch.getTime() + days * 24 * 60 * 60 * 1000);
+    return date;
   }
   
   // Si es string en formato DD/MM/YYYY

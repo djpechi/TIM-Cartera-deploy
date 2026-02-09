@@ -1,0 +1,37 @@
+{
+  "query": "SELECT id, tipoArchivo, nombreArchivo, registrosExitosos, registrosError, estatus, createdAt FROM historialCargas ORDER BY createdAt DESC LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute SELECT id, tipoArchivo, nombreArchivo, registrosExitosos, registrosError, estatus, createdAt FROM historialCargas ORDER BY createdAt DESC LIMIT 5;",
+  "rows": [
+    {
+      "id": "3",
+      "tipoArchivo": "tim_value",
+      "nombreArchivo": "TiM VALUE.xlsx",
+      "registrosExitosos": "0",
+      "registrosError": "1449",
+      "estatus": "completado",
+      "createdAt": "2026-02-09 15:29:29"
+    },
+    {
+      "id": "2",
+      "tipoArchivo": "tim_value",
+      "nombreArchivo": "TiM VALUE.xlsx",
+      "registrosExitosos": "0",
+      "registrosError": "1449",
+      "estatus": "completado",
+      "createdAt": "2026-02-09 15:27:28"
+    },
+    {
+      "id": "1",
+      "tipoArchivo": "tim_transp",
+      "nombreArchivo": "Tim Transp.xlsx",
+      "registrosExitosos": "0",
+      "registrosError": "5528",
+      "estatus": "completado",
+      "createdAt": "2026-02-09 15:27:02"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\ttipoArchivo\tnombreArchivo\tregistrosExitosos\tregistrosError\testatus\tcreatedAt\n3\ttim_value\tTiM VALUE.xlsx\t0\t1449\tcompletado\t2026-02-09 15:29:29\n2\ttim_value\tTiM VALUE.xlsx\t0\t1449\tcompletado\t2026-02-09 15:27:28\n1\ttim_transp\tTim Transp.xlsx\t0\t5528\tcompletado\t2026-02-09 15:27:02\n",
+  "stderr": "",
+  "execution_time_ms": 349
+}

@@ -148,3 +148,8 @@
 
 ## Corrección de Errores
 - [x] Suprimir warning de ResizeObserver en consola del navegador
+
+## Corrección de Carga de Archivos
+- [x] Diagnosticar problema de carga de archivos de facturas
+- [x] Corregir funcionalidad de upload
+- [x] Verificar que la carga funcione correctamente
