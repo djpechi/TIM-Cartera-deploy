@@ -12,8 +12,8 @@ export default function EstadosCuenta() {
   const [clienteSeleccionado, setClienteSeleccionado] = useState<string>('');
   const [grupoSeleccionado, setGrupoSeleccionado] = useState<string>('');
 
-  const { data: clientes, isLoading: loadingClientes } = trpc.clientes.list.useQuery();
-  const { data: grupos, isLoading: loadingGrupos } = trpc.grupos.list.useQuery();
+  const { data: clientes, isLoading: loadingClientes } = trpc.estadosCuenta.clientesConDeuda.useQuery();
+  const { data: grupos, isLoading: loadingGrupos } = trpc.estadosCuenta.gruposConDeuda.useQuery();
 
   const { data: estadoCliente, isLoading: loadingEstadoCliente } = trpc.estadosCuenta.cliente.useQuery(
     { clienteId: parseInt(clienteSeleccionado) },

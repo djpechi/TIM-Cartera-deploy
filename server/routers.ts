@@ -714,6 +714,16 @@ export const appRouter = router({
 
   // ============ Estados de Cuenta ============
   estadosCuenta: router({
+    // Obtener lista de clientes con deuda
+    clientesConDeuda: protectedProcedure.query(async () => {
+      return await db.getClientesConDeuda();
+    }),
+
+    // Obtener lista de grupos con deuda
+    gruposConDeuda: protectedProcedure.query(async () => {
+      return await db.getGruposConDeuda();
+    }),
+
     // Obtener estado de cuenta de un cliente
     cliente: protectedProcedure
       .input(z.object({ clienteId: z.number() }))

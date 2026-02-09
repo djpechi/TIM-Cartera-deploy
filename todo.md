@@ -206,3 +206,10 @@
 - [x] Agregar botón de generación y descarga de PDF
 - [x] Crear tests para generación de PDFs
 - [x] Documentar funcionalidad de estados de cuenta
+
+## Filtrado de Clientes/Grupos sin Deuda en Estados de Cuenta
+- [x] Crear consulta para obtener solo clientes con facturas pendientes
+- [x] Crear consulta para obtener solo grupos con facturas pendientes
+- [x] Actualizar endpoints de tRPC para usar listas filtradas
+- [x] Modificar interfaz para usar nuevos endpoints filtrados
+- [x] Probar que solo aparezcan clientes/grupos con deuda

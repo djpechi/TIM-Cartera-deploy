@@ -1073,3 +1073,51 @@ export async function getEstadoCuentaGrupo(grupoId: number) {
     totalGeneral: totalPendiente + totalIntereses,
   };
 }
+
+// ============ Clientes y Grupos con Deuda ============
+export async function getClientesConDeuda() {
+  const db = await getDb();
+  if (!db) return [];
+
+  // Consulta optimizada: obtener clientes que tienen facturas pendientes
+  const clientesConFacturasPendientes = await db
+    .selectDistinct({ 
+      id: clientes.id,
+      nombre: clientes.nombre,
+      rfc: clientes.rfc,
+      alias: clientes.alias,
+      grupoId: clientes.grupoId,
+      responsableCobranza: clientes.responsableCobranza,
+      correoCobranza: clientes.correoCobranza,
+      telefono: clientes.telefono,
+      direccion: clientes.direccion,
+      createdAt: clientes.createdAt,
+      updatedAt: clientes.updatedAt,
+    })
+    .from(clientes)
+    .innerJoin(facturas, eq(facturas.clienteId, clientes.id))
+    .where(eq(facturas.estadoPago, 'pendiente'));
+  
+  return clientesConFacturasPendientes;
+}
+
+export async function getGruposConDeuda() {
+  const db = await getDb();
+  if (!db) return [];
+
+  // Consulta optimizada: obtener grupos que tienen clientes con facturas pendientes
+  const gruposConFacturasPendientes = await db
+    .selectDistinct({ 
+      id: gruposClientes.id,
+      nombre: gruposClientes.nombre,
+      descripcion: gruposClientes.descripcion,
+      createdAt: gruposClientes.createdAt,
+      updatedAt: gruposClientes.updatedAt,
+    })
+    .from(gruposClientes)
+    .innerJoin(clientes, eq(clientes.grupoId, gruposClientes.id))
+    .innerJoin(facturas, eq(facturas.clienteId, clientes.id))
+    .where(eq(facturas.estadoPago, 'pendiente'));
+  
+  return gruposConFacturasPendientes;
+}
