@@ -27,9 +27,15 @@ import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
 import { Button } from "./ui/button";
 
+import { Upload, FileText, TrendingUp, Settings, DollarSign } from "lucide-react";
+
 const menuItems = [
-  { icon: LayoutDashboard, label: "Page 1", path: "/" },
-  { icon: Users, label: "Page 2", path: "/some-path" },
+  { icon: LayoutDashboard, label: "Dashboard", path: "/" },
+  { icon: Upload, label: "Cargar Archivos", path: "/upload" },
+  { icon: FileText, label: "Facturas", path: "/facturas" },
+  { icon: TrendingUp, label: "Reportes", path: "/reportes" },
+  { icon: Users, label: "Clientes", path: "/clientes" },
+  { icon: Settings, label: "Configuración", path: "/configuracion" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "sidebar-width";
@@ -170,8 +176,9 @@ function DashboardLayoutContent({
               </button>
               {!isCollapsed ? (
                 <div className="flex items-center gap-2 min-w-0">
-                  <span className="font-semibold tracking-tight truncate">
-                    Navigation
+                  <span className="font-semibold tracking-tight truncate flex items-center gap-2">
+                    <DollarSign className="h-4 w-4 text-primary" />
+                    Cartera Vencida
                   </span>
                 </div>
               ) : null}
