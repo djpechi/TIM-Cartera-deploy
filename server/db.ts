@@ -349,3 +349,126 @@ export async function getDashboardStats() {
     facturasPendientes: facturasPendientes[0]?.count || 0,
   };
 }
+
+
+// ============ User Administration ============
+
+/**
+ * Obtener todos los usuarios del sistema
+ */
+export async function getAllUsers() {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get users: database not available");
+    return [];
+  }
+
+  try {
+    const result = await db.select().from(users).orderBy(users.createdAt);
+    return result;
+  } catch (error) {
+    console.error("[Database] Failed to get users:", error);
+    return [];
+  }
+}
+
+/**
+ * Obtener usuario por ID
+ */
+export async function getUserById(id: number) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get user: database not available");
+    return undefined;
+  }
+
+  try {
+    const result = await db.select().from(users).where(eq(users.id, id)).limit(1);
+    return result.length > 0 ? result[0] : undefined;
+  } catch (error) {
+    console.error("[Database] Failed to get user by id:", error);
+    return undefined;
+  }
+}
+
+/**
+ * Actualizar rol de un usuario
+ */
+export async function updateUserRole(userId: number, newRole: "admin" | "operador" | "consulta") {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  try {
+    await db.update(users)
+      .set({ role: newRole, updatedAt: new Date() })
+      .where(eq(users.id, userId));
+    
+    return true;
+  } catch (error) {
+    console.error("[Database] Failed to update user role:", error);
+    throw error;
+  }
+}
+
+/**
+ * Activar o desactivar cuenta de usuario
+ */
+export async function updateUserStatus(userId: number, activo: boolean) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  try {
+    await db.update(users)
+      .set({ activo, updatedAt: new Date() })
+      .where(eq(users.id, userId));
+    
+    return true;
+  } catch (error) {
+    console.error("[Database] Failed to update user status:", error);
+    throw error;
+  }
+}
+
+/**
+ * Obtener estadísticas de usuarios
+ */
+export async function getUserStats() {
+  const db = await getDb();
+  if (!db) {
+    return {
+      total: 0,
+      activos: 0,
+      inactivos: 0,
+      porRol: { admin: 0, operador: 0, consulta: 0 }
+    };
+  }
+
+  try {
+    const allUsers = await db.select().from(users);
+    
+    const stats = {
+      total: allUsers.length,
+      activos: allUsers.filter(u => u.activo).length,
+      inactivos: allUsers.filter(u => !u.activo).length,
+      porRol: {
+        admin: allUsers.filter(u => u.role === 'admin').length,
+        operador: allUsers.filter(u => u.role === 'operador').length,
+        consulta: allUsers.filter(u => u.role === 'consulta').length,
+      }
+    };
+    
+    return stats;
+  } catch (error) {
+    console.error("[Database] Failed to get user stats:", error);
+    return {
+      total: 0,
+      activos: 0,
+      inactivos: 0,
+      porRol: { admin: 0, operador: 0, consulta: 0 }
+    };
+  }
+}

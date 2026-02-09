@@ -2,6 +2,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
+import { adminProcedure } from "./adminMiddleware";
 import { z } from "zod";
 import * as db from "./db";
 import { 
@@ -328,6 +329,81 @@ export const appRouter = router({
         
         return Object.values(porMes).sort((a, b) => b.mes.localeCompare(a.mes)).slice(0, input.meses);
       }),
+  }),
+
+  // ============ Administración de Usuarios ============
+  admin: router({
+    users: router({
+      list: adminProcedure.query(async () => {
+        return await db.getAllUsers();
+      }),
+      
+      stats: adminProcedure.query(async () => {
+        return await db.getUserStats();
+      }),
+      
+      updateRole: adminProcedure
+        .input(z.object({
+          userId: z.number(),
+          newRole: z.enum(["admin", "operador", "consulta"]),
+        }))
+        .mutation(async ({ input, ctx }) => {
+          // No permitir que un admin cambie su propio rol
+          if (input.userId === ctx.user.id) {
+            throw new TRPCError({
+              code: 'BAD_REQUEST',
+              message: 'No puedes cambiar tu propio rol',
+            });
+          }
+          
+          await db.updateUserRole(input.userId, input.newRole);
+          
+          // Registrar en auditoría
+          await db.createAuditLog({
+            usuarioId: ctx.user.id,
+            accion: 'update_user_role',
+            entidad: 'users',
+            entidadId: input.userId,
+            detalles: {
+              newRole: input.newRole,
+              changedBy: ctx.user.email,
+            },
+          });
+          
+          return { success: true };
+        }),
+      
+      updateStatus: adminProcedure
+        .input(z.object({
+          userId: z.number(),
+          activo: z.boolean(),
+        }))
+        .mutation(async ({ input, ctx }) => {
+          // No permitir que un admin desactive su propia cuenta
+          if (input.userId === ctx.user.id) {
+            throw new TRPCError({
+              code: 'BAD_REQUEST',
+              message: 'No puedes desactivar tu propia cuenta',
+            });
+          }
+          
+          await db.updateUserStatus(input.userId, input.activo);
+          
+          // Registrar en auditoría
+          await db.createAuditLog({
+            usuarioId: ctx.user.id,
+            accion: input.activo ? 'activate_user' : 'deactivate_user',
+            entidad: 'users',
+            entidadId: input.userId,
+            detalles: {
+              activo: input.activo,
+              changedBy: ctx.user.email,
+            },
+          });
+          
+          return { success: true };
+        }),
+    }),
   }),
 });
 

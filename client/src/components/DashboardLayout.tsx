@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/sidebar";
 import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
-import { LayoutDashboard, LogOut, PanelLeft, Users } from "lucide-react";
+import { LayoutDashboard, LogOut, PanelLeft, Users, Shield } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
@@ -30,14 +30,23 @@ import { Button } from "./ui/button";
 
 import { Upload, FileText, TrendingUp, Settings, DollarSign } from "lucide-react";
 
-const menuItems = [
-  { icon: LayoutDashboard, label: "Dashboard", path: "/" },
-  { icon: Upload, label: "Cargar Archivos", path: "/upload" },
-  { icon: FileText, label: "Facturas", path: "/facturas" },
-  { icon: TrendingUp, label: "Reportes", path: "/reportes" },
-  { icon: Users, label: "Clientes", path: "/clientes" },
-  { icon: Settings, label: "Configuración", path: "/configuracion" },
-];
+const getMenuItems = (userRole?: string) => {
+  const baseItems = [
+    { icon: LayoutDashboard, label: "Dashboard", path: "/" },
+    { icon: Upload, label: "Cargar Archivos", path: "/upload" },
+    { icon: FileText, label: "Facturas", path: "/facturas" },
+    { icon: TrendingUp, label: "Reportes", path: "/reportes" },
+    { icon: Users, label: "Clientes", path: "/clientes" },
+    { icon: Settings, label: "Configuración", path: "/configuracion" },
+  ];
+  
+  // Solo mostrar Usuarios si el usuario es admin
+  if (userRole === 'admin') {
+    baseItems.push({ icon: Shield, label: "Usuarios", path: "/usuarios" });
+  }
+  
+  return baseItems;
+};
 
 const SIDEBAR_WIDTH_KEY = "sidebar-width";
 const DEFAULT_WIDTH = 280;
@@ -128,6 +137,7 @@ function DashboardLayoutContent({
   const isCollapsed = state === "collapsed";
   const [isResizing, setIsResizing] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
+  const menuItems = getMenuItems(user?.role);
   const activeMenuItem = menuItems.find(item => item.path === location);
   const isMobile = useIsMobile();
 
@@ -197,7 +207,7 @@ function DashboardLayoutContent({
 
           <SidebarContent className="gap-0">
             <SidebarMenu className="px-2 py-1">
-              {menuItems.map(item => {
+              {getMenuItems(user?.role).map(item => {
                 const isActive = location === item.path;
                 return (
                   <SidebarMenuItem key={item.path}>

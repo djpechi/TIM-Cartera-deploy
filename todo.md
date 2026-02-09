@@ -76,3 +76,17 @@
 - [x] Agregar mensajes informativos en login
 - [x] Crear tests para validación de dominios
 - [x] Actualizar documentación con política de acceso
+
+## Módulo de Administración de Usuarios
+- [x] Actualizar esquema de base de datos con nuevos roles (admin, operador, consulta)
+- [x] Agregar campo de estado activo/inactivo a usuarios
+- [x] Crear procedimientos backend para listar usuarios
+- [x] Implementar endpoint para cambiar rol de usuario
+- [x] Implementar endpoint para activar/desactivar cuenta
+- [x] Crear página de administración de usuarios
+- [x] Implementar tabla con listado de usuarios
+- [x] Agregar búsqueda y filtros por rol y estado
+- [x] Crear diálogos para cambiar rol y estado
+- [x] Implementar middleware de autorización solo para admins
+- [x] Agregar tests para gestión de usuarios
+- [x] Documentar roles y permisos del sistema

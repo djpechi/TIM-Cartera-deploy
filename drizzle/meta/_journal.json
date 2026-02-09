@@ -15,6 +15,13 @@
       "when": 1770598194880,
       "tag": "0001_fuzzy_vermin",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1770599484568,
+      "tag": "0002_sweet_nightshade",
+      "breakpoints": true
     }
   ]
 }
