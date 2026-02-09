@@ -10,6 +10,7 @@ import Upload from "./pages/Upload";
 import Facturas from "./pages/Facturas";
 import Reportes from "./pages/Reportes";
 import Configuracion from "./pages/Configuracion";
+import AccessDenied from "./pages/AccessDenied";
 
 function Router() {
   return (
@@ -21,6 +22,7 @@ function Router() {
         <Route path="/reportes" component={Reportes} />
         <Route path="/clientes" component={() => <div>Clientes (próximamente)</div>} />
         <Route path="/configuracion" component={Configuracion} />
+        <Route path="/access-denied" component={AccessDenied} />
         <Route path="/404" component={NotFound} />
         <Route component={NotFound} />
       </Switch>

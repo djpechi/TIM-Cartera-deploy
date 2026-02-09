@@ -1,4 +1,5 @@
 import { useAuth } from "@/_core/hooks/useAuth";
+import { useDomainValidation } from "@/hooks/useDomainValidation";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -53,10 +54,19 @@ export default function DashboardLayout({
     return saved ? parseInt(saved, 10) : DEFAULT_WIDTH;
   });
   const { loading, user } = useAuth();
+  const domainValidation = useDomainValidation();
+  const [location, setLocation] = useLocation();
 
   useEffect(() => {
     localStorage.setItem(SIDEBAR_WIDTH_KEY, sidebarWidth.toString());
   }, [sidebarWidth]);
+
+  useEffect(() => {
+    // Si el usuario está autenticado pero su dominio no es válido, redirigir a acceso denegado
+    if (!loading && user && domainValidation.isDenied && location !== '/access-denied') {
+      setLocation('/access-denied');
+    }
+  }, [loading, user, domainValidation.isDenied, location, setLocation]);
 
   if (loading) {
     return <DashboardLayoutSkeleton />
@@ -71,7 +81,7 @@ export default function DashboardLayout({
               Sign in to continue
             </h1>
             <p className="text-sm text-muted-foreground text-center max-w-sm">
-              Access to this dashboard requires authentication. Continue to launch the login flow.
+              Accede al sistema de gestión de cartera vencida. Solo usuarios con correos @leasingtim.mx o @bpads.mx pueden ingresar.
             </p>
           </div>
           <Button

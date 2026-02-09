@@ -67,3 +67,12 @@
 - [x] Crear guía de usuario del sistema
 - [ ] Documentar configuración de Google Sheets API
 - [x] Preparar checkpoint final
+
+## Control de Acceso por Dominio
+- [x] Implementar middleware de validación de dominio en el backend
+- [x] Crear lista de dominios permitidos (@leasingtim.mx, @bpads.mx)
+- [x] Actualizar lógica de autenticación para validar dominio
+- [x] Crear página de acceso denegado
+- [x] Agregar mensajes informativos en login
+- [x] Crear tests para validación de dominios
+- [x] Actualizar documentación con política de acceso
