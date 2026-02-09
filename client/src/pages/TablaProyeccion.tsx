@@ -70,16 +70,26 @@ export default function TablaProyeccion() {
 
     // Procesar cada contrato y construir jerarquía
     proyeccionData.contratos.forEach((contrato: any) => {
-      const grupoNombre = contrato.grupoNombre || 'Sin Grupo';
-      const grupoKey = grupoNombre;
+      // Si el contrato no tiene operaciones en el año, no lo incluimos
+      const tieneOperaciones = mesesActivos.some(mes => {
+        const monto = (proyeccionData.datos as any)?.[contrato.id]?.[mes] || 0;
+        return monto > 0;
+      });
+      
+      if (!tieneOperaciones) return; // Skip contratos sin operaciones
+
       const clienteNombre = contrato.nombreCliente;
       const clienteId = contrato.clienteId;
+      
+      // Si no tiene grupo, usar el nombre del cliente como grupo
+      const grupoNombre = contrato.grupoNombre || clienteNombre;
+      const grupoKey = contrato.grupoNombre ? `grupo_${contrato.grupoId}` : `cliente_${clienteId}`;
 
       // Crear grupo si no existe
       if (!gruposMap.has(grupoKey)) {
         gruposMap.set(grupoKey, {
-          tipo: grupoNombre === 'Sin Grupo' ? 'sin_grupo' : 'grupo',
-          id: contrato.grupoId || -1,
+          tipo: contrato.grupoNombre ? 'grupo' : 'sin_grupo',
+          id: contrato.grupoId || clienteId,
           nombre: grupoNombre,
           clientesMap: new Map<number, any>()
         });

@@ -189,3 +189,8 @@
 - [x] Agregar opción de vista consolidada vs detallada
 - [x] Implementar toggle para alternar entre vistas
 - [x] Probar funcionalidad con datos reales
+
+## Correcciones de Tabla de Proyección
+- [x] Mostrar clientes sin grupo como grupos independientes (usar razón social como nombre de grupo)
+- [x] Filtrar contratos que no tienen operaciones en el año seleccionado
+- [x] Probar que solo aparezcan contratos con al menos una factura en el año
