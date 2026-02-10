@@ -228,3 +228,16 @@
 - [x] Ocultar intereses en vista detallada de facturas
 - [x] Ajustar cálculo de totales para no incluir intereses
 - [x] Probar que los reportes se vean limpios sin el campo de intereses
+
+## Dashboard de Análisis de Cobranza
+- [x] Crear consulta para evolución temporal de cobranza (pagadas vs pendientes por mes)
+- [x] Crear consulta para top 10 clientes con mayores deudas
+- [x] Crear consulta para distribución de cartera por rangos de antigüedad (1-30, 31-60, 61-90, +90 días)
+- [x] Implementar endpoints tRPC para datos de gráficos
+- [x] Instalar y configurar Chart.js o Recharts
+- [x] Crear página de dashboard con gráficos interactivos
+- [x] Implementar gráfico de líneas para evolución temporal
+- [x] Implementar gráfico de barras para top deudores
+- [x] Implementar gráfico de dona/pie para distribución por rangos
+- [ ] Agregar filtros de fecha y exportación de datos
+- [x] Probar visualizaciones con datos reales

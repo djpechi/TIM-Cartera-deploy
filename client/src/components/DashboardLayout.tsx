@@ -38,6 +38,7 @@ const getMenuItems = (userRole?: string) => {
     { icon: BarChart3, label: "Proyección", path: "/proyeccion" },
     { icon: Table, label: "Tabla Proyección", path: "/tabla-proyeccion" },
     { icon: Receipt, label: "Estados de Cuenta", path: "/estados-cuenta" },
+    { icon: TrendingUp, label: "Análisis de Cobranza", path: "/analisis-cobranza" },
     { icon: TrendingUp, label: "Reportes", path: "/reportes" },
     { icon: Users, label: "Clientes", path: "/gestion-clientes" },
     { icon: Settings, label: "Configuración", path: "/configuracion" },

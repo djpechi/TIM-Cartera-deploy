@@ -1129,3 +1129,81 @@ export async function getGruposConDeuda() {
   
   return gruposConFacturasPendientes;
 }
+
+// ============ Análisis de Cobranza ============
+export async function getEvolucionCobranza() {
+  const db = await getDb();
+  if (!db) return [];
+
+  // Obtener facturas agrupadas por mes y estado de pago
+  const result = await db
+    .select({
+      mes: sql<string>`DATE_FORMAT(${facturas.fecha}, '%Y-%m')`,
+      estadoPago: facturas.estadoPago,
+      cantidad: sql<number>`COUNT(*)`,
+      monto: sql<number>`SUM(${facturas.importeTotal})`,
+    })
+    .from(facturas)
+    .groupBy(sql`DATE_FORMAT(${facturas.fecha}, '%Y-%m')`, facturas.estadoPago)
+    .orderBy(sql`DATE_FORMAT(${facturas.fecha}, '%Y-%m')`);
+
+  return result;
+}
+
+export async function getTopDeudores(limit: number = 10) {
+  const db = await getDb();
+  if (!db) return [];
+
+  // Obtener clientes con mayor deuda pendiente
+  const result = await db
+    .select({
+      cliente: facturas.nombreCliente,
+      cantidadFacturas: sql<number>`COUNT(*)`,
+      totalDeuda: sql<number>`SUM(${facturas.importeTotal})`,
+      diasPromedioAtraso: sql<number>`AVG(${facturas.diasAtraso})`,
+    })
+    .from(facturas)
+    .where(eq(facturas.estadoPago, 'pendiente'))
+    .groupBy(facturas.nombreCliente)
+    .orderBy(sql`SUM(${facturas.importeTotal}) DESC`)
+    .limit(limit);
+
+  return result;
+}
+
+export async function getDistribucionPorAntiguedad() {
+  const db = await getDb();
+  if (!db) return [];
+
+  // Obtener distribución de cartera por rangos de antigüedad
+  const result = await db
+    .select({
+      rango: sql<string>`CASE 
+        WHEN ${facturas.diasAtraso} BETWEEN 1 AND 30 THEN '1-30 días'
+        WHEN ${facturas.diasAtraso} BETWEEN 31 AND 60 THEN '31-60 días'
+        WHEN ${facturas.diasAtraso} BETWEEN 61 AND 90 THEN '61-90 días'
+        WHEN ${facturas.diasAtraso} > 90 THEN '+90 días'
+        ELSE '0 días'
+      END`,
+      cantidadFacturas: sql<number>`COUNT(*)`,
+      montoTotal: sql<number>`SUM(${facturas.importeTotal})`,
+    })
+    .from(facturas)
+    .where(eq(facturas.estadoPago, 'pendiente'))
+    .groupBy(sql`CASE 
+      WHEN ${facturas.diasAtraso} BETWEEN 1 AND 30 THEN '1-30 días'
+      WHEN ${facturas.diasAtraso} BETWEEN 31 AND 60 THEN '31-60 días'
+      WHEN ${facturas.diasAtraso} BETWEEN 61 AND 90 THEN '61-90 días'
+      WHEN ${facturas.diasAtraso} > 90 THEN '+90 días'
+      ELSE '0 días'
+    END`)
+    .orderBy(sql`CASE 
+      WHEN ${facturas.diasAtraso} BETWEEN 1 AND 30 THEN 1
+      WHEN ${facturas.diasAtraso} BETWEEN 31 AND 60 THEN 2
+      WHEN ${facturas.diasAtraso} BETWEEN 61 AND 90 THEN 3
+      WHEN ${facturas.diasAtraso} > 90 THEN 4
+      ELSE 0
+    END`);
+
+  return result;
+}

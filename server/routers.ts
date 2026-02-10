@@ -794,6 +794,26 @@ export const appRouter = router({
         };
       }),
   }),
+
+  // ============ Análisis de Cobranza ============
+  analisis: router({
+    // Obtener evolución temporal de cobranza
+    evolucionCobranza: protectedProcedure.query(async () => {
+      return await db.getEvolucionCobranza();
+    }),
+
+    // Obtener top deudores
+    topDeudores: protectedProcedure
+      .input(z.object({ limit: z.number().optional().default(10) }))
+      .query(async ({ input }) => {
+        return await db.getTopDeudores(input.limit);
+      }),
+
+    // Obtener distribución por antigüedad
+    distribucionAntiguedad: protectedProcedure.query(async () => {
+      return await db.getDistribucionPorAntiguedad();
+    }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;
