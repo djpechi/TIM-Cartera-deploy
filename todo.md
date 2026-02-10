@@ -252,3 +252,9 @@
 - [x] Identificar elementos sin key prop en AnalisisCobranza
 - [x] Agregar keys únicos a todos los elementos de lista
 - [x] Verificar que el error desaparezca
+
+## Eliminación de Distribución por Antigüedad
+- [x] Eliminar consulta getDistribucionPorAntiguedad de db.ts (no es necesario, solo no se usa)
+- [x] Eliminar endpoint de distribución por antigüedad de routers.ts (no es necesario, solo no se usa)
+- [x] Eliminar gráfico de distribución por antigüedad de AnalisisCobranza.tsx
+- [x] Probar que el dashboard cargue sin errores

@@ -1,9 +1,9 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { trpc } from "@/lib/trpc";
-import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { TrendingUp, Users, Clock, DollarSign } from "lucide-react";
 
-const COLORS = ['#10b981', '#f59e0b', '#ef4444', '#dc2626'];
+
 
 const formatCurrency = (value: number) => {
   return new Intl.NumberFormat('es-MX', {
@@ -16,7 +16,7 @@ export default function AnalisisCobranza() {
   const { data: dashboardData } = trpc.dashboard.stats.useQuery();
   const { data: evolucion, isLoading: loadingEvolucion } = trpc.analisis.evolucionCobranza.useQuery();
   const { data: topDeudores, isLoading: loadingTop } = trpc.analisis.topDeudores.useQuery({ limit: 10 });
-  const { data: distribucion, isLoading: loadingDistribucion } = trpc.analisis.distribucionAntiguedad.useQuery();
+
 
   // Procesar datos de evolución para el gráfico de líneas
   const evolucionData = evolucion ? (() => {
@@ -146,9 +146,8 @@ export default function AnalisisCobranza() {
         </CardContent>
       </Card>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        {/* Gráfico de top deudores */}
-        <Card>
+      {/* Gráfico de top deudores */}
+      <Card>
           <CardHeader>
             <CardTitle>Top 10 Clientes con Mayor Deuda</CardTitle>
             <CardDescription>
@@ -177,70 +176,6 @@ export default function AnalisisCobranza() {
             )}
           </CardContent>
         </Card>
-
-        {/* Gráfico de distribución por antigüedad */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Distribución por Antigüedad</CardTitle>
-            <CardDescription>
-              Cartera vencida segmentada por días de atraso
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {loadingDistribucion ? (
-              <div className="h-[400px] flex items-center justify-center">
-                <p className="text-muted-foreground">Cargando datos...</p>
-              </div>
-            ) : distribucion && distribucion.length > 0 ? (
-              <div className="space-y-4">
-                <ResponsiveContainer width="100%" height={250}>
-                  <PieChart>
-                    <Pie
-                      data={distribucion}
-                      cx="50%"
-                      cy="50%"
-                      labelLine={false}
-                      label={({ rango, percent }) => `${rango}: ${(percent * 100).toFixed(0)}%`}
-                      outerRadius={80}
-                      fill="#8884d8"
-                      dataKey="montoTotal"
-                    >
-                      {distribucion.map((entry: any, index: number) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip formatter={(value: number) => formatCurrency(value)} />
-                  </PieChart>
-                </ResponsiveContainer>
-
-                <div className="space-y-2">
-                  {distribucion.map((item: any, index: number) => (
-                    <div key={item.rango} className="flex items-center justify-between p-3 rounded-lg border">
-                      <div className="flex items-center gap-3">
-                        <div
-                          className="w-4 h-4 rounded"
-                          style={{ backgroundColor: COLORS[index % COLORS.length] }}
-                        />
-                        <div>
-                          <p className="font-medium">{item.rango}</p>
-                          <p className="text-sm text-muted-foreground">
-                            {item.cantidadFacturas} facturas
-                          </p>
-                        </div>
-                      </div>
-                      <p className="font-semibold">{formatCurrency(Number(item.montoTotal))}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <div className="h-[400px] flex items-center justify-center">
-                <p className="text-muted-foreground">No hay datos disponibles</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
     </div>
   );
 }
