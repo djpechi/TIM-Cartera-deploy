@@ -196,7 +196,7 @@ export default function EstadosCuenta() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div className="grid grid-cols-3 gap-4 mb-4">
                     <div className="bg-muted p-4 rounded-lg">
                       <p className="text-sm text-muted-foreground">Facturas Pendientes</p>
                       <p className="text-2xl font-bold">{estadoActual.facturas.length}</p>
@@ -204,6 +204,10 @@ export default function EstadosCuenta() {
                     <div className="bg-muted p-4 rounded-lg">
                       <p className="text-sm text-muted-foreground">Subtotal</p>
                       <p className="text-2xl font-bold">{formatCurrency(estadoActual.totalPendiente)}</p>
+                    </div>
+                    <div className="bg-muted p-4 rounded-lg">
+                      <p className="text-sm text-muted-foreground">Intereses Moratorios</p>
+                      <p className="text-2xl font-bold">{formatCurrency(estadoActual.totalIntereses)}</p>
                     </div>
                   </div>
 
@@ -221,6 +225,7 @@ export default function EstadosCuenta() {
                       <table className="w-full">
                         <thead className="bg-muted">
                           <tr>
+                            <th className="px-4 py-3 text-left text-sm font-medium">Contrato</th>
                             {tipoSeleccion === 'grupo' && (
                               <th className="px-4 py-3 text-left text-sm font-medium">Cliente</th>
                             )}
@@ -228,15 +233,18 @@ export default function EstadosCuenta() {
                             <th className="px-4 py-3 text-left text-sm font-medium">Fecha</th>
                             <th className="px-4 py-3 text-left text-sm font-medium">Sistema</th>
                             <th className="px-4 py-3 text-right text-sm font-medium">Importe</th>
+                            <th className="px-4 py-3 text-right text-sm font-medium">Intereses</th>
                             <th className="px-4 py-3 text-right text-sm font-medium">Días Atraso</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y">
                           {estadoActual.facturas.map((factura: any, index: number) => {
                             const importe = Number(factura.importeTotal || 0);
+                            const intereses = Number(factura.interesesMoratorios || 0);
 
                             return (
                               <tr key={index} className="hover:bg-muted/50">
+                                <td className="px-4 py-3 text-sm">{factura.numeroContrato || 'N/A'}</td>
                                 {tipoSeleccion === 'grupo' && (
                                   <td className="px-4 py-3 text-sm">{factura.clienteNombre}</td>
                                 )}
@@ -248,6 +256,7 @@ export default function EstadosCuenta() {
                                   </span>
                                 </td>
                                 <td className="px-4 py-3 text-sm text-right font-semibold">{formatCurrency(importe)}</td>
+                                <td className="px-4 py-3 text-sm text-right">{formatCurrency(intereses)}</td>
                                 <td className="px-4 py-3 text-sm text-right">
                                   <span
                                     className={

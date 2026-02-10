@@ -8,6 +8,7 @@ interface FacturaPendiente {
   diasAtraso: number | null;
   interesesMoratorios: string | null;
   sistema: 'tim_transp' | 'tim_value';
+  numeroContrato?: string | null;
   clienteNombre?: string;
 }
 
@@ -86,25 +87,31 @@ export async function generarEstadoCuentaClientePDF(
 
       const tableTop = doc.y;
       const colWidths = {
-        folio: 90,
-        fecha: 80,
-        sistema: 70,
-        importe: 110,
-        dias: 60,
+        contrato: 60,
+        folio: 70,
+        fecha: 65,
+        sistema: 50,
+        importe: 75,
+        intereses: 75,
+        dias: 45,
       };
 
       // Encabezados de tabla
       doc.fontSize(9).font('Helvetica-Bold');
       let x = 50;
+      doc.text('Contrato', x, tableTop, { width: colWidths.contrato, align: 'left' });
+      x += colWidths.contrato;
       doc.text('Folio', x, tableTop, { width: colWidths.folio, align: 'left' });
       x += colWidths.folio;
       doc.text('Fecha', x, tableTop, { width: colWidths.fecha, align: 'left' });
       x += colWidths.fecha;
-      doc.text('Sistema', x, tableTop, { width: colWidths.sistema, align: 'left' });
+      doc.text('Sist.', x, tableTop, { width: colWidths.sistema, align: 'left' });
       x += colWidths.sistema;
       doc.text('Importe', x, tableTop, { width: colWidths.importe, align: 'right' });
       x += colWidths.importe;
-      doc.text('Días Atraso', x, tableTop, { width: colWidths.dias, align: 'right' });
+      doc.text('Intereses', x, tableTop, { width: colWidths.intereses, align: 'right' });
+      x += colWidths.intereses;
+      doc.text('Días', x, tableTop, { width: colWidths.dias, align: 'right' });
 
       doc.moveDown(0.3);
       doc.moveTo(50, doc.y).lineTo(562, doc.y).stroke();
@@ -122,9 +129,12 @@ export async function generarEstadoCuentaClientePDF(
         }
 
         const importe = Number(factura.importeTotal || 0);
+        const intereses = Number(factura.interesesMoratorios || 0);
 
         x = 50;
-        doc.text(factura.folio, x, doc.y, { width: colWidths.folio, align: 'left' });
+        doc.text(factura.numeroContrato || 'N/A', x, doc.y, { width: colWidths.contrato, align: 'left' });
+        x += colWidths.contrato;
+        doc.text(factura.folio, x, rowY, { width: colWidths.folio, align: 'left' });
         x += colWidths.folio;
         doc.text(formatDate(factura.fecha), x, rowY, { width: colWidths.fecha, align: 'left' });
         x += colWidths.fecha;
@@ -135,6 +145,8 @@ export async function generarEstadoCuentaClientePDF(
         x += colWidths.sistema;
         doc.text(formatCurrency(importe), x, rowY, { width: colWidths.importe, align: 'right' });
         x += colWidths.importe;
+        doc.text(formatCurrency(intereses), x, rowY, { width: colWidths.intereses, align: 'right' });
+        x += colWidths.intereses;
         doc.text(String(factura.diasAtraso || 0), x, rowY, { width: colWidths.dias, align: 'right' });
 
         doc.moveDown(0.8);
@@ -145,11 +157,24 @@ export async function generarEstadoCuentaClientePDF(
       doc.moveDown(0.5);
 
       // Totales
-      doc.fontSize(12).font('Helvetica-Bold');
-      const totalsX = 400;
-      doc.text('TOTAL A PAGAR:', totalsX, doc.y, { width: 100, align: 'left' });
-      doc.text(formatCurrency(data.totalPendiente), totalsX + 100, doc.y, {
-        width: 62,
+      doc.fontSize(10).font('Helvetica-Bold');
+      const totalsX = 350;
+      doc.text('Subtotal:', totalsX, doc.y, { width: 80, align: 'left' });
+      doc.text(formatCurrency(data.totalPendiente), totalsX + 80, doc.y, {
+        width: 82,
+        align: 'right',
+      });
+      doc.moveDown(0.5);
+      doc.text('Intereses Moratorios:', totalsX, doc.y, { width: 80, align: 'left' });
+      doc.text(formatCurrency(data.totalIntereses), totalsX + 80, doc.y, {
+        width: 82,
+        align: 'right',
+      });
+      doc.moveDown(0.5);
+      doc.fontSize(12);
+      doc.text('TOTAL A PAGAR:', totalsX, doc.y, { width: 80, align: 'left' });
+      doc.text(formatCurrency(data.totalGeneral), totalsX + 80, doc.y, {
+        width: 82,
         align: 'right',
       });
 
@@ -201,16 +226,20 @@ export async function generarEstadoCuentaGrupoPDF(
 
       const tableTop = doc.y;
       const colWidths = {
-        cliente: 100,
-        folio: 65,
-        fecha: 65,
-        importe: 80,
-        dias: 50,
+        contrato: 50,
+        cliente: 85,
+        folio: 60,
+        fecha: 60,
+        importe: 70,
+        intereses: 70,
+        dias: 45,
       };
 
       // Encabezados de tabla
       doc.fontSize(9).font('Helvetica-Bold');
       let x = 50;
+      doc.text('Contrato', x, tableTop, { width: colWidths.contrato, align: 'left' });
+      x += colWidths.contrato;
       doc.text('Cliente', x, tableTop, { width: colWidths.cliente, align: 'left' });
       x += colWidths.cliente;
       doc.text('Folio', x, tableTop, { width: colWidths.folio, align: 'left' });
@@ -219,6 +248,8 @@ export async function generarEstadoCuentaGrupoPDF(
       x += colWidths.fecha;
       doc.text('Importe', x, tableTop, { width: colWidths.importe, align: 'right' });
       x += colWidths.importe;
+      doc.text('Intereses', x, tableTop, { width: colWidths.intereses, align: 'right' });
+      x += colWidths.intereses;
       doc.text('Días', x, tableTop, { width: colWidths.dias, align: 'right' });
 
       doc.moveDown(0.3);
@@ -237,9 +268,15 @@ export async function generarEstadoCuentaGrupoPDF(
         }
 
         const importe = Number(factura.importeTotal || 0);
+        const intereses = Number(factura.interesesMoratorios || 0);
 
         x = 50;
-        doc.text(factura.clienteNombre || '', x, doc.y, {
+        doc.text(factura.numeroContrato || 'N/A', x, doc.y, {
+          width: colWidths.contrato,
+          align: 'left',
+        });
+        x += colWidths.contrato;
+        doc.text(factura.clienteNombre || '', x, rowY, {
           width: colWidths.cliente,
           align: 'left',
         });
@@ -250,6 +287,8 @@ export async function generarEstadoCuentaGrupoPDF(
         x += colWidths.fecha;
         doc.text(formatCurrency(importe), x, rowY, { width: colWidths.importe, align: 'right' });
         x += colWidths.importe;
+        doc.text(formatCurrency(intereses), x, rowY, { width: colWidths.intereses, align: 'right' });
+        x += colWidths.intereses;
         doc.text(String(factura.diasAtraso || 0), x, rowY, { width: colWidths.dias, align: 'right' });
 
         doc.moveDown(0.8);
@@ -260,11 +299,24 @@ export async function generarEstadoCuentaGrupoPDF(
       doc.moveDown(0.5);
 
       // Totales
-      doc.fontSize(12).font('Helvetica-Bold');
-      const totalsX = 400;
-      doc.text('TOTAL A PAGAR:', totalsX, doc.y, { width: 100, align: 'left' });
-      doc.text(formatCurrency(data.totalPendiente), totalsX + 100, doc.y, {
-        width: 62,
+      doc.fontSize(10).font('Helvetica-Bold');
+      const totalsX = 350;
+      doc.text('Subtotal:', totalsX, doc.y, { width: 80, align: 'left' });
+      doc.text(formatCurrency(data.totalPendiente), totalsX + 80, doc.y, {
+        width: 82,
+        align: 'right',
+      });
+      doc.moveDown(0.5);
+      doc.text('Intereses Moratorios:', totalsX, doc.y, { width: 80, align: 'left' });
+      doc.text(formatCurrency(data.totalIntereses), totalsX + 80, doc.y, {
+        width: 82,
+        align: 'right',
+      });
+      doc.moveDown(0.5);
+      doc.fontSize(12);
+      doc.text('TOTAL A PAGAR:', totalsX, doc.y, { width: 80, align: 'left' });
+      doc.text(formatCurrency(data.totalGeneral), totalsX + 80, doc.y, {
+        width: 82,
         align: 'right',
       });
 

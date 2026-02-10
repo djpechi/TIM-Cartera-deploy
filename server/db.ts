@@ -981,6 +981,7 @@ export async function getFacturasPendientesPorCliente(clienteId: number) {
   if (cliente.length === 0) return [];
 
   // Buscar facturas por nombreCliente (no por clienteId)
+  // Incluir número de contrato de la primera partida (si existe)
   const result = await db
     .select({
       folio: facturas.folio,
@@ -990,8 +991,10 @@ export async function getFacturasPendientesPorCliente(clienteId: number) {
       interesesMoratorios: facturas.interesesMoratorios,
       estadoPago: facturas.estadoPago,
       sistema: facturas.sistema,
+      numeroContrato: partidasFactura.numeroContrato,
     })
     .from(facturas)
+    .leftJoin(partidasFactura, eq(facturas.id, partidasFactura.facturaId))
     .where(and(
       eq(facturas.nombreCliente, cliente[0].nombre),
       eq(facturas.estadoPago, 'pendiente')
@@ -1006,6 +1009,7 @@ export async function getFacturasPendientesPorGrupo(grupoId: number) {
   if (!db) return [];
 
   // Buscar facturas por nombreCliente (no por clienteId)
+  // Incluir número de contrato de la primera partida (si existe)
   const result = await db
     .select({
       folio: facturas.folio,
@@ -1016,9 +1020,11 @@ export async function getFacturasPendientesPorGrupo(grupoId: number) {
       estadoPago: facturas.estadoPago,
       sistema: facturas.sistema,
       clienteNombre: clientes.nombre,
+      numeroContrato: partidasFactura.numeroContrato,
     })
     .from(facturas)
     .innerJoin(clientes, eq(facturas.nombreCliente, clientes.nombre))
+    .leftJoin(partidasFactura, eq(facturas.id, partidasFactura.facturaId))
     .where(and(
       eq(clientes.grupoId, grupoId),
       eq(facturas.estadoPago, 'pendiente')

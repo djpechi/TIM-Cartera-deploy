@@ -264,3 +264,11 @@
 - [x] Localizar modal de contratos próximos a vencer
 - [x] Agregar tabla con lista de contratos (cliente, número, fecha vencimiento, días restantes)
 - [x] Probar modal con datos reales
+
+## Habilitar Intereses Moratorios y Número de Contrato en Estados de Cuenta
+- [x] Revisar código del generador de PDFs en EstadosCuenta.tsx
+- [x] Agregar columna de intereses moratorios en tabla del PDF
+- [x] Agregar columna de número de contrato en tabla del PDF
+- [x] Actualizar cálculo de totales para incluir intereses moratorios
+- [x] Actualizar vista previa si muestra la tabla
+- [x] Probar generación de PDF con nuevas columnas
