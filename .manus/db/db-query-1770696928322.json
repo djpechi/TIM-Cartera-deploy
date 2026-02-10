@@ -1,0 +1,18 @@
+{
+  "query": "SELECT DISTINCT estadoPago, COUNT(*) as cantidad FROM facturas GROUP BY estadoPago;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute SELECT DISTINCT estadoPago, COUNT(*) as cantidad FROM facturas GROUP BY estadoPago;",
+  "rows": [
+    {
+      "estadoPago": "pagado",
+      "cantidad": "6760"
+    },
+    {
+      "estadoPago": "pendiente",
+      "cantidad": "211"
+    }
+  ],
+  "messages": [],
+  "stdout": "estadoPago\tcantidad\npagado\t6760\npendiente\t211\n",
+  "stderr": "",
+  "execution_time_ms": 347
+}

@@ -22,7 +22,7 @@ export default function AnalisisCobranza() {
   const evolucionData = evolucion ? (() => {
     const mesesMap = new Map<string, { mes: string; pagadas: number; pendientes: number }>();
     
-    evolucion.forEach(item => {
+    evolucion.forEach((item: any) => {
       if (!mesesMap.has(item.mes)) {
         mesesMap.set(item.mes, { mes: item.mes, pagadas: 0, pendientes: 0 });
       }
@@ -205,7 +205,7 @@ export default function AnalisisCobranza() {
                       fill="#8884d8"
                       dataKey="montoTotal"
                     >
-                      {distribucion.map((entry, index) => (
+                      {distribucion.map((entry: any, index: number) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
@@ -214,7 +214,7 @@ export default function AnalisisCobranza() {
                 </ResponsiveContainer>
 
                 <div className="space-y-2">
-                  {distribucion.map((item, index) => (
+                  {distribucion.map((item: any, index: number) => (
                     <div key={item.rango} className="flex items-center justify-between p-3 rounded-lg border">
                       <div className="flex items-center gap-3">
                         <div

@@ -1,0 +1,70 @@
+{
+  "query": "SELECT DATE_FORMAT(fecha, '%Y-%m') as mes, estadoPago, COUNT(*) as cantidad, SUM(importeTotal) as monto FROM facturas WHERE fecha IS NOT NULL GROUP BY 1, 2 ORDER BY 1 LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute SELECT DATE_FORMAT(fecha, '%Y-%m') as mes, estadoPago, COUNT(*) as cantidad, SUM(importeTotal) as monto FROM facturas WHERE fecha IS NOT NULL GROUP BY 1, 2 ORDER BY 1 LIMIT 10;",
+  "rows": [
+    {
+      "mes": "2025-01",
+      "estadoPago": "pagado",
+      "cantidad": "654",
+      "monto": "7928539.72"
+    },
+    {
+      "mes": "2025-02",
+      "estadoPago": "pagado",
+      "cantidad": "456",
+      "monto": "8956918.81"
+    },
+    {
+      "mes": "2025-03",
+      "estadoPago": "pagado",
+      "cantidad": "447",
+      "monto": "10594729.08"
+    },
+    {
+      "mes": "2025-04",
+      "estadoPago": "pagado",
+      "cantidad": "425",
+      "monto": "7102926.76"
+    },
+    {
+      "mes": "2025-05",
+      "estadoPago": "pagado",
+      "cantidad": "431",
+      "monto": "8739251.63"
+    },
+    {
+      "mes": "2025-06",
+      "estadoPago": "pagado",
+      "cantidad": "428",
+      "monto": "7800249.26"
+    },
+    {
+      "mes": "2025-07",
+      "estadoPago": "pagado",
+      "cantidad": "405",
+      "monto": "6452728.07"
+    },
+    {
+      "mes": "2025-08",
+      "estadoPago": "pagado",
+      "cantidad": "476",
+      "monto": "9065033.92"
+    },
+    {
+      "mes": "2025-08",
+      "estadoPago": "pendiente",
+      "cantidad": "4",
+      "monto": "29320.28"
+    },
+    {
+      "mes": "2025-09",
+      "estadoPago": "pagado",
+      "cantidad": "516",
+      "monto": "10157180.48"
+    }
+  ],
+  "messages": [],
+  "stdout": "mes\testadoPago\tcantidad\tmonto\n2025-01\tpagado\t654\t7928539.72\n2025-02\tpagado\t456\t8956918.81\n2025-03\tpagado\t447\t10594729.08\n2025-04\tpagado\t425\t7102926.76\n2025-05\tpagado\t431\t8739251.63\n2025-06\tpagado\t428\t7800249.26\n2025-07\tpagado\t405\t6452728.07\n2025-08\tpagado\t476\t9065033.92\n2025-08\tpendiente\t4\t29320.28\n2025-09\tpagado\t516\t10157180.48\n",
+  "stderr": "",
+  "execution_time_ms": 389
+}

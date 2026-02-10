@@ -1135,19 +1135,26 @@ export async function getEvolucionCobranza() {
   const db = await getDb();
   if (!db) return [];
 
-  // Obtener facturas agrupadas por mes y estado de pago
-  const result = await db
-    .select({
-      mes: sql<string>`DATE_FORMAT(${facturas.fecha}, '%Y-%m')`,
-      estadoPago: facturas.estadoPago,
-      cantidad: sql<number>`COUNT(*)`,
-      monto: sql<number>`SUM(${facturas.importeTotal})`,
-    })
-    .from(facturas)
-    .groupBy(sql`DATE_FORMAT(${facturas.fecha}, '%Y-%m')`, facturas.estadoPago)
-    .orderBy(sql`DATE_FORMAT(${facturas.fecha}, '%Y-%m')`);
+  try {
+    // Usar SQL raw con números de posición para evitar problemas con GROUP BY
+    const result: any = await db.execute(sql`
+      SELECT 
+        DATE_FORMAT(fecha, '%Y-%m') as mes,
+        estadoPago,
+        COUNT(*) as cantidad,
+        SUM(importeTotal) as monto
+      FROM facturas
+      WHERE fecha IS NOT NULL
+      GROUP BY 1, 2
+      ORDER BY 1
+    `);
 
-  return result;
+    console.log('[getEvolucionCobranza] Result:', result);
+    return Array.isArray(result) ? result : (result.rows || []);
+  } catch (error) {
+    console.error('[getEvolucionCobranza] Error:', error);
+    return [];
+  }
 }
 
 export async function getTopDeudores(limit: number = 10) {
@@ -1175,35 +1182,45 @@ export async function getDistribucionPorAntiguedad() {
   const db = await getDb();
   if (!db) return [];
 
-  // Obtener distribución de cartera por rangos de antigüedad
-  const result = await db
-    .select({
-      rango: sql<string>`CASE 
-        WHEN ${facturas.diasAtraso} BETWEEN 1 AND 30 THEN '1-30 días'
-        WHEN ${facturas.diasAtraso} BETWEEN 31 AND 60 THEN '31-60 días'
-        WHEN ${facturas.diasAtraso} BETWEEN 61 AND 90 THEN '61-90 días'
-        WHEN ${facturas.diasAtraso} > 90 THEN '+90 días'
-        ELSE '0 días'
-      END`,
-      cantidadFacturas: sql<number>`COUNT(*)`,
-      montoTotal: sql<number>`SUM(${facturas.importeTotal})`,
-    })
-    .from(facturas)
-    .where(eq(facturas.estadoPago, 'pendiente'))
-    .groupBy(sql`CASE 
-      WHEN ${facturas.diasAtraso} BETWEEN 1 AND 30 THEN '1-30 días'
-      WHEN ${facturas.diasAtraso} BETWEEN 31 AND 60 THEN '31-60 días'
-      WHEN ${facturas.diasAtraso} BETWEEN 61 AND 90 THEN '61-90 días'
-      WHEN ${facturas.diasAtraso} > 90 THEN '+90 días'
-      ELSE '0 días'
-    END`)
-    .orderBy(sql`CASE 
-      WHEN ${facturas.diasAtraso} BETWEEN 1 AND 30 THEN 1
-      WHEN ${facturas.diasAtraso} BETWEEN 31 AND 60 THEN 2
-      WHEN ${facturas.diasAtraso} BETWEEN 61 AND 90 THEN 3
-      WHEN ${facturas.diasAtraso} > 90 THEN 4
-      ELSE 0
-    END`);
+  try {
+    // Usar SQL raw sin ORDER BY complejo
+    const result: any = await db.execute(sql`
+      SELECT 
+        CASE 
+          WHEN DATEDIFF(CURDATE(), fecha) BETWEEN 1 AND 30 THEN '1-30 días'
+          WHEN DATEDIFF(CURDATE(), fecha) BETWEEN 31 AND 60 THEN '31-60 días'
+          WHEN DATEDIFF(CURDATE(), fecha) BETWEEN 61 AND 90 THEN '61-90 días'
+          WHEN DATEDIFF(CURDATE(), fecha) > 90 THEN '+90 días'
+          ELSE '0 días'
+        END as rango,
+        COUNT(*) as cantidadFacturas,
+        SUM(importeTotal) as montoTotal
+      FROM facturas
+      WHERE estadoPago = 'pendiente'
+      GROUP BY 1
+    `);
 
-  return result;
+    const rows = Array.isArray(result) ? result : (result.rows || []);
+    
+    // Ordenar manualmente en JavaScript
+    const ordenRangos: Record<string, number> = {
+      '0 días': 0,
+      '1-30 días': 1,
+      '31-60 días': 2,
+      '61-90 días': 3,
+      '+90 días': 4,
+    };
+    
+    rows.sort((a: any, b: any) => {
+      const ordenA = ordenRangos[a.rango] || 0;
+      const ordenB = ordenRangos[b.rango] || 0;
+      return ordenA - ordenB;
+    });
+
+    console.log('[getDistribucionPorAntiguedad] Result:', rows.length, 'rows');
+    return rows;
+  } catch (error) {
+    console.error('[getDistribucionPorAntiguedad] Error:', error);
+    return [];
+  }
 }

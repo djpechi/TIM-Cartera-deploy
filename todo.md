@@ -241,3 +241,9 @@
 - [x] Implementar gráfico de dona/pie para distribución por rangos
 - [ ] Agregar filtros de fecha y exportación de datos
 - [x] Probar visualizaciones con datos reales
+
+## Corrección de Errores SQL en Dashboard de Análisis
+- [x] Corregir consulta de distribución por antigüedad (calcular diasAtraso con DATEDIFF)
+- [x] Corregir consulta de evolución temporal (manejar fechas NULL)
+- [x] Usar SQL raw con números de posición para compatibilidad con ONLY_FULL_GROUP_BY
+- [x] Probar que ambos gráficos carguen correctamente (parcialmente: gráficos funcionan pero requieren datos históricos)
