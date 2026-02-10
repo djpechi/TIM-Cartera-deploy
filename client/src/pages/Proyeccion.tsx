@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { trpc } from "@/lib/trpc";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -14,6 +15,7 @@ import { es } from "date-fns/locale";
 export default function Proyeccion() {
   const [mesesProyeccion, setMesesProyeccion] = useState(6);
   const [empresaFiltro, setEmpresaFiltro] = useState<"todas" | "tim_transp" | "tim_value">("todas");
+  const [modalContratosOpen, setModalContratosOpen] = useState(false);
 
   // Calcular rango de fechas
   const fechaInicio = useMemo(() => {
@@ -157,18 +159,79 @@ export default function Proyeccion() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Próximos a Vencer</CardTitle>
-            <AlertTriangle className="h-4 w-4 text-yellow-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">{contratosVenciendo}</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              3 o menos rentas pendientes
-            </p>
-          </CardContent>
-        </Card>
+        <Dialog open={modalContratosOpen} onOpenChange={setModalContratosOpen}>
+          <DialogTrigger asChild>
+            <Card className="cursor-pointer hover:bg-accent transition-colors">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Próximos a Vencer</CardTitle>
+                <AlertTriangle className="h-4 w-4 text-yellow-600" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-yellow-600">{contratosVenciendo}</div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  3 o menos rentas pendientes
+                </p>
+              </CardContent>
+            </Card>
+          </DialogTrigger>
+          <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Contratos Próximos a Vencer</DialogTitle>
+              <DialogDescription>
+                Contratos con 3 o menos rentas pendientes - Requieren atención para renovación
+              </DialogDescription>
+            </DialogHeader>
+            <div className="mt-4">
+              {contratosProximosAVencer && contratosProximosAVencer.length > 0 ? (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Contrato</TableHead>
+                      <TableHead>Cliente</TableHead>
+                      <TableHead>Empresa</TableHead>
+                      <TableHead className="text-right">Renta Actual</TableHead>
+                      <TableHead className="text-right">Total Rentas</TableHead>
+                      <TableHead className="text-right">Pendientes</TableHead>
+                      <TableHead className="text-right">Monto Mensual</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {contratosProximosAVencer.map((contrato) => {
+                      const pendientes = calcularRentasPendientes(contrato.rentaActual, contrato.totalRentas);
+                      return (
+                        <TableRow key={contrato.id}>
+                          <TableCell className="font-medium">
+                            EXP:{contrato.numeroContrato}
+                          </TableCell>
+                          <TableCell>{contrato.nombreCliente}</TableCell>
+                          <TableCell>
+                            <Badge variant={contrato.empresa === 'tim_transp' ? 'default' : 'secondary'}>
+                              {contrato.empresa === 'tim_transp' ? 'Tim Transp' : 'Tim Value'}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-right">{contrato.rentaActual}</TableCell>
+                          <TableCell className="text-right">{contrato.totalRentas}</TableCell>
+                          <TableCell className="text-right">
+                            <Badge variant={pendientes <= 1 ? 'destructive' : 'outline'}>
+                              {pendientes} {pendientes === 1 ? 'renta' : 'rentas'}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-right font-medium">
+                            {formatCurrency(Number(contrato.montoMensual))}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              ) : (
+                <div className="text-center py-8 text-muted-foreground">
+                  No hay contratos próximos a vencer
+                </div>
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

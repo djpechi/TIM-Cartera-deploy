@@ -258,3 +258,9 @@
 - [x] Eliminar endpoint de distribución por antigüedad de routers.ts (no es necesario, solo no se usa)
 - [x] Eliminar gráfico de distribución por antigüedad de AnalisisCobranza.tsx
 - [x] Probar que el dashboard cargue sin errores
+
+## Modificación de Modal de Contratos Próximos a Vencer
+- [x] Identificar archivo de la página de Proyecciones
+- [x] Localizar modal de contratos próximos a vencer
+- [x] Agregar tabla con lista de contratos (cliente, número, fecha vencimiento, días restantes)
+- [x] Probar modal con datos reales
