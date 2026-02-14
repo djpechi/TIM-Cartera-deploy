@@ -340,3 +340,9 @@
 - [x] Actualizar generador de PDFs para recalcular días de atraso al momento de generación
 - [x] Actualizar cálculo de intereses moratorios para usar días de atraso dinámicos
 - [x] Probar en vista previa y PDFs que los días de atraso se calculan correctamente
+
+## Reorganizar Exportación Masiva en Tab Dedicada
+- [x] Agregar tercera tab "Exportación Masiva" en Estados de Cuenta
+- [x] Mover checkboxes y lista de clientes a la nueva tab
+- [x] Reorganizar interfaz para mejor visualización
+- [x] Probar funcionalidad en la nueva tab

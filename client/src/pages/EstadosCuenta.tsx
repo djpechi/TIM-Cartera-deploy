@@ -8,7 +8,7 @@ import { FileText, Download, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function EstadosCuenta() {
-  const [tipoSeleccion, setTipoSeleccion] = useState<'cliente' | 'grupo'>('cliente');
+  const [tipoSeleccion, setTipoSeleccion] = useState<'cliente' | 'grupo' | 'masivo'>('cliente');
   const [clienteSeleccionado, setClienteSeleccionado] = useState<string>('');
   const [grupoSeleccionado, setGrupoSeleccionado] = useState<string>('');
   const [tasaInteresMoratorio, setTasaInteresMoratorio] = useState<number>(0);
@@ -160,86 +160,35 @@ export default function EstadosCuenta() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs value={tipoSeleccion} onValueChange={(v) => setTipoSeleccion(v as 'cliente' | 'grupo')}>
-              <TabsList className="grid w-full grid-cols-2">
+            <Tabs value={tipoSeleccion} onValueChange={(v) => setTipoSeleccion(v as 'cliente' | 'grupo' | 'masivo')}>
+              <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="cliente">Por Cliente</TabsTrigger>
                 <TabsTrigger value="grupo">Por Grupo</TabsTrigger>
+                <TabsTrigger value="masivo">Exportación Masiva</TabsTrigger>
               </TabsList>
 
               <TabsContent value="cliente" className="space-y-4 mt-4">
-                <div className="flex gap-4 items-end">
-                  <div className="flex-1">
-                    <label className="text-sm font-medium mb-2 block">Seleccionar Cliente</label>
-                    <Select value={clienteSeleccionado} onValueChange={setClienteSeleccionado}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecciona un cliente..." />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {loadingClientes ? (
-                          <SelectItem value="loading" disabled>
-                            Cargando...
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Seleccionar Cliente</label>
+                  <Select value={clienteSeleccionado} onValueChange={setClienteSeleccionado}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecciona un cliente..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {loadingClientes ? (
+                        <SelectItem value="loading" disabled>
+                          Cargando...
+                        </SelectItem>
+                      ) : (
+                        clientes?.map((cliente) => (
+                          <SelectItem key={cliente.id} value={String(cliente.id)}>
+                            {cliente.nombre}
                           </SelectItem>
-                        ) : (
-                          clientes?.map((cliente) => (
-                            <SelectItem key={cliente.id} value={String(cliente.id)}>
-                              {cliente.nombre}
-                            </SelectItem>
-                          ))
-                        )}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <Button
-                    onClick={() => {
-                      if (clientesSeleccionados.length === 0) {
-                        toast.error('Selecciona al menos un cliente');
-                        return;
-                      }
-                      generarPDFsMasivos.mutate({ 
-                        clienteIds: clientesSeleccionados,
-                        tasaInteresMoratorio 
-                      });
-                    }}
-                    disabled={clientesSeleccionados.length === 0 || generarPDFsMasivos.isPending}
-                  >
-                    {generarPDFsMasivos.isPending ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Generando...
-                      </>
-                    ) : (
-                      <>
-                        <Download className="mr-2 h-4 w-4" />
-                        Exportar Seleccionados ({clientesSeleccionados.length})
-                      </>
-                    )}
-                  </Button>
+                        ))
+                      )}
+                    </SelectContent>
+                  </Select>
                 </div>
-                
-                {clientes && clientes.length > 0 && (
-                  <div className="border rounded-lg p-4 max-h-64 overflow-y-auto">
-                    <p className="text-sm font-medium mb-3">Seleccionar clientes para exportación masiva:</p>
-                    <div className="space-y-2">
-                      {clientes.map((cliente) => (
-                        <label key={cliente.id} className="flex items-center gap-2 cursor-pointer hover:bg-accent p-2 rounded">
-                          <input
-                            type="checkbox"
-                            checked={clientesSeleccionados.includes(cliente.id)}
-                            onChange={(e) => {
-                              if (e.target.checked) {
-                                setClientesSeleccionados([...clientesSeleccionados, cliente.id]);
-                              } else {
-                                setClientesSeleccionados(clientesSeleccionados.filter(id => id !== cliente.id));
-                              }
-                            }}
-                            className="h-4 w-4"
-                          />
-                          <span className="text-sm">{cliente.nombre}</span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </TabsContent>
 
               <TabsContent value="grupo" className="space-y-4 mt-4">
@@ -263,6 +212,98 @@ export default function EstadosCuenta() {
                       )}
                     </SelectContent>
                   </Select>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="masivo" className="space-y-4 mt-4">
+                <div className="space-y-4">
+                  <div className="flex gap-4 items-end">
+                    <div className="flex-1">
+                      <label className="text-sm font-medium mb-2 block">Tasa de Interés Moratorio (%)</label>
+                      <input
+                        type="number"
+                        min="0"
+                        step="0.1"
+                        value={tasaInteresMoratorio}
+                        onChange={(e) => setTasaInteresMoratorio(parseFloat(e.target.value) || 0)}
+                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        placeholder="Ej: 2.5"
+                      />
+                    </div>
+                    <Button
+                      onClick={() => {
+                        if (clientesSeleccionados.length === 0) {
+                          toast.error('Selecciona al menos un cliente');
+                          return;
+                        }
+                        generarPDFsMasivos.mutate({ 
+                          clienteIds: clientesSeleccionados,
+                          tasaInteresMoratorio 
+                        });
+                      }}
+                      disabled={clientesSeleccionados.length === 0 || generarPDFsMasivos.isPending}
+                      size="lg"
+                    >
+                      {generarPDFsMasivos.isPending ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Generando ZIP...
+                        </>
+                      ) : (
+                        <>
+                          <Download className="mr-2 h-4 w-4" />
+                          Exportar Seleccionados ({clientesSeleccionados.length})
+                        </>
+                      )}
+                    </Button>
+                  </div>
+
+                  {clientes && clientes.length > 0 && (
+                    <div className="border rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <p className="text-sm font-medium">Seleccionar clientes para exportación:</p>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            if (clientesSeleccionados.length === clientes.length) {
+                              setClientesSeleccionados([]);
+                            } else {
+                              setClientesSeleccionados(clientes.map(c => c.id));
+                            }
+                          }}
+                        >
+                          {clientesSeleccionados.length === clientes.length ? 'Deseleccionar Todos' : 'Seleccionar Todos'}
+                        </Button>
+                      </div>
+                      <div className="max-h-96 overflow-y-auto space-y-2">
+                        {clientes.map((cliente) => (
+                          <label key={cliente.id} className="flex items-center gap-3 cursor-pointer hover:bg-accent p-3 rounded-md transition-colors">
+                            <input
+                              type="checkbox"
+                              checked={clientesSeleccionados.includes(cliente.id)}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  setClientesSeleccionados([...clientesSeleccionados, cliente.id]);
+                                } else {
+                                  setClientesSeleccionados(clientesSeleccionados.filter(id => id !== cliente.id));
+                                }
+                              }}
+                              className="h-4 w-4"
+                            />
+                            <span className="text-sm flex-1">{cliente.nombre}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {(!clientes || clientes.length === 0) && !loadingClientes && (
+                    <div className="text-center py-8 text-muted-foreground">
+                      <FileText className="mx-auto h-12 w-12 mb-2 opacity-50" />
+                      <p>No hay clientes con deuda pendiente</p>
+                    </div>
+                  )}
                 </div>
               </TabsContent>
             </Tabs>
