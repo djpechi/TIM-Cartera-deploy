@@ -38,7 +38,7 @@ export default function AnalisisCobranza() {
   })() : [];
 
   // Usar datos del dashboard para totales
-  const totalPendiente = dashboardData?.totalCarteraVencida || 0;
+  const totalPendiente = dashboardData?.totalCarteraPendiente || 0;
   const totalFacturas = dashboardData?.facturasPendientes || 0;
 
   return (

@@ -214,6 +214,16 @@ export async function updateFacturaEstadoPago(folio: string, estadoPago: 'pendie
   await db.update(facturas).set({ estadoPago }).where(eq(facturas.folio, folio));
 }
 
+export async function updateFacturaSaldoPendiente(folio: string, saldoPendiente: number, estadoPago: 'pendiente' | 'pagado') {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(facturas).set({ 
+    saldoPendiente: saldoPendiente.toString(),
+    estadoPago 
+  }).where(eq(facturas.folio, folio));
+}
+
 export async function upsertFactura(factura: InsertFactura) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
@@ -361,12 +371,19 @@ export async function getDashboardStats() {
   const db = await getDb();
   if (!db) return null;
   
-  const totalCarteraVencida = await db
-    .select({ total: sql<number>`COALESCE(SUM(${facturas.totalConIntereses}), 0)` })
+  // Total cartera pendiente (saldoPendiente de todas las facturas pendientes)
+  const totalCarteraPendiente = await db
+    .select({ total: sql<number>`COALESCE(SUM(${facturas.saldoPendiente}), 0)` })
+    .from(facturas)
+    .where(eq(facturas.estadoPago, 'pendiente'));
+  
+  // Cartera vencida con más de 8 días
+  const carteraVencidaMayor8Dias = await db
+    .select({ total: sql<number>`COALESCE(SUM(${facturas.saldoPendiente}), 0)` })
     .from(facturas)
     .where(and(
       eq(facturas.estadoPago, 'pendiente'),
-      sql`${facturas.diasAtraso} > 0`
+      sql`${facturas.diasAtraso} > 8`
     ));
   
   const clientesConAtraso = await db
@@ -382,17 +399,51 @@ export async function getDashboardStats() {
     .from(facturas)
     .where(eq(facturas.estadoPago, 'pendiente'));
   
-  const totalCarteraPendiente = await db
-    .select({ total: sql<number>`COALESCE(SUM(${facturas.importeTotal}), 0)` })
-    .from(facturas)
-    .where(eq(facturas.estadoPago, 'pendiente'));
-  
   return {
-    totalCarteraVencida: totalCarteraVencida[0]?.total || 0,
     totalCarteraPendiente: totalCarteraPendiente[0]?.total || 0,
+    carteraVencidaMayor8Dias: carteraVencidaMayor8Dias[0]?.total || 0,
     clientesConAtraso: clientesConAtraso[0]?.count || 0,
     facturasPendientes: facturasPendientes[0]?.count || 0,
   };
+}
+
+export async function getFacturasCarteraPendiente() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db
+    .select({
+      folio: facturas.folio,
+      nombreCliente: facturas.nombreCliente,
+      sistema: facturas.sistema,
+      fechaVencimiento: facturas.fechaVencimiento,
+      diasAtraso: facturas.diasAtraso,
+      saldoPendiente: facturas.saldoPendiente,
+    })
+    .from(facturas)
+    .where(eq(facturas.estadoPago, 'pendiente'))
+    .orderBy(desc(facturas.diasAtraso));
+}
+
+export async function getFacturasCarteraVencidaMayor8Dias() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db
+    .select({
+      folio: facturas.folio,
+      nombreCliente: facturas.nombreCliente,
+      sistema: facturas.sistema,
+      fechaVencimiento: facturas.fechaVencimiento,
+      diasAtraso: facturas.diasAtraso,
+      saldoPendiente: facturas.saldoPendiente,
+    })
+    .from(facturas)
+    .where(and(
+      eq(facturas.estadoPago, 'pendiente'),
+      sql`${facturas.diasAtraso} > 8`
+    ))
+    .orderBy(desc(facturas.diasAtraso));
 }
 
 
@@ -993,6 +1044,7 @@ export async function getFacturasPendientesPorCliente(clienteId: number) {
       folio: facturas.folio,
       fecha: facturas.fecha,
       importeTotal: facturas.importeTotal,
+      saldoPendiente: facturas.saldoPendiente,
       diasAtraso: facturas.diasAtraso,
       interesesMoratorios: facturas.interesesMoratorios,
       estadoPago: facturas.estadoPago,
@@ -1021,6 +1073,7 @@ export async function getFacturasPendientesPorGrupo(grupoId: number) {
       folio: facturas.folio,
       fecha: facturas.fecha,
       importeTotal: facturas.importeTotal,
+      saldoPendiente: facturas.saldoPendiente,
       diasAtraso: facturas.diasAtraso,
       interesesMoratorios: facturas.interesesMoratorios,
       estadoPago: facturas.estadoPago,

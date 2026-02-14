@@ -69,6 +69,7 @@ export const facturas = mysqlTable("facturas", {
   fecha: timestamp("fecha").notNull(),
   fechaVencimiento: timestamp("fechaVencimiento"),
   importeTotal: decimal("importeTotal", { precision: 15, scale: 2 }).notNull(),
+  saldoPendiente: decimal("saldoPendiente", { precision: 15, scale: 2 }).default("0.00").notNull(),
   descripcion: text("descripcion"),
   estatus: mysqlEnum("estatus", ["normal", "cancelada"]).default("normal").notNull(),
   estadoPago: mysqlEnum("estadoPago", ["pendiente", "pagado"]).default("pendiente").notNull(),

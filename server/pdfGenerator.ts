@@ -5,6 +5,7 @@ interface FacturaPendiente {
   folio: string;
   fecha: Date | null;
   importeTotal: string;
+  saldoPendiente: string;
   diasAtraso: number | null;
   interesesMoratorios: string | null;
   sistema: 'tim_transp' | 'tim_value';
@@ -53,7 +54,8 @@ function formatDate(date: Date | null): string {
 }
 
 export async function generarEstadoCuentaClientePDF(
-  data: EstadoCuentaCliente
+  data: EstadoCuentaCliente,
+  tasaInteresMoratorio: number = 0
 ): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     try {
@@ -117,6 +119,10 @@ export async function generarEstadoCuentaClientePDF(
       doc.moveTo(50, doc.y).lineTo(562, doc.y).stroke();
       doc.moveDown(0.3);
 
+      // Calcular totales con tasa editable
+      let subtotal = 0;
+      let totalIntereses = 0;
+      
       // Filas de facturas
       doc.fontSize(8).font('Helvetica');
       data.facturas.forEach((factura) => {
@@ -128,8 +134,12 @@ export async function generarEstadoCuentaClientePDF(
           doc.y = 50;
         }
 
-        const importe = Number(factura.importeTotal || 0);
-        const intereses = Number(factura.interesesMoratorios || 0);
+        const saldoPendiente = Number(factura.saldoPendiente || 0);
+        const diasAtraso = Number(factura.diasAtraso || 0);
+        const intereses = saldoPendiente * (tasaInteresMoratorio / 100) * (diasAtraso / 30);
+        
+        subtotal += saldoPendiente;
+        totalIntereses += intereses;
 
         x = 50;
         doc.text(factura.numeroContrato || 'N/A', x, doc.y, { width: colWidths.contrato, align: 'left' });
@@ -143,7 +153,7 @@ export async function generarEstadoCuentaClientePDF(
           align: 'left',
         });
         x += colWidths.sistema;
-        doc.text(formatCurrency(importe), x, rowY, { width: colWidths.importe, align: 'right' });
+        doc.text(formatCurrency(saldoPendiente), x, rowY, { width: colWidths.importe, align: 'right' });
         x += colWidths.importe;
         doc.text(formatCurrency(intereses), x, rowY, { width: colWidths.intereses, align: 'right' });
         x += colWidths.intereses;
@@ -157,23 +167,25 @@ export async function generarEstadoCuentaClientePDF(
       doc.moveDown(0.5);
 
       // Totales
+      const totalGeneral = subtotal + totalIntereses;
+      
       doc.fontSize(10).font('Helvetica-Bold');
       const totalsX = 350;
       doc.text('Subtotal:', totalsX, doc.y, { width: 80, align: 'left' });
-      doc.text(formatCurrency(data.totalPendiente), totalsX + 80, doc.y, {
+      doc.text(formatCurrency(subtotal), totalsX + 80, doc.y, {
         width: 82,
         align: 'right',
       });
       doc.moveDown(0.5);
-      doc.text('Intereses Moratorios:', totalsX, doc.y, { width: 80, align: 'left' });
-      doc.text(formatCurrency(data.totalIntereses), totalsX + 80, doc.y, {
+      doc.text(`Intereses Moratorios (${tasaInteresMoratorio}%):`, totalsX, doc.y, { width: 80, align: 'left' });
+      doc.text(formatCurrency(totalIntereses), totalsX + 80, doc.y, {
         width: 82,
         align: 'right',
       });
       doc.moveDown(0.5);
       doc.fontSize(12);
       doc.text('TOTAL A PAGAR:', totalsX, doc.y, { width: 80, align: 'left' });
-      doc.text(formatCurrency(data.totalGeneral), totalsX + 80, doc.y, {
+      doc.text(formatCurrency(totalGeneral), totalsX + 80, doc.y, {
         width: 82,
         align: 'right',
       });
@@ -195,7 +207,8 @@ export async function generarEstadoCuentaClientePDF(
 }
 
 export async function generarEstadoCuentaGrupoPDF(
-  data: EstadoCuentaGrupo
+  data: EstadoCuentaGrupo,
+  tasaInteresMoratorio: number = 0
 ): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     try {
@@ -256,6 +269,10 @@ export async function generarEstadoCuentaGrupoPDF(
       doc.moveTo(50, doc.y).lineTo(562, doc.y).stroke();
       doc.moveDown(0.3);
 
+      // Calcular totales con tasa editable
+      let subtotal = 0;
+      let totalIntereses = 0;
+      
       // Filas de facturas
       doc.fontSize(8).font('Helvetica');
       data.facturas.forEach((factura) => {
@@ -267,8 +284,12 @@ export async function generarEstadoCuentaGrupoPDF(
           doc.y = 50;
         }
 
-        const importe = Number(factura.importeTotal || 0);
-        const intereses = Number(factura.interesesMoratorios || 0);
+        const saldoPendiente = Number(factura.saldoPendiente || 0);
+        const diasAtraso = Number(factura.diasAtraso || 0);
+        const intereses = saldoPendiente * (tasaInteresMoratorio / 100) * (diasAtraso / 30);
+        
+        subtotal += saldoPendiente;
+        totalIntereses += intereses;
 
         x = 50;
         doc.text(factura.numeroContrato || 'N/A', x, doc.y, {
@@ -285,7 +306,7 @@ export async function generarEstadoCuentaGrupoPDF(
         x += colWidths.folio;
         doc.text(formatDate(factura.fecha), x, rowY, { width: colWidths.fecha, align: 'left' });
         x += colWidths.fecha;
-        doc.text(formatCurrency(importe), x, rowY, { width: colWidths.importe, align: 'right' });
+        doc.text(formatCurrency(saldoPendiente), x, rowY, { width: colWidths.importe, align: 'right' });
         x += colWidths.importe;
         doc.text(formatCurrency(intereses), x, rowY, { width: colWidths.intereses, align: 'right' });
         x += colWidths.intereses;
@@ -299,23 +320,25 @@ export async function generarEstadoCuentaGrupoPDF(
       doc.moveDown(0.5);
 
       // Totales
+      const totalGeneral = subtotal + totalIntereses;
+      
       doc.fontSize(10).font('Helvetica-Bold');
       const totalsX = 350;
       doc.text('Subtotal:', totalsX, doc.y, { width: 80, align: 'left' });
-      doc.text(formatCurrency(data.totalPendiente), totalsX + 80, doc.y, {
+      doc.text(formatCurrency(subtotal), totalsX + 80, doc.y, {
         width: 82,
         align: 'right',
       });
       doc.moveDown(0.5);
-      doc.text('Intereses Moratorios:', totalsX, doc.y, { width: 80, align: 'left' });
-      doc.text(formatCurrency(data.totalIntereses), totalsX + 80, doc.y, {
+      doc.text(`Intereses Moratorios (${tasaInteresMoratorio}%):`, totalsX, doc.y, { width: 80, align: 'left' });
+      doc.text(formatCurrency(totalIntereses), totalsX + 80, doc.y, {
         width: 82,
         align: 'right',
       });
       doc.moveDown(0.5);
       doc.fontSize(12);
       doc.text('TOTAL A PAGAR:', totalsX, doc.y, { width: 80, align: 'left' });
-      doc.text(formatCurrency(data.totalGeneral), totalsX + 80, doc.y, {
+      doc.text(formatCurrency(totalGeneral), totalsX + 80, doc.y, {
         width: 82,
         align: 'right',
       });

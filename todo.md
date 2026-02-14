@@ -281,3 +281,19 @@
 - [x] Actualizar Dashboard para mostrar cartera total pendiente ($2,185,402.47)
 - [x] Modificar procesador de pendientes para crear facturas faltantes automáticamente
 - [x] Validar correcciones con tests unitarios
+
+## Implementar Nueva Lógica de Saldo Pendiente
+- [x] Agregar campo saldoPendiente a tabla facturas en schema.ts
+- [x] Ejecutar migración de base de datos (pnpm db:push)
+- [x] Modificar procesador de pendientes para actualizar saldoPendiente
+- [x] Marcar facturas ausentes en archivo como saldoPendiente = 0
+- [x] Agregar input de tasa de interés moratorio en Estados de Cuenta
+- [x] Actualizar vista previa para calcular intereses con tasa editable
+- [x] Modificar generador de PDF para usar saldoPendiente y tasa configurable
+- [x] Actualizar getDashboardStats para usar saldoPendiente
+- [x] Crear funciones para obtener detalles de facturas para modales
+- [ ] Agregar endpoints tRPC para modales
+- [ ] Actualizar Dashboard.tsx para mostrar modales al hacer clic
+- [ ] Probar carga de archivo de pendientes con nueva lógica
+- [ ] Probar generación de estados de cuenta con diferentes tasas
+- [ ] Validar dashboard y modales

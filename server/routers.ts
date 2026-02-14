@@ -116,6 +116,11 @@ export const appRouter = router({
             const foliosPendientes = new Set((result.data || []).map((p: any) => p.folio));
             const foliosExistentes = new Set(allFacturas.map(f => f.folio));
             
+            // Crear mapa de saldos pendientes del archivo
+            const saldosPendientes = new Map(
+              (result.data || []).map((p: any) => [p.folio, parseFloat(p.saldo || '0')])
+            );
+            
             // Crear facturas para folios que no existen en la BD
             const foliosFaltantes = (result.data || []).filter((p: any) => !foliosExistentes.has(p.folio));
             
@@ -129,31 +134,28 @@ export const appRouter = router({
               const fechaFactura = new Date(fechaVencimiento);
               fechaFactura.setDate(fechaFactura.getDate() - 30);
               
-              const { interesesMoratorios, totalConIntereses } = calcularAtrasoEIntereses(
-                fechaVencimiento,
-                saldo,
-                tasaInteres
-              );
-              
               await db.upsertFactura({
                 folio: pendiente.folio,
                 fecha: fechaFactura,
                 fechaVencimiento,
                 importeTotal: saldo.toString(),
+                saldoPendiente: saldo.toString(),
                 nombreCliente: pendiente.nombreCliente || 'CLIENTE DESCONOCIDO',
                 descripcion: 'Factura creada automáticamente desde archivo de pendientes',
                 estadoPago: 'pendiente',
                 diasAtraso,
-                interesesMoratorios: interesesMoratorios.toString(),
-                totalConIntereses: totalConIntereses.toString(),
+                interesesMoratorios: '0.00',
+                totalConIntereses: saldo.toString(),
                 sistema: 'tim_transp',
               } as any);
             }
             
-            // Actualizar estado de facturas existentes
+            // Actualizar saldoPendiente y estado de todas las facturas
             for (const factura of allFacturas) {
-              const estadoPago = foliosPendientes.has(factura.folio) ? 'pendiente' : 'pagado';
-              await db.updateFacturaEstadoPago(factura.folio, estadoPago);
+              const saldoPendiente = saldosPendientes.get(factura.folio) || 0;
+              const estadoPago = saldoPendiente > 0 ? 'pendiente' : 'pagado';
+              
+              await db.updateFacturaSaldoPendiente(factura.folio, saldoPendiente, estadoPago);
             }
           } else {
             // Insertar o actualizar facturas
@@ -790,7 +792,10 @@ export const appRouter = router({
 
     // Generar PDF de estado de cuenta de cliente
     generarPDFCliente: protectedProcedure
-      .input(z.object({ clienteId: z.number() }))
+      .input(z.object({ 
+        clienteId: z.number(),
+        tasaInteresMoratorio: z.number().default(0)
+      }))
       .mutation(async ({ input }) => {
         const estado = await db.getEstadoCuentaCliente(input.clienteId);
         if (!estado) {
@@ -801,7 +806,7 @@ export const appRouter = router({
         }
         
         const { generarEstadoCuentaClientePDF } = await import('./pdfGenerator');
-        const pdfBuffer = await generarEstadoCuentaClientePDF(estado);
+        const pdfBuffer = await generarEstadoCuentaClientePDF(estado, input.tasaInteresMoratorio);
         
         return {
           pdf: pdfBuffer.toString('base64'),
@@ -811,7 +816,10 @@ export const appRouter = router({
 
     // Generar PDF de estado de cuenta de grupo
     generarPDFGrupo: protectedProcedure
-      .input(z.object({ grupoId: z.number() }))
+      .input(z.object({ 
+        grupoId: z.number(),
+        tasaInteresMoratorio: z.number().default(0)
+      }))
       .mutation(async ({ input }) => {
         const estado = await db.getEstadoCuentaGrupo(input.grupoId);
         if (!estado) {
@@ -822,7 +830,7 @@ export const appRouter = router({
         }
         
         const { generarEstadoCuentaGrupoPDF } = await import('./pdfGenerator');
-        const pdfBuffer = await generarEstadoCuentaGrupoPDF(estado);
+        const pdfBuffer = await generarEstadoCuentaGrupoPDF(estado, input.tasaInteresMoratorio);
         
         return {
           pdf: pdfBuffer.toString('base64'),

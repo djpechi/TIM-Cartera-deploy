@@ -60,7 +60,7 @@ export default function Dashboard() {
                   Todas las facturas pendientes
                 </p>
                 <p className="text-xs text-amber-600 mt-1">
-                  Vencidas: {formatCurrency(Number(stats?.totalCarteraVencida || 0))}
+                  Vencidas &gt;8 días: {formatCurrency(Number(stats?.carteraVencidaMayor8Dias || 0))}
                 </p>
               </>
             )}

@@ -11,6 +11,7 @@ export default function EstadosCuenta() {
   const [tipoSeleccion, setTipoSeleccion] = useState<'cliente' | 'grupo'>('cliente');
   const [clienteSeleccionado, setClienteSeleccionado] = useState<string>('');
   const [grupoSeleccionado, setGrupoSeleccionado] = useState<string>('');
+  const [tasaInteresMoratorio, setTasaInteresMoratorio] = useState<number>(0);
 
   const { data: clientes, isLoading: loadingClientes } = trpc.estadosCuenta.clientesConDeuda.useQuery();
   const { data: grupos, isLoading: loadingGrupos } = trpc.estadosCuenta.gruposConDeuda.useQuery();
@@ -79,9 +80,15 @@ export default function EstadosCuenta() {
 
   const handleGenerarPDF = () => {
     if (tipoSeleccion === 'cliente' && clienteSeleccionado) {
-      generarPDFCliente.mutate({ clienteId: parseInt(clienteSeleccionado) });
+      generarPDFCliente.mutate({ 
+        clienteId: parseInt(clienteSeleccionado),
+        tasaInteresMoratorio 
+      });
     } else if (tipoSeleccion === 'grupo' && grupoSeleccionado) {
-      generarPDFGrupo.mutate({ grupoId: parseInt(grupoSeleccionado) });
+      generarPDFGrupo.mutate({ 
+        grupoId: parseInt(grupoSeleccionado),
+        tasaInteresMoratorio 
+      });
     }
   };
 
@@ -184,6 +191,37 @@ export default function EstadosCuenta() {
           <>
             <Card>
               <CardHeader>
+                <CardTitle>Configuración de Intereses</CardTitle>
+                <CardDescription>
+                  Configura la tasa de interés moratorio para el cálculo
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">
+                      Tasa de Interés Moratorio (%)
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      max="100"
+                      step="0.1"
+                      value={tasaInteresMoratorio}
+                      onChange={(e) => setTasaInteresMoratorio(parseFloat(e.target.value) || 0)}
+                      className="w-full px-3 py-2 border rounded-md"
+                      placeholder="Ej: 3.5"
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Ingresa 0 para no aplicar intereses moratorios
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <FileText className="h-5 w-5" />
                   Vista Previa del Estado de Cuenta
@@ -196,29 +234,50 @@ export default function EstadosCuenta() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="grid grid-cols-3 gap-4 mb-4">
-                    <div className="bg-muted p-4 rounded-lg">
-                      <p className="text-sm text-muted-foreground">Facturas Pendientes</p>
-                      <p className="text-2xl font-bold">{estadoActual.facturas.length}</p>
-                    </div>
-                    <div className="bg-muted p-4 rounded-lg">
-                      <p className="text-sm text-muted-foreground">Subtotal</p>
-                      <p className="text-2xl font-bold">{formatCurrency(estadoActual.totalPendiente)}</p>
-                    </div>
-                    <div className="bg-muted p-4 rounded-lg">
-                      <p className="text-sm text-muted-foreground">Intereses Moratorios</p>
-                      <p className="text-2xl font-bold">{formatCurrency(estadoActual.totalIntereses)}</p>
-                    </div>
-                  </div>
+                  {(() => {
+                    // Calcular intereses con tasa editable
+                    const subtotal = estadoActual.facturas.reduce((sum: number, f: any) => {
+                      return sum + Number(f.saldoPendiente || 0);
+                    }, 0);
+                    
+                    const interesesCalculados = estadoActual.facturas.reduce((sum: number, f: any) => {
+                      const saldo = Number(f.saldoPendiente || 0);
+                      const diasAtraso = Number(f.diasAtraso || 0);
+                      const intereses = saldo * (tasaInteresMoratorio / 100) * (diasAtraso / 30);
+                      return sum + intereses;
+                    }, 0);
+                    
+                    const totalGeneral = subtotal + interesesCalculados;
+                    
+                    return (
+                      <>
+                        <div className="grid grid-cols-3 gap-4 mb-4">
+                          <div className="bg-muted p-4 rounded-lg">
+                            <p className="text-sm text-muted-foreground">Facturas Pendientes</p>
+                            <p className="text-2xl font-bold">{estadoActual.facturas.length}</p>
+                          </div>
+                          <div className="bg-muted p-4 rounded-lg">
+                            <p className="text-sm text-muted-foreground">Subtotal</p>
+                            <p className="text-2xl font-bold">{formatCurrency(subtotal)}</p>
+                          </div>
+                          <div className="bg-muted p-4 rounded-lg">
+                            <p className="text-sm text-muted-foreground">Intereses Moratorios ({tasaInteresMoratorio}%)</p>
+                            <p className="text-2xl font-bold">{formatCurrency(interesesCalculados)}</p>
+                          </div>
+                        </div>
 
-                  <div className="border rounded-lg p-4 bg-primary/5">
-                    <div className="flex justify-between items-center">
-                      <span className="text-lg font-semibold">Total a Pagar</span>
-                      <span className="text-2xl font-bold text-primary">
-                        {formatCurrency(estadoActual.totalGeneral)}
-                      </span>
-                    </div>
-                  </div>
+                        <div className="border rounded-lg p-4 bg-primary/5">
+                          <div className="flex justify-between items-center">
+                            <span className="text-lg font-semibold">Total a Pagar</span>
+                            <span className="text-2xl font-bold text-primary">
+                              {formatCurrency(totalGeneral)}
+                            </span>
+                          </div>
+                        </div>
+                      </>
+                    );
+                  })()}
+                  
 
                   <div className="border rounded-lg overflow-hidden">
                     <div className="overflow-x-auto">
@@ -239,8 +298,9 @@ export default function EstadosCuenta() {
                         </thead>
                         <tbody className="divide-y">
                           {estadoActual.facturas.map((factura: any, index: number) => {
-                            const importe = Number(factura.importeTotal || 0);
-                            const intereses = Number(factura.interesesMoratorios || 0);
+                            const saldoPendiente = Number(factura.saldoPendiente || 0);
+                            const diasAtraso = Number(factura.diasAtraso || 0);
+                            const intereses = saldoPendiente * (tasaInteresMoratorio / 100) * (diasAtraso / 30);
 
                             return (
                               <tr key={index} className="hover:bg-muted/50">
@@ -255,7 +315,7 @@ export default function EstadosCuenta() {
                                     {factura.sistema === 'tim_transp' ? 'TT' : 'TV'}
                                   </span>
                                 </td>
-                                <td className="px-4 py-3 text-sm text-right font-semibold">{formatCurrency(importe)}</td>
+                                <td className="px-4 py-3 text-sm text-right font-semibold">{formatCurrency(saldoPendiente)}</td>
                                 <td className="px-4 py-3 text-sm text-right">{formatCurrency(intereses)}</td>
                                 <td className="px-4 py-3 text-sm text-right">
                                   <span
