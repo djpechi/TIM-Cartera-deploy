@@ -334,3 +334,9 @@
 - [x] Agregar botón "Exportar Seleccionados" en frontend
 - [x] Implementar lógica de selección múltiple
 - [x] Probar exportación masiva con múltiples clientes
+
+## Cálculo Dinámico de Días de Atraso en Estados de Cuenta
+- [x] Modificar consultas de estados de cuenta para calcular días de atraso en tiempo real
+- [x] Actualizar generador de PDFs para recalcular días de atraso al momento de generación
+- [x] Actualizar cálculo de intereses moratorios para usar días de atraso dinámicos
+- [x] Probar en vista previa y PDFs que los días de atraso se calculan correctamente
