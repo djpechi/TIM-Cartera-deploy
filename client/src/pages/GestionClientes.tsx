@@ -331,6 +331,7 @@ export default function GestionClientes() {
                   <TableHead>Alias</TableHead>
                   <TableHead>Grupo</TableHead>
                   <TableHead>Responsable</TableHead>
+                  <TableHead>Correo</TableHead>
                   <TableHead>Contacto</TableHead>
                   <TableHead className="text-right">Acciones</TableHead>
                 </TableRow>
@@ -338,7 +339,7 @@ export default function GestionClientes() {
               <TableBody>
                 {filteredClientes.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center text-muted-foreground">
+                    <TableCell colSpan={8} className="text-center text-muted-foreground">
                       No se encontraron clientes
                     </TableCell>
                   </TableRow>
@@ -356,9 +357,8 @@ export default function GestionClientes() {
                         )}
                       </TableCell>
                       <TableCell>{cliente.responsableCobranza || "-"}</TableCell>
-                      <TableCell>
-                        {cliente.correoCobranza || cliente.telefono || "-"}
-                      </TableCell>
+                      <TableCell>{cliente.correoCobranza || "-"}</TableCell>
+                      <TableCell>{cliente.telefono || "-"}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
                           <Button

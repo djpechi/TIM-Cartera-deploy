@@ -308,3 +308,8 @@
 - [x] Actualizar DashboardLayout/sidebar para filtrar menús según permisos
 - [x] Crear hook usePermissions para verificar permisos en el frontend
 - [x] Probar sistema con diferentes roles y permisos
+
+## Agregar Columna de Correo en Tabla de Clientes
+- [x] Verificar campo correoCobranza en schema de clientes
+- [x] Actualizar tabla en página Clientes para mostrar columna de correo
+- [x] Probar visualización de correos en la tabla
