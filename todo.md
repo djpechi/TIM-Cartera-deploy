@@ -367,3 +367,11 @@
 - [x] Corregir lógica de cálculo de intereses moratorios en generación de estados de cuenta
 - [x] Probar generación de estados de cuenta con datos reales
 - [x] Verificar que los cálculos sean correctos en el PDF generado
+
+## Corrección de Error al Editar Clientes
+- [x] Revisar logs del navegador y servidor para identificar el error
+- [x] Investigar código de edición de clientes en frontend
+- [x] Investigar endpoint de actualización de clientes en backend
+- [x] Corregir error identificado (SelectItem con value vacío)
+- [x] Probar edición de clientes con datos reales
+- [x] Verificar que la edición funcione correctamente

@@ -97,7 +97,7 @@ export default function GestionClientes() {
     nombre: "",
     rfc: "",
     alias: "",
-    grupoId: "",
+    grupoId: "sin-grupo",
     responsableCobranza: "",
     correoCobranza: "",
     telefono: "",
@@ -117,7 +117,7 @@ export default function GestionClientes() {
       nombre: "",
       rfc: "",
       alias: "",
-      grupoId: "",
+      grupoId: "sin-grupo",
       responsableCobranza: "",
       correoCobranza: "",
       telefono: "",
@@ -142,7 +142,7 @@ export default function GestionClientes() {
       nombre: cliente.nombre || "",
       rfc: cliente.rfc || "",
       alias: cliente.alias || "",
-      grupoId: cliente.grupoId?.toString() || "",
+      grupoId: cliente.grupoId?.toString() || "sin-grupo",
       responsableCobranza: cliente.responsableCobranza || "",
       correoCobranza: cliente.correoCobranza || "",
       telefono: cliente.telefono || "",
@@ -167,7 +167,7 @@ export default function GestionClientes() {
       nombre: clienteForm.nombre,
       rfc: clienteForm.rfc || undefined,
       alias: clienteForm.alias || undefined,
-      grupoId: clienteForm.grupoId ? parseInt(clienteForm.grupoId) : undefined,
+      grupoId: (clienteForm.grupoId && clienteForm.grupoId !== 'sin-grupo') ? parseInt(clienteForm.grupoId) : undefined,
       responsableCobranza: clienteForm.responsableCobranza || undefined,
       correoCobranza: clienteForm.correoCobranza || undefined,
       telefono: clienteForm.telefono || undefined,
@@ -448,7 +448,7 @@ export default function GestionClientes() {
                       <SelectValue placeholder="Seleccionar grupo" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">Sin grupo</SelectItem>
+                      <SelectItem value="sin-grupo">Sin grupo</SelectItem>
                       {grupos.map((grupo) => (
                         <SelectItem key={grupo.id} value={grupo.id.toString()}>
                           {grupo.nombre}
