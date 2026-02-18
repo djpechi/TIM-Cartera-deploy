@@ -375,3 +375,13 @@
 - [x] Corregir error identificado (SelectItem con value vacío)
 - [x] Probar edición de clientes con datos reales
 - [x] Verificar que la edición funcione correctamente
+
+## Corrección de Intereses Moratorios para TT y TV
+- [x] Investigar por qué intereses moratorios solo se calculan para TIM VALUE (TV)
+- [x] Revisar código de generación de estados de cuenta para identificar filtro por empresa
+- [x] Identificar problema: facturas TT no tienen fechas de vencimiento configuradas
+- [x] Investigar por qué las facturas TT no tienen fechas de vencimiento
+- [x] Revisar código de carga de archivos para identificar dónde se importan fechas
+- [x] Corregir importación de columna "Vence" a fechaVencimiento para facturas TT
+- [x] Actualizar fechas de vencimiento de facturas TT existentes en base de datos
+- [x] Probar generación de estados de cuenta con facturas TT actualizadas

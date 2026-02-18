@@ -1,0 +1,130 @@
+{
+  "query": "SELECT \n  folio,\n  fecha,\n  fechaVencimiento,\n  sistema,\n  importeTotal,\n  saldoPendiente,\n  estadoPago,\n  DATEDIFF(CURDATE(), fechaVencimiento) as diasAtraso\nFROM facturas\nWHERE nombreCliente = 'OUTOKUMPU MEXINOX'\n  AND estadoPago = 'pendiente'\nORDER BY sistema, fecha\nLIMIT 20;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute SELECT \n  folio,\n  fecha,\n  fechaVencimiento,\n  sistema,\n  importeTotal,\n  saldoPendiente,\n  estadoPago,\n  DATEDIFF(CURDATE(), fechaVencimiento) as diasAtraso\nFROM facturas\nWHERE nombreCliente = 'OUTOKUMPU MEXINOX'\n  AND estadoPago = 'pendiente'\nORDER BY sistema, fecha\nLIMIT 20;",
+  "rows": [
+    {
+      "folio": "AB11738",
+      "fecha": "2026-01-20 00:00:00",
+      "fechaVencimiento": "2026-02-19 00:00:00",
+      "sistema": "tim_transp",
+      "importeTotal": "1624.00",
+      "saldoPendiente": "1624.00",
+      "estadoPago": "pendiente",
+      "diasAtraso": "-1"
+    },
+    {
+      "folio": "AB11741",
+      "fecha": "2026-01-20 00:00:00",
+      "fechaVencimiento": "2026-02-19 00:00:00",
+      "sistema": "tim_transp",
+      "importeTotal": "1624.00",
+      "saldoPendiente": "1624.00",
+      "estadoPago": "pendiente",
+      "diasAtraso": "-1"
+    },
+    {
+      "folio": "AB11749",
+      "fecha": "2026-01-20 00:00:00",
+      "fechaVencimiento": "2026-02-19 00:00:00",
+      "sistema": "tim_transp",
+      "importeTotal": "1624.00",
+      "saldoPendiente": "1624.00",
+      "estadoPago": "pendiente",
+      "diasAtraso": "-1"
+    },
+    {
+      "folio": "AB11744",
+      "fecha": "2026-01-20 00:00:00",
+      "fechaVencimiento": "2026-02-19 00:00:00",
+      "sistema": "tim_transp",
+      "importeTotal": "1624.00",
+      "saldoPendiente": "1624.00",
+      "estadoPago": "pendiente",
+      "diasAtraso": "-1"
+    },
+    {
+      "folio": "AB11746",
+      "fecha": "2026-01-20 00:00:00",
+      "fechaVencimiento": "2026-02-19 00:00:00",
+      "sistema": "tim_transp",
+      "importeTotal": "1624.00",
+      "saldoPendiente": "1624.00",
+      "estadoPago": "pendiente",
+      "diasAtraso": "-1"
+    },
+    {
+      "folio": "AB11850",
+      "fecha": "2026-01-29 00:00:00",
+      "fechaVencimiento": "2026-02-28 00:00:00",
+      "sistema": "tim_transp",
+      "importeTotal": "11332.04",
+      "saldoPendiente": "11332.04",
+      "estadoPago": "pendiente",
+      "diasAtraso": "-10"
+    },
+    {
+      "folio": "AB11849",
+      "fecha": "2026-01-29 00:00:00",
+      "fechaVencimiento": "2026-02-28 00:00:00",
+      "sistema": "tim_transp",
+      "importeTotal": "9835.64",
+      "saldoPendiente": "9835.64",
+      "estadoPago": "pendiente",
+      "diasAtraso": "-10"
+    },
+    {
+      "folio": "AB11848",
+      "fecha": "2026-01-29 00:00:00",
+      "fechaVencimiento": "2026-02-28 00:00:00",
+      "sistema": "tim_transp",
+      "importeTotal": "9835.64",
+      "saldoPendiente": "9835.64",
+      "estadoPago": "pendiente",
+      "diasAtraso": "-10"
+    },
+    {
+      "folio": "AA1292",
+      "fecha": "2026-01-02 00:00:00",
+      "fechaVencimiento": "2026-02-01 00:00:00",
+      "sistema": "tim_value",
+      "importeTotal": "3006.74",
+      "saldoPendiente": "3006.74",
+      "estadoPago": "pendiente",
+      "diasAtraso": "17"
+    },
+    {
+      "folio": "AA1290",
+      "fecha": "2026-01-02 00:00:00",
+      "fechaVencimiento": "2026-02-01 00:00:00",
+      "sistema": "tim_value",
+      "importeTotal": "22040.00",
+      "saldoPendiente": "22040.00",
+      "estadoPago": "pendiente",
+      "diasAtraso": "17"
+    },
+    {
+      "folio": "AA1289",
+      "fecha": "2026-01-02 00:00:00",
+      "fechaVencimiento": "2026-02-01 00:00:00",
+      "sistema": "tim_value",
+      "importeTotal": "9033.08",
+      "saldoPendiente": "9033.08",
+      "estadoPago": "pendiente",
+      "diasAtraso": "17"
+    },
+    {
+      "folio": "AA1485",
+      "fecha": "2026-01-29 00:00:00",
+      "fechaVencimiento": "2026-02-28 00:00:00",
+      "sistema": "tim_value",
+      "importeTotal": "31111.20",
+      "saldoPendiente": "31111.20",
+      "estadoPago": "pendiente",
+      "diasAtraso": "-10"
+    }
+  ],
+  "messages": [],
+  "stdout": "folio\tfecha\tfechaVencimiento\tsistema\timporteTotal\tsaldoPendiente\testadoPago\tdiasAtraso\nAB11738\t2026-01-20 00:00:00\t2026-02-19 00:00:00\ttim_transp\t1624.00\t1624.00\tpendiente\t-1\nAB11741\t2026-01-20 00:00:00\t2026-02-19 00:00:00\ttim_transp\t1624.00\t1624.00\tpendiente\t-1\nAB11749\t2026-01-20 00:00:00\t2026-02-19 00:00:00\ttim_transp\t1624.00\t1624.00\tpendiente\t-1\nAB11744\t2026-01-20 00:00:00\t2026-02-19 00:00:00\ttim_transp\t1624.00\t1624.00\tpendiente\t-1\nAB11746\t2026-01-20 00:00:00\t2026-02-19 00:00:00\ttim_transp\t1624.00\t1624.00\tpendiente\t-1\nAB11850\t2026-01-29 00:00:00\t2026-02-28 00:00:00\ttim_transp\t11332.04\t11332.04\tpendiente\t-10\nAB11849\t2026-01-29 00:00:00\t2026-02-28 00:00:00\ttim_transp\t9835.64\t9835.64\tpendiente\t-10\nAB11848\t2026-01-29 00:00:00\t2026-02-28 00:00:00\ttim_transp\t9835.64\t9835.64\tpendiente\t-10\nAA1292\t2026-01-02 00:00:00\t2026-02-01 00:00:00\ttim_value\t3006.74\t3006.74\tpendiente\t17\nAA1290\t2026-01-02 00:00:00\t2026-02-01 00:00:00\ttim_value\t22040.00\t22040.00\tpendiente\t17\nAA1289\t2026-01-02 00:00:00\t2026-02-01 00:00:00\ttim_value\t9033.08\t9033.08\tpendiente\t17\nAA1485\t2026-01-29 00:00:00\t2026-02-28 00:00:00\ttim_value\t31111.20\t31111.20\tpendiente\t-10\n",
+  "stderr": "",
+  "execution_time_ms": 810
+}

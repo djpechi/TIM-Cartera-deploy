@@ -1,0 +1,50 @@
+{
+  "query": "SELECT \n  folio,\n  DATE_FORMAT(fecha, '%Y-%m-%d') as fecha,\n  DATE_FORMAT(fechaVencimiento, '%Y-%m-%d') as fechaVencimiento,\n  DATEDIFF(CURDATE(), fechaVencimiento) as diasAtraso,\n  sistema,\n  saldoPendiente\nFROM facturas\nWHERE folio IN ('AB11746', 'AB11749', 'AB11738', 'AB11744', 'AB11741')\nORDER BY folio;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute SELECT \n  folio,\n  DATE_FORMAT(fecha, '%Y-%m-%d') as fecha,\n  DATE_FORMAT(fechaVencimiento, '%Y-%m-%d') as fechaVencimiento,\n  DATEDIFF(CURDATE(), fechaVencimiento) as diasAtraso,\n  sistema,\n  saldoPendiente\nFROM facturas\nWHERE folio IN ('AB11746', 'AB11749', 'AB11738', 'AB11744', 'AB11741')\nORDER BY folio;",
+  "rows": [
+    {
+      "folio": "AB11738",
+      "fecha": "2026-01-20",
+      "fechaVencimiento": "2026-01-22",
+      "diasAtraso": "27",
+      "sistema": "tim_transp",
+      "saldoPendiente": "1624.00"
+    },
+    {
+      "folio": "AB11741",
+      "fecha": "2026-01-20",
+      "fechaVencimiento": "2026-01-22",
+      "diasAtraso": "27",
+      "sistema": "tim_transp",
+      "saldoPendiente": "1624.00"
+    },
+    {
+      "folio": "AB11744",
+      "fecha": "2026-01-20",
+      "fechaVencimiento": "2026-01-22",
+      "diasAtraso": "27",
+      "sistema": "tim_transp",
+      "saldoPendiente": "1624.00"
+    },
+    {
+      "folio": "AB11746",
+      "fecha": "2026-01-20",
+      "fechaVencimiento": "2026-01-22",
+      "diasAtraso": "27",
+      "sistema": "tim_transp",
+      "saldoPendiente": "1624.00"
+    },
+    {
+      "folio": "AB11749",
+      "fecha": "2026-01-20",
+      "fechaVencimiento": "2026-01-22",
+      "diasAtraso": "27",
+      "sistema": "tim_transp",
+      "saldoPendiente": "1624.00"
+    }
+  ],
+  "messages": [],
+  "stdout": "folio\tfecha\tfechaVencimiento\tdiasAtraso\tsistema\tsaldoPendiente\nAB11738\t2026-01-20\t2026-01-22\t27\ttim_transp\t1624.00\nAB11741\t2026-01-20\t2026-01-22\t27\ttim_transp\t1624.00\nAB11744\t2026-01-20\t2026-01-22\t27\ttim_transp\t1624.00\nAB11746\t2026-01-20\t2026-01-22\t27\ttim_transp\t1624.00\nAB11749\t2026-01-20\t2026-01-22\t27\ttim_transp\t1624.00\n",
+  "stderr": "",
+  "execution_time_ms": 67
+}

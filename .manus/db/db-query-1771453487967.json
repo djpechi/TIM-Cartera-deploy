@@ -1,0 +1,80 @@
+{
+  "query": "SELECT \n  folio,\n  DATE_FORMAT(fecha, '%Y-%m-%d') as fecha,\n  fechaVencimiento,\n  sistema,\n  saldoPendiente\nFROM facturas\nWHERE folio IN ('AB11746', 'AB11749', 'AB11738', 'AB11744', 'AB11741', 'AB11848', 'AB11849', 'AB11850', 'AB11709', 'AB11826')\nORDER BY folio;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute SELECT \n  folio,\n  DATE_FORMAT(fecha, '%Y-%m-%d') as fecha,\n  fechaVencimiento,\n  sistema,\n  saldoPendiente\nFROM facturas\nWHERE folio IN ('AB11746', 'AB11749', 'AB11738', 'AB11744', 'AB11741', 'AB11848', 'AB11849', 'AB11850', 'AB11709', 'AB11826')\nORDER BY folio;",
+  "rows": [
+    {
+      "folio": "AB11709",
+      "fecha": "2026-01-20",
+      "fechaVencimiento": "2026-02-19 00:00:00",
+      "sistema": "tim_transp",
+      "saldoPendiente": "1624.00"
+    },
+    {
+      "folio": "AB11738",
+      "fecha": "2026-01-20",
+      "fechaVencimiento": "2026-02-19 00:00:00",
+      "sistema": "tim_transp",
+      "saldoPendiente": "1624.00"
+    },
+    {
+      "folio": "AB11741",
+      "fecha": "2026-01-20",
+      "fechaVencimiento": "2026-02-19 00:00:00",
+      "sistema": "tim_transp",
+      "saldoPendiente": "1624.00"
+    },
+    {
+      "folio": "AB11744",
+      "fecha": "2026-01-20",
+      "fechaVencimiento": "2026-02-19 00:00:00",
+      "sistema": "tim_transp",
+      "saldoPendiente": "1624.00"
+    },
+    {
+      "folio": "AB11746",
+      "fecha": "2026-01-20",
+      "fechaVencimiento": "2026-02-19 00:00:00",
+      "sistema": "tim_transp",
+      "saldoPendiente": "1624.00"
+    },
+    {
+      "folio": "AB11749",
+      "fecha": "2026-01-20",
+      "fechaVencimiento": "2026-02-19 00:00:00",
+      "sistema": "tim_transp",
+      "saldoPendiente": "1624.00"
+    },
+    {
+      "folio": "AB11826",
+      "fecha": "2026-01-21",
+      "fechaVencimiento": "2026-02-20 00:00:00",
+      "sistema": "tim_transp",
+      "saldoPendiente": "13580.22"
+    },
+    {
+      "folio": "AB11848",
+      "fecha": "2026-01-29",
+      "fechaVencimiento": "2026-02-28 00:00:00",
+      "sistema": "tim_transp",
+      "saldoPendiente": "9835.64"
+    },
+    {
+      "folio": "AB11849",
+      "fecha": "2026-01-29",
+      "fechaVencimiento": "2026-02-28 00:00:00",
+      "sistema": "tim_transp",
+      "saldoPendiente": "9835.64"
+    },
+    {
+      "folio": "AB11850",
+      "fecha": "2026-01-29",
+      "fechaVencimiento": "2026-02-28 00:00:00",
+      "sistema": "tim_transp",
+      "saldoPendiente": "11332.04"
+    }
+  ],
+  "messages": [],
+  "stdout": "folio\tfecha\tfechaVencimiento\tsistema\tsaldoPendiente\nAB11709\t2026-01-20\t2026-02-19 00:00:00\ttim_transp\t1624.00\nAB11738\t2026-01-20\t2026-02-19 00:00:00\ttim_transp\t1624.00\nAB11741\t2026-01-20\t2026-02-19 00:00:00\ttim_transp\t1624.00\nAB11744\t2026-01-20\t2026-02-19 00:00:00\ttim_transp\t1624.00\nAB11746\t2026-01-20\t2026-02-19 00:00:00\ttim_transp\t1624.00\nAB11749\t2026-01-20\t2026-02-19 00:00:00\ttim_transp\t1624.00\nAB11826\t2026-01-21\t2026-02-20 00:00:00\ttim_transp\t13580.22\nAB11848\t2026-01-29\t2026-02-28 00:00:00\ttim_transp\t9835.64\nAB11849\t2026-01-29\t2026-02-28 00:00:00\ttim_transp\t9835.64\nAB11850\t2026-01-29\t2026-02-28 00:00:00\ttim_transp\t11332.04\n",
+  "stderr": "",
+  "execution_time_ms": 115
+}

@@ -94,10 +94,11 @@ export function processTimTranspFile(buffer: Buffer): ProcessResult {
     }
     
     const headers = (data[headerRow] as any[]).map(h => String(h || '').toLowerCase().trim());
-    const fechaIdx = headers.findIndex(h => h.includes('fecha'));
+    const fechaIdx = headers.findIndex(h => h.includes('fecha') && !h.includes('venc'));
+    const venceIdx = headers.findIndex(h => h.includes('vence') || h.includes('vencimiento'));
     const folioIdx = headers.findIndex(h => h.includes('folio'));
     const clienteIdx = headers.findIndex(h => h.includes('cliente') || h.includes('nombre'));
-    const importeIdx = headers.findIndex(h => h.includes('importe') || h.includes('total'));
+    const importeIdx = headers.findIndex(h => h.includes('importe') || h.includes('total') || h.includes('saldo'));
     const descripcionIdx = headers.findIndex(h => h.includes('descripci'));
     const estatusIdx = headers.findIndex(h => h.includes('estatus'));
     
@@ -111,6 +112,7 @@ export function processTimTranspFile(buffer: Buffer): ProcessResult {
       
       try {
         const fecha = parseExcelDate(row[fechaIdx]);
+        const fechaVencimiento = venceIdx !== -1 ? parseExcelDate(row[venceIdx]) : null;
         const nombreCliente = row[clienteIdx] ? String(row[clienteIdx]).trim() : '';
         const importeTotal = parseNumber(row[importeIdx]);
         const descripcion = row[descripcionIdx] ? String(row[descripcionIdx]) : '';
@@ -126,6 +128,7 @@ export function processTimTranspFile(buffer: Buffer): ProcessResult {
           sistema: 'tim_transp',
           nombreCliente,
           fecha,
+          fechaVencimiento,
           importeTotal: importeTotal.toString(),
           descripcion,
           estatus: estatus.includes('cancelad') ? 'cancelada' : 'normal',
@@ -196,10 +199,11 @@ export function processTimValueFile(buffer: Buffer): ProcessResult {
     }
     
     const headers = (data[headerRow] as any[]).map(h => String(h || '').toLowerCase().trim());
-    const fechaIdx = headers.findIndex(h => h.includes('fecha'));
+    const fechaIdx = headers.findIndex(h => h.includes('fecha') && !h.includes('venc'));
+    const venceIdx = headers.findIndex(h => h.includes('vence') || h.includes('vencimiento'));
     const folioIdx = headers.findIndex(h => h.includes('folio'));
     const clienteIdx = headers.findIndex(h => h.includes('cliente') || h.includes('nombre'));
-    const importeIdx = headers.findIndex(h => h.includes('importe') || h.includes('total'));
+    const importeIdx = headers.findIndex(h => h.includes('importe') || h.includes('total') || h.includes('saldo'));
     const descripcionIdx = headers.findIndex(h => h.includes('descripci'));
     const estatusIdx = headers.findIndex(h => h.includes('estatus'));
     
@@ -213,6 +217,7 @@ export function processTimValueFile(buffer: Buffer): ProcessResult {
       
       try {
         const fecha = parseExcelDate(row[fechaIdx]);
+        const fechaVencimiento = venceIdx !== -1 ? parseExcelDate(row[venceIdx]) : null;
         const nombreCliente = row[clienteIdx] ? String(row[clienteIdx]).trim() : '';
         const importeTotal = parseNumber(row[importeIdx]);
         const descripcion = row[descripcionIdx] ? String(row[descripcionIdx]) : '';
@@ -228,6 +233,7 @@ export function processTimValueFile(buffer: Buffer): ProcessResult {
           sistema: 'tim_value',
           nombreCliente,
           fecha,
+          fechaVencimiento,
           importeTotal: importeTotal.toString(),
           descripcion,
           estatus: estatus.includes('cancelad') ? 'cancelada' : 'normal',
