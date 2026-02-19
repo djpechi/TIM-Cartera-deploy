@@ -1100,12 +1100,7 @@ export async function getFacturasPendientesPorCliente(clienteId: number) {
       interesesMoratorios: facturas.interesesMoratorios,
       estadoPago: facturas.estadoPago,
       sistema: facturas.sistema,
-      numeroContrato: sql<string>`(
-        SELECT numeroContrato 
-        FROM partidasFactura 
-        WHERE partidasFactura.facturaId = ${facturas.id} 
-        LIMIT 1
-      )`,
+      numeroContrato: facturas.numeroContrato,
     })
     .from(facturas)
     .where(and(
@@ -1136,12 +1131,7 @@ export async function getFacturasPendientesPorGrupo(grupoId: number) {
       estadoPago: facturas.estadoPago,
       sistema: facturas.sistema,
       clienteNombre: clientes.nombre,
-      numeroContrato: sql<string>`(
-        SELECT numeroContrato 
-        FROM partidasFactura 
-        WHERE partidasFactura.facturaId = ${facturas.id} 
-        LIMIT 1
-      )`,
+      numeroContrato: facturas.numeroContrato,
     })
     .from(facturas)
     .innerJoin(clientes, eq(facturas.nombreCliente, clientes.nombre))

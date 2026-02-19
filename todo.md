@@ -395,3 +395,18 @@
 - [x] Identificar por qué la consulta retorna facturas duplicadas (LEFT JOIN con partidasFactura)
 - [x] Corregir consulta para evitar duplicados (usar subconsulta en lugar de LEFT JOIN)
 - [x] Probar vista previa de estado de cuenta con BOTANAS CAMPESINAS
+
+## Identificación y Clasificación de Folios sin Contrato
+- [x] Consultar base de datos para identificar folios sin contrato asignado (87 folios encontrados)
+- [x] Analizar descripción de cada folio para clasificar tipo
+- [x] Clasificar folios como: servicio, refrendo, póliza de seguro o membresía
+- [x] Crear lista de folios con su clasificación correspondiente (66 tienen contrato, 10 Club TIM, 2 seguros, 9 otros)
+- [x] Actualizar base de datos con números de contrato según clasificación (78 folios actualizados)
+- [x] PROBLEMA: Vista previa muestra N/A aunque BD tiene contratos correctos
+- [x] Decidir agregar campo numeroContrato directamente a tabla facturas
+- [x] Agregar campo numeroContrato a schema.ts
+- [x] Ejecutar migración de base de datos
+- [x] Actualizar xlsxProcessor para extraer numeroContrato de descripción
+- [x] Migrar contratos existentes de partidasFactura a facturas
+- [x] Actualizar consultas de estados de cuenta para usar numeroContrato de facturas
+- [x] Probar estados de cuenta con contratos visibles (0047 visible correctamente)

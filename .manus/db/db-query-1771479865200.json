@@ -1,0 +1,31 @@
+{
+  "query": "SELECT f.folio, f.nombreCliente, p.numeroContrato, p.descripcion, p.monto\nFROM facturas f\nLEFT JOIN partidasFactura p ON p.facturaId = f.id\nWHERE f.nombreCliente = 'BOTANAS CAMPESINAS' AND f.estadoPago = 'pendiente'\nORDER BY f.folio;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute SELECT f.folio, f.nombreCliente, p.numeroContrato, p.descripcion, p.monto\nFROM facturas f\nLEFT JOIN partidasFactura p ON p.facturaId = f.id\nWHERE f.nombreCliente = 'BOTANAS CAMPESINAS' AND f.estadoPago = 'pendiente'\nORDER BY f.folio;",
+  "rows": [
+    {
+      "folio": "AA1513",
+      "nombreCliente": "BOTANAS CAMPESINAS",
+      "numeroContrato": "0047",
+      "descripcion": "ARRENDAMIENTO VEHICULOS SEDAN, CUPE O CAMIONETA EXP: 0047 BMW-MINI MINI COOPER CONVERTIBLE ICONIC AUT 2024 NS:40892: RENTA 8 DE 24 DEL 02 de febrero de 2026 AL 01 de marzo de 2026",
+      "monto": "9280.00"
+    },
+    {
+      "folio": "AA1513",
+      "nombreCliente": "BOTANAS CAMPESINAS",
+      "numeroContrato": "0047",
+      "descripcion": "ARRENDAMIENTO VEHICULOS SEDAN, CUPE O CAMIONETA EXP: 0047 BMW-MINI MINI COOPER CONVERTIBLE ICONIC AUT 2024 NS:40892: RENTA 8 DE 24 DEL 02 de febrero de 2026 AL 01 de marzo de 2026",
+      "monto": "9280.00"
+    },
+    {
+      "folio": "AA1514",
+      "nombreCliente": "BOTANAS CAMPESINAS",
+      "numeroContrato": "0047",
+      "descripcion": "ADMINISTRACION DE FLOTILLA EXP:0047: RENTA 8 DE 24 DEL 02 de febrero de 2026 AL 01 de marzo de 2026",
+      "monto": "16008.00"
+    }
+  ],
+  "messages": [],
+  "stdout": "folio\tnombreCliente\tnumeroContrato\tdescripcion\tmonto\nAA1513\tBOTANAS CAMPESINAS\t0047\tARRENDAMIENTO VEHICULOS SEDAN, CUPE O CAMIONETA EXP: 0047 BMW-MINI MINI COOPER CONVERTIBLE ICONIC AUT 2024 NS:40892: RENTA 8 DE 24 DEL 02 de febrero de 2026 AL 01 de marzo de 2026\t9280.00\nAA1513\tBOTANAS CAMPESINAS\t0047\tARRENDAMIENTO VEHICULOS SEDAN, CUPE O CAMIONETA EXP: 0047 BMW-MINI MINI COOPER CONVERTIBLE ICONIC AUT 2024 NS:40892: RENTA 8 DE 24 DEL 02 de febrero de 2026 AL 01 de marzo de 2026\t9280.00\nAA1514\tBOTANAS CAMPESINAS\t0047\tADMINISTRACION DE FLOTILLA EXP:0047: RENTA 8 DE 24 DEL 02 de febrero de 2026 AL 01 de marzo de 2026\t16008.00\n",
+  "stderr": "",
+  "execution_time_ms": 106
+}

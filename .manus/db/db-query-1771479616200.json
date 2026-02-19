@@ -1,0 +1,460 @@
+{
+  "query": "SELECT f.folio, f.nombreCliente, f.fecha, f.importeTotal, f.descripcion, f.sistema, \n(SELECT numeroContrato FROM partidasFactura WHERE partidasFactura.facturaId = f.id LIMIT 1) as numeroContrato\nFROM facturas f\nWHERE f.estadoPago = 'pendiente'\nHAVING numeroContrato IS NULL\nORDER BY f.nombreCliente, f.folio\nLIMIT 50;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute SELECT f.folio, f.nombreCliente, f.fecha, f.importeTotal, f.descripcion, f.sistema, \n(SELECT numeroContrato FROM partidasFactura WHERE partidasFactura.facturaId = f.id LIMIT 1) as numeroContrato\nFROM facturas f\nWHERE f.estadoPago = 'pendiente'\nHAVING numeroContrato IS NULL\nORDER BY f.nombreCliente, f.folio\nLIMIT 50;",
+  "rows": [
+    {
+      "folio": "AB11826",
+      "nombreCliente": "AUTOEDICIONES DEL POTOSI",
+      "fecha": "2026-01-21 00:00:00",
+      "importeTotal": "13580.22",
+      "descripcion": "GESTIÓN POR SEGURO VW TAOS COMFORTLINE 2023 NS: 305228",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11966",
+      "nombreCliente": "BALEROS Y ABASTOS DE SAN LUIS",
+      "fecha": "2026-02-02 00:00:00",
+      "importeTotal": "35952.20",
+      "descripcion": "200411SCT - CLUB TIM: , 20 DE 24",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AA1514",
+      "nombreCliente": "BOTANAS CAMPESINAS",
+      "fecha": "2026-02-02 00:00:00",
+      "importeTotal": "16008.00",
+      "descripcion": "ADMINISTRACION DE FLOTILLA EXP:0047: RENTA 8 DE 24 DEL 02 de febrero de 2026 AL 01 de marzo de 2026",
+      "sistema": "tim_value",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11709",
+      "nombreCliente": "CARONTE LOGISTICA INTEGRAL",
+      "fecha": "2026-01-20 00:00:00",
+      "importeTotal": "1624.00",
+      "descripcion": "REFRENDO VEHICULAR 2026 EXP:311 - NISSAN - NP300 CHASIS CON CARROCERIA SECA U24 - 2023 - NS:865983",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11724",
+      "nombreCliente": "CARONTE LOGISTICA INTEGRAL",
+      "fecha": "2026-01-20 00:00:00",
+      "importeTotal": "1624.00",
+      "descripcion": "REFRENDO VEHICULAR 2026 EXP:457 - VOLKSWAGEN - JETTA SPORTLINE TIPTRONIC - 2025 - NS:017457",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11774",
+      "nombreCliente": "CARONTE LOGISTICA INTEGRAL",
+      "fecha": "2026-01-20 00:00:00",
+      "importeTotal": "1624.00",
+      "descripcion": "REFRENDO VEHICULAR 2026 EXP:387 - TOYOTA - SIENNA XLE HEV - 2024 - NS:200077",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11790",
+      "nombreCliente": "CARONTE LOGISTICA INTEGRAL",
+      "fecha": "2026-01-20 00:00:00",
+      "importeTotal": "1624.00",
+      "descripcion": "REFRENDO VEHICULAR 2026 EXP:222 2023-NISSAN-MARCH u20 NS:219041",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11810",
+      "nombreCliente": "CARONTE LOGISTICA INTEGRAL",
+      "fecha": "2026-01-20 00:00:00",
+      "importeTotal": "1624.00",
+      "descripcion": "REFRENDO VEHICULAR 2026 EXP:257 2023-NISSAN-NP300 C/ESTACAS COLOR BLANCO U19 NS:836903",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11992",
+      "nombreCliente": "CHAPAS Y HERRAJES DE MEXICO",
+      "fecha": "2026-02-02 00:00:00",
+      "importeTotal": "11135.87",
+      "descripcion": "200348SCT - CLUB TIM: , 26 DE 36",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11638",
+      "nombreCliente": "CINTHYA ANDREA SALINAS FLORES",
+      "fecha": "2026-01-02 00:00:00",
+      "importeTotal": "29260.74",
+      "descripcion": "200492SCT - CLUB TIM: , 12 DE 36",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11756",
+      "nombreCliente": "CINTHYA ANDREA SALINAS FLORES",
+      "fecha": "2026-01-20 00:00:00",
+      "importeTotal": "1624.00",
+      "descripcion": "REFRENDO VEHICULAR 2026 EXP:492 - MERCEDES-BENZ - AMG CLA 45 S 4MATIC+ - 2023 - NS:424822",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB12093",
+      "nombreCliente": "CINTHYA ANDREA SALINAS FLORES",
+      "fecha": "2026-02-02 00:00:00",
+      "importeTotal": "29260.74",
+      "descripcion": "200492SCT - CLUB TIM: , 13 DE 36",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AA1637",
+      "nombreCliente": "CLIENTE DESCONOCIDO",
+      "fecha": "2026-01-16 22:55:18",
+      "importeTotal": "29458.13",
+      "descripcion": "Factura creada automáticamente desde archivo de pendientes",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AA1642",
+      "nombreCliente": "CLIENTE DESCONOCIDO",
+      "fecha": "2026-01-10 21:43:54",
+      "importeTotal": "6960.00",
+      "descripcion": "Factura creada automáticamente desde archivo de pendientes",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AA1643",
+      "nombreCliente": "CLIENTE DESCONOCIDO",
+      "fecha": "2026-01-10 21:43:54",
+      "importeTotal": "5987.92",
+      "descripcion": "Factura creada automáticamente desde archivo de pendientes",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB12136",
+      "nombreCliente": "CLIENTE DESCONOCIDO",
+      "fecha": "2026-01-17 22:55:18",
+      "importeTotal": "11332.04",
+      "descripcion": "Factura creada automáticamente desde archivo de pendientes",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB12140",
+      "nombreCliente": "CLIENTE DESCONOCIDO",
+      "fecha": "2026-01-10 21:43:54",
+      "importeTotal": "12297.33",
+      "descripcion": "Factura creada automáticamente desde archivo de pendientes",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB12142",
+      "nombreCliente": "CLIENTE DESCONOCIDO",
+      "fecha": "2026-01-10 21:43:54",
+      "importeTotal": "12297.33",
+      "descripcion": "Factura creada automáticamente desde archivo de pendientes",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11775",
+      "nombreCliente": "COEDESSA",
+      "fecha": "2026-01-20 00:00:00",
+      "importeTotal": "1624.00",
+      "descripcion": "REFRENDO VEHICULAR 2026 EXP:205 2023-CHEVROLET-S10 CREW CAB 2.0 TURBO 4X4 NS:045542",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11782",
+      "nombreCliente": "COEDESSA",
+      "fecha": "2026-01-20 00:00:00",
+      "importeTotal": "1624.00",
+      "descripcion": "REFRENDO VEHICULAR 2026 EXP:206 2023-CHEVROLET-S10 CREW CAB 2.0 TURBO 4X4 NS:043599",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11784",
+      "nombreCliente": "COEDESSA",
+      "fecha": "2026-01-20 00:00:00",
+      "importeTotal": "1624.00",
+      "descripcion": "REFRENDO VEHICULAR 2026 EXP:211 2022-NISSAN-NISSAN NP 300 ESTACAS NS:844770",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11787",
+      "nombreCliente": "COEDESSA",
+      "fecha": "2026-01-20 00:00:00",
+      "importeTotal": "1624.00",
+      "descripcion": "REFRENDO VEHICULAR 2026 EXP:212 2022-NISSAN-NISSAN NP 300 ESTACAS NS:844758",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AA1466",
+      "nombreCliente": "COMBUSTIBLES Y LUBRICANTES OJUELOS",
+      "fecha": "2026-01-20 00:00:00",
+      "importeTotal": "1624.00",
+      "descripcion": "REFRENDO VEHICULAR 2026 EXP:0024 2022-CAN AM-DEFENDER MAX XT HD10 NS:001231",
+      "sistema": "tim_value",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AA1629",
+      "nombreCliente": "COMBUSTIBLES Y LUBRICANTES OJUELOS",
+      "fecha": "2026-02-02 00:00:00",
+      "importeTotal": "4466.48",
+      "descripcion": "ADMINISTRACION DE FLOTILLA EXP:0024: RENTA 11 DE 12 DEL 02 de febrero de 2026 AL 01 de marzo de 2026",
+      "sistema": "tim_value",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AA1436",
+      "nombreCliente": "DESARROLLOS INMOBILIARIOS A TU MEDIDA",
+      "fecha": "2026-01-20 00:00:00",
+      "importeTotal": "1624.00",
+      "descripcion": "REFRENDO VEHICULAR 2026 EXP:0109 BYD SONG PLUS 2026 NS:064807",
+      "sistema": "tim_value",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AA1451",
+      "nombreCliente": "DESARROLLOS INMOBILIARIOS A TU MEDIDA",
+      "fecha": "2026-01-20 00:00:00",
+      "importeTotal": "1624.00",
+      "descripcion": "REFRENDO VEHICULAR 2026 EXP:0118 MERCEDES-BENZ GLS 2024 NS:111353",
+      "sistema": "tim_value",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11735",
+      "nombreCliente": "EMBUTIDOS SAN LUIS",
+      "fecha": "2026-01-20 00:00:00",
+      "importeTotal": "1624.00",
+      "descripcion": "REFRENDO VEHICULAR 2026 EXP:342 - SUSUKI - GRAND VITARA GLX - 2024 - NS:102186",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11763",
+      "nombreCliente": "EMBUTIDOS SAN LUIS",
+      "fecha": "2026-01-20 00:00:00",
+      "importeTotal": "1624.00",
+      "descripcion": "REFRENDO VEHICULAR 2026 EXP:361 - TOYOTA - HILUX TS CHASIS CABINA - 2024 - NS:434344",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AA1459",
+      "nombreCliente": "ESTRUCTURAS Y PAILERIA ESPECIALIZADA",
+      "fecha": "2026-01-20 00:00:00",
+      "importeTotal": "1624.00",
+      "descripcion": "REFRENDO VEHICULAR 2026 EXP:0033 2025- AUDI Q8 SUV MIL HIBRID NS:023475",
+      "sistema": "tim_value",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11860",
+      "nombreCliente": "EUROKING",
+      "fecha": "2026-02-02 00:00:00",
+      "importeTotal": "13017.83",
+      "descripcion": "200326SCT - CLUB TIM: , 28 DE 48",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11834",
+      "nombreCliente": "FRESAN INGENIEROS",
+      "fecha": "2026-01-24 00:00:00",
+      "importeTotal": "1624.00",
+      "descripcion": "REFRENDO VEHICULAR 2026 EXP:465 - BYD - SHARK B57 PLUG IN DMO HIBRIDO AT - 2025 - NS:032888",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11836",
+      "nombreCliente": "FRESAN INGENIEROS",
+      "fecha": "2026-01-24 00:00:00",
+      "importeTotal": "1624.00",
+      "descripcion": "REFRENDO VEHICULAR 2026 EXP:482 - TESLA - MODEL Y AUTONOMIA MAYOR - 2025 - NS:697307",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB12059",
+      "nombreCliente": "FRESAN INGENIEROS",
+      "fecha": "2026-02-02 00:00:00",
+      "importeTotal": "17236.41",
+      "descripcion": "200465SCT - CLUB TIM: , 16 DE 36",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB12061",
+      "nombreCliente": "GRUPO GASTRONOMICO MERCUG",
+      "fecha": "2026-02-02 00:00:00",
+      "importeTotal": "7962.97",
+      "descripcion": "200475SCT - CLUB TIM: , 16 DE 24",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11730",
+      "nombreCliente": "INDUSTRIAL METALICA DEL ALTIPLANO",
+      "fecha": "2026-01-20 00:00:00",
+      "importeTotal": "1624.00",
+      "descripcion": "REFRENDO VEHICULAR 2026 EXP:466 - VOLKSWAGEN - TIGUAN - 2024 - NS:213151",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11732",
+      "nombreCliente": "INDUSTRIAL METALICA DEL ALTIPLANO",
+      "fecha": "2026-01-20 00:00:00",
+      "importeTotal": "1624.00",
+      "descripcion": "REFRENDO VEHICULAR 2026 EXP:467 - VOLKSWAGEN - SAVEIRO - 2025 - NS:029394",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11734",
+      "nombreCliente": "INDUSTRIAL METALICA DEL ALTIPLANO",
+      "fecha": "2026-01-20 00:00:00",
+      "importeTotal": "1624.00",
+      "descripcion": "REFRENDO VEHICULAR 2026 EXP:468 - VOLKSWAGEN - SAVEIRO - 2025 - NS:025790",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11745",
+      "nombreCliente": "INDUSTRIAL METALICA DEL ALTIPLANO",
+      "fecha": "2026-01-20 00:00:00",
+      "importeTotal": "1624.00",
+      "descripcion": "REFRENDO VEHICULAR 2026 EXP:477 - HONDA - CRV TURBO PLUS T - 2025 - NS:050169",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11737",
+      "nombreCliente": "INDUSTRIAS SENSACOLOR",
+      "fecha": "2026-01-20 00:00:00",
+      "importeTotal": "1624.00",
+      "descripcion": "REFRENDO VEHICULAR 2026 EXP:470 - BYD - SONG PLUS DM-I AT - 2025 - NS:061231",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AA1456",
+      "nombreCliente": "JORGE ADOLFO MAURICIO STAHL PALACIOS",
+      "fecha": "2026-01-20 00:00:00",
+      "importeTotal": "1624.00",
+      "descripcion": "REFRENDO VEHICULAR 2026 EXP:0038 2025- VOLKSWAGEN GOLF GTI NS:186109",
+      "sistema": "tim_value",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11954",
+      "nombreCliente": "JUAN GERARDO ZAMANILLO OLVERA",
+      "fecha": "2026-02-02 00:00:00",
+      "importeTotal": "54552.41",
+      "descripcion": "200398SCT - CLUB TIM: , 21 DE 36",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AA1439",
+      "nombreCliente": "LEAN MDC",
+      "fecha": "2026-01-20 00:00:00",
+      "importeTotal": "1624.00",
+      "descripcion": "REFRENDO VEHICULAR 2026 EXP:0016 2025-MG MG3 EXCITE HATCHBACK NS:015829",
+      "sistema": "tim_value",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11762",
+      "nombreCliente": "LEAN MDC",
+      "fecha": "2026-01-20 00:00:00",
+      "importeTotal": "1624.00",
+      "descripcion": "REFRENDO VEHICULAR 2026 EXP:360 - BMW MINI COOPER S - CLUBMAN - 2024 - NS:V18510",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11085",
+      "nombreCliente": "LPG TRANSPORTES",
+      "fecha": "2025-12-02 00:00:00",
+      "importeTotal": "32175.00",
+      "descripcion": "ARRENDAMIENTO - EXP:391 - KENWORTH - TRACTOCAMION T660 - 2013 - NS:844025: RENTA 20 DE 48 DEL 02 de diciembre de 2025 AL 01 de enero de 2026",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11086",
+      "nombreCliente": "LPG TRANSPORTES",
+      "fecha": "2025-12-02 00:00:00",
+      "importeTotal": "28000.00",
+      "descripcion": "ARRENDAMIENTO - EXP:363 - VOLVO - TRACTOCAMION NL64T670 - 2013 - NS:130584: RENTA 23 DE 36 DEL 02 de diciembre de 2025 AL 01 de enero de 2026",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11088",
+      "nombreCliente": "LPG TRANSPORTES",
+      "fecha": "2025-12-02 00:00:00",
+      "importeTotal": "34079.84",
+      "descripcion": "ARRENDAMIENTO - FREIGHTLINER - TORTON CON CAJA - 2016 - NS:HP5179 - EXP:246: RENTA 34 DE 48 DEL 02 de diciembre de 2025 AL 01 de enero de 2026",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11159",
+      "nombreCliente": "LPG TRANSPORTES",
+      "fecha": "2025-12-02 00:00:00",
+      "importeTotal": "31983.33",
+      "descripcion": "ARRENDAMIENTO - EXP:309 - VOLVO - TRACTOCAMION VNL64T-670 - 2014 - NS:155621: RENTA 26 DE 48 DEL 02 de diciembre de 2025 AL 01 de enero de 2026",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11160",
+      "nombreCliente": "LPG TRANSPORTES",
+      "fecha": "2025-12-02 00:00:00",
+      "importeTotal": "11358.36",
+      "descripcion": "ARRENDAMIENTO - EXP:310 - UTILITY - REMOLQUE TIPO CAJA SECA 53 PIES - 2009 - NS:742147: RENTA 26 DE 48 DEL 02 de diciembre de 2025 AL 01 de enero de 2026",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11181",
+      "nombreCliente": "LPG TRANSPORTES",
+      "fecha": "2025-12-02 00:00:00",
+      "importeTotal": "30983.33",
+      "descripcion": "ARRENDAMIENTO - EXP:399 - KENWORTH - TRACTOCAMION T660 - 2013 - NS:844041: RENTA 18 DE 48 DEL 02 de diciembre de 2025 AL 01 de enero de 2026",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    },
+    {
+      "folio": "AB11339",
+      "nombreCliente": "LPG TRANSPORTES",
+      "fecha": "2025-12-02 00:00:00",
+      "importeTotal": "35750.01",
+      "descripcion": "ARRENDAMIENTO - EXP:487 - FREIGHTLINER - CAMION M2106 CON CAJA MUDANCERA - 2017 - NS:HX5744: RENTA 12 DE 48 DEL 02 de diciembre de 2025 AL 01 de enero de 2026",
+      "sistema": "tim_transp",
+      "numeroContrato": "NULL"
+    }
+  ],
+  "messages": [],
+  "stdout": "folio\tnombreCliente\tfecha\timporteTotal\tdescripcion\tsistema\tnumeroContrato\nAB11826\tAUTOEDICIONES DEL POTOSI\t2026-01-21 00:00:00\t13580.22\tGESTIÓN POR SEGURO VW TAOS COMFORTLINE 2023 NS: 305228\ttim_transp\tNULL\nAB11966\tBALEROS Y ABASTOS DE SAN LUIS\t2026-02-02 00:00:00\t35952.20\t200411SCT - CLUB TIM: , 20 DE 24\ttim_transp\tNULL\nAA1514\tBOTANAS CAMPESINAS\t2026-02-02 00:00:00\t16008.00\tADMINISTRACION DE FLOTILLA EXP:0047: RENTA 8 DE 24 DEL 02 de febrero de 2026 AL 01 de marzo de 2026\ttim_value\tNULL\nAB11709\tCARONTE LOGISTICA INTEGRAL\t2026-01-20 00:00:00\t1624.00\tREFRENDO VEHICULAR 2026 EXP:311 - NISSAN - NP300 CHASIS CON CARROCERIA SECA U24 - 2023 - NS:865983\ttim_transp\tNULL\nAB11724\tCARONTE LOGISTICA INTEGRAL\t2026-01-20 00:00:00\t1624.00\tREFRENDO VEHICULAR 2026 EXP:457 - VOLKSWAGEN - JETTA SPORTLINE TIPTRONIC - 2025 - NS:017457\ttim_transp\tNULL\nAB11774\tCARONTE LOGISTICA INTEGRAL\t2026-01-20 00:00:00\t1624.00\tREFRENDO VEHICULAR 2026 EXP:387 - TOYOTA - SIENNA XLE HEV - 2024 - NS:200077\ttim_transp\tNULL\nAB11790\tCARONTE LOGISTICA INTEGRAL\t2026-01-20 00:00:00\t1624.00\tREFRENDO VEHICULAR 2026 EXP:222 2023-NISSAN-MARCH u20 NS:219041\ttim_transp\tNULL\nAB11810\tCARONTE LOGISTICA INTEGRAL\t2026-01-20 00:00:00\t1624.00\tREFRENDO VEHICULAR 2026 EXP:257 2023-NISSAN-NP300 C/ESTACAS COLOR BLANCO U19 NS:836903\ttim_transp\tNULL\nAB11992\tCHAPAS Y HERRAJES DE MEXICO\t2026-02-02 00:00:00\t11135.87\t200348SCT - CLUB TIM: , 26 DE 36\ttim_transp\tNULL\nAB11638\tCINTHYA ANDREA SALINAS FLORES\t2026-01-02 00:00:00\t29260.74\t200492SCT - CLUB TIM: , 12 DE 36\ttim_transp\tNULL\nAB11756\tCINTHYA ANDREA SALINAS FLORES\t2026-01-20 00:00:00\t1624.00\tREFRENDO VEHICULAR 2026 EXP:492 - MERCEDES-BENZ - AMG CLA 45 S 4MATIC+ - 2023 - NS:424822\ttim_transp\tNULL\nAB12093\tCINTHYA ANDREA SALINAS FLORES\t2026-02-02 00:00:00\t29260.74\t200492SCT - CLUB TIM: , 13 DE 36\ttim_transp\tNULL\nAA1637\tCLIENTE DESCONOCIDO\t2026-01-16 22:55:18\t29458.13\tFactura creada automáticamente desde archivo de pendientes\ttim_transp\tNULL\nAA1642\tCLIENTE DESCONOCIDO\t2026-01-10 21:43:54\t6960.00\tFactura creada automáticamente desde archivo de pendientes\ttim_transp\tNULL\nAA1643\tCLIENTE DESCONOCIDO\t2026-01-10 21:43:54\t5987.92\tFactura creada automáticamente desde archivo de pendientes\ttim_transp\tNULL\nAB12136\tCLIENTE DESCONOCIDO\t2026-01-17 22:55:18\t11332.04\tFactura creada automáticamente desde archivo de pendientes\ttim_transp\tNULL\nAB12140\tCLIENTE DESCONOCIDO\t2026-01-10 21:43:54\t12297.33\tFactura creada automáticamente desde archivo de pendientes\ttim_transp\tNULL\nAB12142\tCLIENTE DESCONOCIDO\t2026-01-10 21:43:54\t12297.33\tFactura creada automáticamente desde archivo de pendientes\ttim_transp\tNULL\nAB11775\tCOEDESSA\t2026-01-20 00:00:00\t1624.00\tREFRENDO VEHICULAR 2026 EXP:205 2023-CHEVROLET-S10 CREW CAB 2.0 TURBO 4X4 NS:045542\ttim_transp\tNULL\nAB11782\tCOEDESSA\t2026-01-20 00:00:00\t1624.00\tREFRENDO VEHICULAR 2026 EXP:206 2023-CHEVROLET-S10 CREW CAB 2.0 TURBO 4X4 NS:043599\ttim_transp\tNULL\nAB11784\tCOEDESSA\t2026-01-20 00:00:00\t1624.00\tREFRENDO VEHICULAR 2026 EXP:211 2022-NISSAN-NISSAN NP 300 ESTACAS NS:844770\ttim_transp\tNULL\nAB11787\tCOEDESSA\t2026-01-20 00:00:00\t1624.00\tREFRENDO VEHICULAR 2026 EXP:212 2022-NISSAN-NISSAN NP 300 ESTACAS NS:844758\ttim_transp\tNULL\nAA1466\tCOMBUSTIBLES Y LUBRICANTES OJUELOS\t2026-01-20 00:00:00\t1624.00\tREFRENDO VEHICULAR 2026 EXP:0024 2022-CAN AM-DEFENDER MAX XT HD10 NS:001231\ttim_value\tNULL\nAA1629\tCOMBUSTIBLES Y LUBRICANTES OJUELOS\t2026-02-02 00:00:00\t4466.48\tADMINISTRACION DE FLOTILLA EXP:0024: RENTA 11 DE 12 DEL 02 de febrero de 2026 AL 01 de marzo de 2026\ttim_value\tNULL\nAA1436\tDESARROLLOS INMOBILIARIOS A TU MEDIDA\t2026-01-20 00:00:00\t1624.00\tREFRENDO VEHICULAR 2026 EXP:0109 BYD SONG PLUS 2026 NS:064807\ttim_value\tNULL\nAA1451\tDESARROLLOS INMOBILIARIOS A TU MEDIDA\t2026-01-20 00:00:00\t1624.00\tREFRENDO VEHICULAR 2026 EXP:0118 MERCEDES-BENZ GLS 2024 NS:111353\ttim_value\tNULL\nAB11735\tEMBUTIDOS SAN LUIS\t2026-01-20 00:00:00\t1624.00\tREFRENDO VEHICULAR 2026 EXP:342 - SUSUKI - GRAND VITARA GLX - 2024 - NS:102186\ttim_transp\tNULL\nAB11763\tEMBUTIDOS SAN LUIS\t2026-01-20 00:00:00\t1624.00\tREFRENDO VEHICULAR 2026 EXP:361 - TOYOTA - HILUX TS CHASIS CABINA - 2024 - NS:434344\ttim_transp\tNULL\nAA1459\tESTRUCTURAS Y PAILERIA ESPECIALIZADA\t2026-01-20 00:00:00\t1624.00\tREFRENDO VEHICULAR 2026 EXP:0033 2025- AUDI Q8 SUV MIL HIBRID NS:023475\ttim_value\tNULL\nAB11860\tEUROKING\t2026-02-02 00:00:00\t13017.83\t200326SCT - CLUB TIM: , 28 DE 48\ttim_transp\tNULL\nAB11834\tFRESAN INGENIEROS\t2026-01-24 00:00:00\t1624.00\tREFRENDO VEHICULAR 2026 EXP:465 - BYD - SHARK B57 PLUG IN DMO HIBRIDO AT - 2025 - NS:032888\ttim_transp\tNULL\nAB11836\tFRESAN INGENIEROS\t2026-01-24 00:00:00\t1624.00\tREFRENDO VEHICULAR 2026 EXP:482 - TESLA - MODEL Y AUTONOMIA MAYOR - 2025 - NS:697307\ttim_transp\tNULL\nAB12059\tFRESAN INGENIEROS\t2026-02-02 00:00:00\t17236.41\t200465SCT - CLUB TIM: , 16 DE 36\ttim_transp\tNULL\nAB12061\tGRUPO GASTRONOMICO MERCUG\t2026-02-02 00:00:00\t7962.97\t200475SCT - CLUB TIM: , 16 DE 24\ttim_transp\tNULL\nAB11730\tINDUSTRIAL METALICA DEL ALTIPLANO\t2026-01-20 00:00:00\t1624.00\tREFRENDO VEHICULAR 2026 EXP:466 - VOLKSWAGEN - TIGUAN - 2024 - NS:213151\ttim_transp\tNULL\nAB11732\tINDUSTRIAL METALICA DEL ALTIPLANO\t2026-01-20 00:00:00\t1624.00\tREFRENDO VEHICULAR 2026 EXP:467 - VOLKSWAGEN - SAVEIRO - 2025 - NS:029394\ttim_transp\tNULL\nAB11734\tINDUSTRIAL METALICA DEL ALTIPLANO\t2026-01-20 00:00:00\t1624.00\tREFRENDO VEHICULAR 2026 EXP:468 - VOLKSWAGEN - SAVEIRO - 2025 - NS:025790\ttim_transp\tNULL\nAB11745\tINDUSTRIAL METALICA DEL ALTIPLANO\t2026-01-20 00:00:00\t1624.00\tREFRENDO VEHICULAR 2026 EXP:477 - HONDA - CRV TURBO PLUS T - 2025 - NS:050169\ttim_transp\tNULL\nAB11737\tINDUSTRIAS SENSACOLOR\t2026-01-20 00:00:00\t1624.00\tREFRENDO VEHICULAR 2026 EXP:470 - BYD - SONG PLUS DM-I AT - 2025 - NS:061231\ttim_transp\tNULL\nAA1456\tJORGE ADOLFO MAURICIO STAHL PALACIOS\t2026-01-20 00:00:00\t1624.00\tREFRENDO VEHICULAR 2026 EXP:0038 2025- VOLKSWAGEN GOLF GTI NS:186109\ttim_value\tNULL\nAB11954\tJUAN GERARDO ZAMANILLO OLVERA\t2026-02-02 00:00:00\t54552.41\t200398SCT - CLUB TIM: , 21 DE 36\ttim_transp\tNULL\nAA1439\tLEAN MDC\t2026-01-20 00:00:00\t1624.00\tREFRENDO VEHICULAR 2026 EXP:0016 2025-MG MG3 EXCITE HATCHBACK NS:015829\ttim_value\tNULL\nAB11762\tLEAN MDC\t2026-01-20 00:00:00\t1624.00\tREFRENDO VEHICULAR 2026 EXP:360 - BMW MINI COOPER S - CLUBMAN - 2024 - NS:V18510\ttim_transp\tNULL\nAB11085\tLPG TRANSPORTES\t2025-12-02 00:00:00\t32175.00\tARRENDAMIENTO - EXP:391 - KENWORTH - TRACTOCAMION T660 - 2013 - NS:844025: RENTA 20 DE 48 DEL 02 de diciembre de 2025 AL 01 de enero de 2026\ttim_transp\tNULL\nAB11086\tLPG TRANSPORTES\t2025-12-02 00:00:00\t28000.00\tARRENDAMIENTO - EXP:363 - VOLVO - TRACTOCAMION NL64T670 - 2013 - NS:130584: RENTA 23 DE 36 DEL 02 de diciembre de 2025 AL 01 de enero de 2026\ttim_transp\tNULL\nAB11088\tLPG TRANSPORTES\t2025-12-02 00:00:00\t34079.84\tARRENDAMIENTO - FREIGHTLINER - TORTON CON CAJA - 2016 - NS:HP5179 - EXP:246: RENTA 34 DE 48 DEL 02 de diciembre de 2025 AL 01 de enero de 2026\ttim_transp\tNULL\nAB11159\tLPG TRANSPORTES\t2025-12-02 00:00:00\t31983.33\tARRENDAMIENTO - EXP:309 - VOLVO - TRACTOCAMION VNL64T-670 - 2014 - NS:155621: RENTA 26 DE 48 DEL 02 de diciembre de 2025 AL 01 de enero de 2026\ttim_transp\tNULL\nAB11160\tLPG TRANSPORTES\t2025-12-02 00:00:00\t11358.36\tARRENDAMIENTO - EXP:310 - UTILITY - REMOLQUE TIPO CAJA SECA 53 PIES - 2009 - NS:742147: RENTA 26 DE 48 DEL 02 de diciembre de 2025 AL 01 de enero de 2026\ttim_transp\tNULL\nAB11181\tLPG TRANSPORTES\t2025-12-02 00:00:00\t30983.33\tARRENDAMIENTO - EXP:399 - KENWORTH - TRACTOCAMION T660 - 2013 - NS:844041: RENTA 18 DE 48 DEL 02 de diciembre de 2025 AL 01 de enero de 2026\ttim_transp\tNULL\nAB11339\tLPG TRANSPORTES\t2025-12-02 00:00:00\t35750.01\tARRENDAMIENTO - EXP:487 - FREIGHTLINER - CAMION M2106 CON CAJA MUDANCERA - 2017 - NS:HX5744: RENTA 12 DE 48 DEL 02 de diciembre de 2025 AL 01 de enero de 2026\ttim_transp\tNULL\n",
+  "stderr": "",
+  "execution_time_ms": 264
+}

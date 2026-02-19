@@ -1,0 +1,20 @@
+{
+  "query": "SELECT \n  f.folio,\n  f.nombreCliente,\n  (SELECT numeroContrato FROM partidasFactura WHERE partidasFactura.facturaId = f.id LIMIT 1) as numeroContrato\nFROM facturas f\nWHERE f.nombreCliente = 'BOTANAS CAMPESINAS' AND f.estadoPago = 'pendiente'\nORDER BY f.folio;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute SELECT \n  f.folio,\n  f.nombreCliente,\n  (SELECT numeroContrato FROM partidasFactura WHERE partidasFactura.facturaId = f.id LIMIT 1) as numeroContrato\nFROM facturas f\nWHERE f.nombreCliente = 'BOTANAS CAMPESINAS' AND f.estadoPago = 'pendiente'\nORDER BY f.folio;",
+  "rows": [
+    {
+      "folio": "AA1513",
+      "nombreCliente": "BOTANAS CAMPESINAS",
+      "numeroContrato": "0047"
+    },
+    {
+      "folio": "AA1514",
+      "nombreCliente": "BOTANAS CAMPESINAS",
+      "numeroContrato": "0047"
+    }
+  ],
+  "messages": [],
+  "stdout": "folio\tnombreCliente\tnumeroContrato\nAA1513\tBOTANAS CAMPESINAS\t0047\nAA1514\tBOTANAS CAMPESINAS\t0047\n",
+  "stderr": "",
+  "execution_time_ms": 67
+}

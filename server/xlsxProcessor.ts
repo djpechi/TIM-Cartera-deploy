@@ -118,6 +118,13 @@ export function processTimTranspFile(buffer: Buffer): ProcessResult {
         const descripcion = row[descripcionIdx] ? String(row[descripcionIdx]) : '';
         const estatus = row[estatusIdx] ? String(row[estatusIdx]).toLowerCase() : 'normal';
         
+        // Extraer numeroContrato de la descripción (formato: EXP:XXXX)
+        let numeroContrato: string | null = null;
+        const contratoMatch = descripcion.match(/EXP[:\s]*([A-Z0-9]+)/i);
+        if (contratoMatch) {
+          numeroContrato = contratoMatch[1];
+        }
+        
         if (!fecha || !nombreCliente || importeTotal === 0) {
           errores.push(`Fila ${i + 1}: Datos incompletos para folio ${folio}`);
           continue;
@@ -131,6 +138,7 @@ export function processTimTranspFile(buffer: Buffer): ProcessResult {
           fechaVencimiento,
           importeTotal: importeTotal.toString(),
           descripcion,
+          numeroContrato,
           estatus: estatus.includes('cancelad') ? 'cancelada' : 'normal',
           estadoPago: 'pendiente',
           diasAtraso: 0,
@@ -223,6 +231,13 @@ export function processTimValueFile(buffer: Buffer): ProcessResult {
         const descripcion = row[descripcionIdx] ? String(row[descripcionIdx]) : '';
         const estatus = row[estatusIdx] ? String(row[estatusIdx]).toLowerCase() : 'normal';
         
+        // Extraer numeroContrato de la descripción (formato: EXP:XXXX)
+        let numeroContrato: string | null = null;
+        const contratoMatch = descripcion.match(/EXP[:\s]*([A-Z0-9]+)/i);
+        if (contratoMatch) {
+          numeroContrato = contratoMatch[1];
+        }
+        
         if (!fecha || !nombreCliente || importeTotal === 0) {
           errores.push(`Fila ${i + 1}: Datos incompletos para folio ${folio}`);
           continue;
@@ -236,6 +251,7 @@ export function processTimValueFile(buffer: Buffer): ProcessResult {
           fechaVencimiento,
           importeTotal: importeTotal.toString(),
           descripcion,
+          numeroContrato,
           estatus: estatus.includes('cancelad') ? 'cancelada' : 'normal',
           estadoPago: 'pendiente',
           diasAtraso: 0,

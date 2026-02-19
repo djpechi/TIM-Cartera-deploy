@@ -73,6 +73,7 @@ export const facturas = mysqlTable("facturas", {
   importeTotal: decimal("importeTotal", { precision: 15, scale: 2 }).notNull(),
   saldoPendiente: decimal("saldoPendiente", { precision: 15, scale: 2 }).default("0.00").notNull(),
   descripcion: text("descripcion"),
+  numeroContrato: varchar("numeroContrato", { length: 50 }),
   estatus: mysqlEnum("estatus", ["normal", "cancelada"]).default("normal").notNull(),
   estadoPago: mysqlEnum("estadoPago", ["pendiente", "pagado"]).default("pendiente").notNull(),
   diasAtraso: int("diasAtraso").default(0),
