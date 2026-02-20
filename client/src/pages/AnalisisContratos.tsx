@@ -324,11 +324,8 @@ export default function AnalisisContratos() {
                       <TableHeader>
                         <TableRow>
                           <TableHead>Número de Contrato</TableHead>
-                          <TableHead>Facturas Pendientes</TableHead>
-                          <TableHead className="text-right">Total Adeudado</TableHead>
-                          <TableHead>Última Factura</TableHead>
-                          <TableHead>Última Fecha</TableHead>
-                          <TableHead>Proyección</TableHead>
+                          <TableHead className="text-right">Pagos Faltantes</TableHead>
+                          <TableHead className="text-right">Deuda Proyectada</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -341,26 +338,17 @@ export default function AnalisisContratos() {
                                   <span className="text-muted-foreground italic">Otros</span>
                                 )}
                               </TableCell>
-                              <TableCell>{contrato.totalFacturas}</TableCell>
+                              <TableCell className="text-right">
+                                {proyeccion ? (
+                                  <span className="font-medium">{proyeccion.pagosFaltantes}</span>
+                                ) : (
+                                  <span className="text-muted-foreground">-</span>
+                                )}
+                              </TableCell>
                               <TableCell className="text-right font-medium text-destructive">
                                 {formatearMoneda(
                                   proyeccion ? proyeccion.deudaProyectada : parseFloat(contrato.totalAdeudado || '0'),
                                   formatoUsuario
-                                )}
-                              </TableCell>
-                              <TableCell>{contrato.ultimaFactura}</TableCell>
-                              <TableCell>
-                                {contrato.ultimaFecha
-                                  ? new Date(contrato.ultimaFecha).toLocaleDateString('es-MX')
-                                  : '-'}
-                              </TableCell>
-                              <TableCell>
-                                {proyeccion ? (
-                                  <span className="text-sm">
-                                    {proyeccion.pagoActual} de {proyeccion.pagosTotales} ({proyeccion.pagosFaltantes} pendientes)
-                                  </span>
-                                ) : (
-                                  <span className="text-sm text-muted-foreground italic">Sin proyección</span>
                                 )}
                               </TableCell>
                             </TableRow>

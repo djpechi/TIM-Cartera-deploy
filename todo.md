@@ -436,3 +436,6 @@
 - [x] Corregir consulta getContratosPorCliente para evitar error de GROUP BY
 - [x] Probar búsqueda por cliente AFIMSA
 - [x] Verificar que no haya errores SQL
+
+## Simplificación de Tabla por Cliente en Análisis de Contratos
+- [x] Simplificar tabla de búsqueda por cliente para mostrar solo: Número de Contrato, Pagos Faltantes, Deuda Proyectada
