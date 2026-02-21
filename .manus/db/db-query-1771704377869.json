@@ -1,0 +1,9 @@
+{
+  "query": "ALTER TABLE `historialCargas` MODIFY COLUMN `tipoArchivo` enum('tim_transp','tim_value','pendientes','contratos') NOT NULL;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute ALTER TABLE `historialCargas` MODIFY COLUMN `tipoArchivo` enum('tim_transp','tim_value','pendientes','contratos') NOT NULL;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 168
+}

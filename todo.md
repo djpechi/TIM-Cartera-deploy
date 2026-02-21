@@ -559,3 +559,5 @@
 - [x] Agregar endpoint tRPC para procesar archivo de contratos activos
 - [x] Actualizar UI de Cargar Archivos para incluir opción "Contratos Activos"
 - [ ] Probar carga de archivo ContratosactivosTIM.xlsx
+
+- [x] BUG: Error "XLSX.readFile is not a function" al cargar archivo de contratos
