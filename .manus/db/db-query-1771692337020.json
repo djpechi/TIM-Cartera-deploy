@@ -1,0 +1,13 @@
+{
+  "query": "SELECT COUNT(*) as total FROM facturasFaltantes;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute SELECT COUNT(*) as total FROM facturasFaltantes;",
+  "rows": [
+    {
+      "total": "0"
+    }
+  ],
+  "messages": [],
+  "stdout": "total\n0\n",
+  "stderr": "",
+  "execution_time_ms": 57
+}

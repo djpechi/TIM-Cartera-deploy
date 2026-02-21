@@ -12,7 +12,8 @@ import {
   googleSheetsConfig, GoogleSheetsConfig, InsertGoogleSheetsConfig,
   contratos, Contrato, InsertContrato,
   proyeccionMensual, ProyeccionMensual, InsertProyeccionMensual,
-  partidasFactura, PartidaFactura, InsertPartidaFactura
+  partidasFactura, PartidaFactura, InsertPartidaFactura,
+  facturasFaltantes, FacturaFaltante, InsertFacturaFaltante
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -242,6 +243,7 @@ export async function upsertFactura(factura: InsertFactura) {
       fecha: factura.fecha,
       fechaVencimiento: factura.fechaVencimiento,
       importeTotal: factura.importeTotal,
+      saldoPendiente: factura.saldoPendiente,
       descripcion: factura.descripcion,
       estatus: factura.estatus,
       estadoPago: factura.estadoPago,
@@ -1465,4 +1467,68 @@ export async function getContratosPorCliente(clienteId: number) {
   }
 
   return resultado;
+}
+
+
+// ============ Facturas Faltantes Management ============
+export async function insertFacturaFaltante(faltante: InsertFacturaFaltante) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  // Verificar si ya existe una factura faltante con el mismo folio no resuelta
+  const existente = await db
+    .select()
+    .from(facturasFaltantes)
+    .where(
+      and(
+        eq(facturasFaltantes.folio, faltante.folio),
+        eq(facturasFaltantes.resuelta, false)
+      )
+    );
+  
+  // Si ya existe, no insertar duplicado
+  if (existente.length > 0) {
+    return existente[0];
+  }
+  
+  const result = await db.insert(facturasFaltantes).values(faltante);
+  return result;
+}
+
+export async function getFacturasFaltantesNoResueltas() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db
+    .select()
+    .from(facturasFaltantes)
+    .where(eq(facturasFaltantes.resuelta, false))
+    .orderBy(desc(facturasFaltantes.detectadoEn));
+}
+
+export async function marcarFacturaFaltanteResuelta(folio: string) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db
+    .update(facturasFaltantes)
+    .set({ 
+      resuelta: true,
+      resueltaEn: new Date()
+    })
+    .where(
+      and(
+        eq(facturasFaltantes.folio, folio),
+        eq(facturasFaltantes.resuelta, false)
+      )
+    );
+}
+
+export async function deleteFacturasFaltantesResueltas() {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db
+    .delete(facturasFaltantes)
+    .where(eq(facturasFaltantes.resuelta, true));
 }

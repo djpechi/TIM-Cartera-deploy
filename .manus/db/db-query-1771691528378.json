@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS facturasFaltantes (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  folio VARCHAR(50) NOT NULL,\n  saldo DECIMAL(15, 2) NOT NULL,\n  fecha DATE,\n  fechaVencimiento DATE,\n  archivoOrigen VARCHAR(255),\n  detectadoEn TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,\n  resuelta BOOLEAN DEFAULT FALSE NOT NULL,\n  resueltaEn TIMESTAMP NULL\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute CREATE TABLE IF NOT EXISTS facturasFaltantes (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  folio VARCHAR(50) NOT NULL,\n  saldo DECIMAL(15, 2) NOT NULL,\n  fecha DATE,\n  fechaVencimiento DATE,\n  archivoOrigen VARCHAR(255),\n  detectadoEn TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,\n  resuelta BOOLEAN DEFAULT FALSE NOT NULL,\n  resueltaEn TIMESTAMP NULL\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 360
+}

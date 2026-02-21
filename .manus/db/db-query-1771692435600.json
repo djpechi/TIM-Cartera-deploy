@@ -1,0 +1,14 @@
+{
+  "query": "SELECT SUM(saldoPendiente) as totalCarteraPendiente, COUNT(*) as totalFacturas FROM facturas WHERE estadoPago = 'pendiente';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute SELECT SUM(saldoPendiente) as totalCarteraPendiente, COUNT(*) as totalFacturas FROM facturas WHERE estadoPago = 'pendiente';",
+  "rows": [
+    {
+      "totalCarteraPendiente": "1351781.99",
+      "totalFacturas": "139"
+    }
+  ],
+  "messages": [],
+  "stdout": "totalCarteraPendiente\ttotalFacturas\n1351781.99\t139\n",
+  "stderr": "",
+  "execution_time_ms": 57
+}

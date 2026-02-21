@@ -1,0 +1,13 @@
+{
+  "query": "SELECT SUM(CAST(saldoPendiente AS DECIMAL(10,2))) as total FROM facturas WHERE estadoPago = 'pendiente';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute SELECT SUM(CAST(saldoPendiente AS DECIMAL(10,2))) as total FROM facturas WHERE estadoPago = 'pendiente';",
+  "rows": [
+    {
+      "total": "1351781.99"
+    }
+  ],
+  "messages": [],
+  "stdout": "total\n1351781.99\n",
+  "stderr": "",
+  "execution_time_ms": 114
+}

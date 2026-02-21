@@ -251,6 +251,20 @@ export default function Upload() {
                       )}
                     </>
                   )}
+                  {uploadResult.validacionTotales && (
+                    <div className={`mt-3 p-3 rounded ${uploadResult.validacionTotales.coincide ? 'bg-green-50' : 'bg-red-50'}`}>
+                      <p className={`font-semibold mb-2 ${uploadResult.validacionTotales.coincide ? 'text-green-700' : 'text-red-700'}`}>
+                        {uploadResult.validacionTotales.coincide ? '✓ Validación de Totales: Correcta' : '⚠ Validación de Totales: Error'}
+                      </p>
+                      <div className="text-sm space-y-1">
+                        <p>Total en archivo: ${uploadResult.validacionTotales.totalArchivo.toLocaleString('es-MX', {minimumFractionDigits: 2})}</p>
+                        <p>Total en base de datos: ${uploadResult.validacionTotales.totalBD.toLocaleString('es-MX', {minimumFractionDigits: 2})}</p>
+                        {!uploadResult.validacionTotales.coincide && (
+                          <p className="font-semibold text-red-700">Diferencia: ${uploadResult.validacionTotales.diferencia.toLocaleString('es-MX', {minimumFractionDigits: 2})}</p>
+                        )}
+                      </div>
+                    </div>
+                  )}
                   {uploadResult.facturasFaltantes && uploadResult.facturasFaltantes.length > 0 && (
                     <div className="mt-3">
                       <p className="font-semibold mb-1 text-orange-600">Facturas no encontradas en la base de datos ({uploadResult.facturasFaltantes.length}):</p>

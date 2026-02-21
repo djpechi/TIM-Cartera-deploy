@@ -12,6 +12,7 @@ export default function Dashboard() {
   const { data: stats, isLoading: statsLoading } = trpc.dashboard.stats.useQuery();
   const { data: facturasPendientes, isLoading: facturasLoading } = trpc.dashboard.facturasPendientes.useQuery();
   const { data: historial, isLoading: historialLoading } = trpc.dashboard.historialCargas.useQuery();
+  const { data: facturasFaltantes, isLoading: faltantesLoading } = trpc.dashboard.facturasFaltantes.useQuery();
 
   const formatCurrency = (value: number) => {
     return formatearMoneda(value, user?.formatoMoneda || "completo");
@@ -273,6 +274,93 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Facturas Faltantes */}
+      {facturasFaltantes && facturasFaltantes.length > 0 && (
+        <Card className="border-amber-200 bg-amber-50/50">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <AlertCircle className="h-5 w-5 text-amber-600" />
+                  Facturas Faltantes Detectadas
+                </CardTitle>
+                <CardDescription>
+                  Estas facturas están en el archivo de pendientes pero no se encontraron en la base de datos
+                </CardDescription>
+              </div>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => {
+                  // Exportar a Excel
+                  const data = facturasFaltantes.map(f => ({
+                    Folio: f.folio,
+                    Saldo: f.saldo,
+                    Fecha: f.fecha ? new Date(f.fecha).toLocaleDateString('es-MX') : '',
+                    'Fecha Vencimiento': f.fechaVencimiento ? new Date(f.fechaVencimiento).toLocaleDateString('es-MX') : '',
+                    'Archivo Origen': f.archivoOrigen,
+                    'Detectado': new Date(f.detectadoEn).toLocaleDateString('es-MX')
+                  }));
+                  
+                  const csv = [
+                    Object.keys(data[0]).join(','),
+                    ...data.map(row => Object.values(row).join(','))
+                  ].join('\n');
+                  
+                  const blob = new Blob([csv], { type: 'text/csv' });
+                  const url = window.URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `facturas_faltantes_${new Date().toISOString().split('T')[0]}.csv`;
+                  a.click();
+                }}
+              >
+                Exportar Lista
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {faltantesLoading ? (
+              <Skeleton className="h-32 w-full" />
+            ) : (
+              <div className="space-y-2">
+                <div className="rounded-lg border bg-white">
+                  <div className="grid grid-cols-5 gap-4 p-3 font-medium text-sm border-b bg-muted/50">
+                    <div>Folio</div>
+                    <div className="text-right">Saldo</div>
+                    <div>Fecha</div>
+                    <div>Vencimiento</div>
+                    <div>Detectado</div>
+                  </div>
+                  <div className="divide-y max-h-64 overflow-y-auto">
+                    {facturasFaltantes.map((faltante) => (
+                      <div key={faltante.id} className="grid grid-cols-5 gap-4 p-3 text-sm">
+                        <div className="font-medium">{faltante.folio}</div>
+                        <div className="text-right font-medium text-amber-700">
+                          {formatCurrency(Number(faltante.saldo))}
+                        </div>
+                        <div className="text-muted-foreground">
+                          {faltante.fecha ? new Date(faltante.fecha).toLocaleDateString('es-MX') : '-'}
+                        </div>
+                        <div className="text-muted-foreground">
+                          {faltante.fechaVencimiento ? new Date(faltante.fechaVencimiento).toLocaleDateString('es-MX') : '-'}
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          {formatDate(faltante.detectadoEn)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground mt-2">
+                  💡 <strong>Acción requerida:</strong> Carga estas facturas desde los archivos TT (Tim Transp) o TV (Tim Value) antes de volver a cargar el archivo de pendientes.
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Quick Actions */}
       <Card>

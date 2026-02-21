@@ -1,0 +1,14 @@
+{
+  "query": "SELECT COUNT(*) as total, SUM(CAST(saldoPendiente AS DECIMAL(10,2))) as suma FROM facturas WHERE CAST(saldoPendiente AS DECIMAL(10,2)) > 0;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute SELECT COUNT(*) as total, SUM(CAST(saldoPendiente AS DECIMAL(10,2))) as suma FROM facturas WHERE CAST(saldoPendiente AS DECIMAL(10,2)) > 0;",
+  "rows": [
+    {
+      "total": "110",
+      "suma": "1351781.99"
+    }
+  ],
+  "messages": [],
+  "stdout": "total\tsuma\n110\t1351781.99\n",
+  "stderr": "",
+  "execution_time_ms": 63
+}

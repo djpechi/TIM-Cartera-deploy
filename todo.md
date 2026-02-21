@@ -501,3 +501,24 @@
 - [ ] Cargar archivos completos de TT y TV con todas las facturas
 - [ ] Recargar archivo de pendientes para actualizar saldos
 - [ ] Verificar que totales coincidan
+
+## Nueva Funcionalidad: Dashboard de Facturas Faltantes
+- [x] Crear tabla en base de datos para almacenar facturas faltantes
+- [x] Modificar backend para guardar facturas faltantes detectadas durante carga
+- [x] Crear endpoint para obtener lista de facturas faltantes
+- [x] Crear componente visual en dashboard con tabla de facturas faltantes
+- [x] Implementar botón de exportación a CSV (frontend)
+- [ ] Probar funcionalidad completa con carga de pendientes
+
+## Cambio de Lógica: Archivo de Pendientes Define Estado de Pago
+- [ ] Modificar lógica de carga de pendientes: facturas EN el archivo = pendiente, resto = pagado
+- [ ] Agregar validación automática de totales después de cada carga
+- [ ] Mostrar mensaje de error si totales no coinciden
+- [ ] Probar con archivo Libro1.xlsx y verificar que suma sea $1,795,886.72
+
+## Validación de Fecha Mínima en Carga de Pendientes
+- [x] Identificar fecha más antigua en archivo de pendientes
+- [x] Modificar lógica para solo actualizar facturas con fecha >= fecha mínima del archivo
+- [x] Ignorar facturas históricas (anteriores a fecha mínima) en actualización automática
+- [x] Agregar logs para mostrar fecha mínima detectada y facturas excluidas
+- [ ] Probar que facturas históricas mantienen su estado actual sin modificarse

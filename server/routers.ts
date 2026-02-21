@@ -53,6 +53,10 @@ export const appRouter = router({
     historialCargas: protectedProcedure.query(async () => {
       return await db.getAllHistorialCargas();
     }),
+    
+    facturasFaltantes: protectedProcedure.query(async () => {
+      return await db.getFacturasFaltantesNoResueltas();
+    }),
   }),
 
   // ============ Carga de Archivos ============
@@ -111,6 +115,7 @@ export const appRouter = router({
           
           // Guardar datos en la base de datos
           let facturasFaltantes: any[] = [];
+          let saldosPendientes: Map<string, number> = new Map();
           
           if (tipoArchivo === 'pendientes') {
             // Limpiar pendientes anteriores
@@ -127,9 +132,14 @@ export const appRouter = router({
             const foliosExistentes = new Set(allFacturas.map(f => f.folio));
             
             // Crear mapa de saldos pendientes del archivo
-            const saldosPendientes = new Map(
+            saldosPendientes = new Map(
               (result.data || []).map((p: any) => [p.folio, parseFloat(p.saldo || '0')])
             );
+            
+            console.log(`[DEBUG] Registros en archivo: ${result.data?.length || 0}`);
+            console.log(`[DEBUG] Saldos en mapa: ${saldosPendientes.size}`);
+            const totalArchivoDebug = Array.from(saldosPendientes.values()).reduce((sum: number, val: number) => sum + val, 0);
+            console.log(`[DEBUG] Total saldos en mapa: $${totalArchivoDebug.toFixed(2)}`);
             
             // Identificar facturas que están en el archivo pero NO en la BD
             const foliosFaltantes = (result.data || []).filter((p: any) => !foliosExistentes.has(p.folio));
@@ -145,10 +155,37 @@ export const appRouter = router({
             console.log(`[PENDIENTES] Facturas faltantes detectadas: ${facturasFaltantes.length}`);
             if (facturasFaltantes.length > 0) {
               console.log('[PENDIENTES] Folios faltantes:', facturasFaltantes.map(f => f.folio).join(', '));
+              
+              // Guardar facturas faltantes en la base de datos
+              for (const faltante of facturasFaltantes) {
+                await db.insertFacturaFaltante({
+                  folio: faltante.folio,
+                  saldo: faltante.saldo,
+                  fecha: faltante.fecha,
+                  fechaVencimiento: faltante.fechaVencimiento,
+                  archivoOrigen: input.fileName || 'pendientes.xlsx',
+                  resuelta: false
+                });
+              }
             }
             
             // NO crear facturas nuevas - solo reportar las faltantes
             // (Las facturas deben ser creadas primero desde archivos TT o TV)
+            
+            // Identificar fecha más antigua en el archivo de pendientes
+            let fechaMinimaArchivo: Date | null = null;
+            for (const pendiente of result.data || []) {
+              if (pendiente.fecha) {
+                const fecha = new Date(pendiente.fecha);
+                if (!fechaMinimaArchivo || fecha < fechaMinimaArchivo) {
+                  fechaMinimaArchivo = fecha;
+                }
+              }
+            }
+            
+            if (fechaMinimaArchivo) {
+              console.log(`[FECHA MÍNIMA] Fecha más antigua en archivo: ${fechaMinimaArchivo.toISOString().split('T')[0]}`);
+            }
             
             // Crear mapa de fechas del archivo para actualizar facturas existentes
             const fechasArchivo = new Map(
@@ -158,9 +195,23 @@ export const appRouter = router({
             );
             
             // Actualizar saldoPendiente, estado y fechas de todas las facturas
+            // NUEVA LÓGICA: Si la factura está en el archivo de pendientes, es pendiente; si no, es pagado
+            // VALIDACIÓN: Solo actualizar facturas con fecha >= fecha mínima del archivo
+            let facturasActualizadas = 0;
+            let saldoTotalActualizado = 0;
+            let facturasIgnoradasHistoricas = 0;
             for (const factura of allFacturas) {
-              const saldoPendiente = saldosPendientes.get(factura.folio) || 0;
-              const estadoPago = saldoPendiente > 0 ? 'pendiente' : 'pagado';
+              // Ignorar facturas históricas (anteriores a la fecha mínima del archivo)
+              if (fechaMinimaArchivo && factura.fecha) {
+                const fechaFactura = new Date(factura.fecha);
+                if (fechaFactura < fechaMinimaArchivo) {
+                  facturasIgnoradasHistoricas++;
+                  continue; // No modificar esta factura
+                }
+              }
+              const estaEnArchivoPendientes = foliosPendientes.has(factura.folio);
+              const saldoPendiente = estaEnArchivoPendientes ? (saldosPendientes.get(factura.folio) || 0) : 0;
+              const estadoPago = estaEnArchivoPendientes ? 'pendiente' : 'pagado';
               
               // Si el archivo tiene fechas para esta factura, actualizarlas también
               const fechasDelArchivo = fechasArchivo.get(factura.folio);
@@ -188,6 +239,17 @@ export const appRouter = router({
                 // Solo actualizar saldo si no hay fechas en el archivo
                 await db.updateFacturaSaldoPendiente(factura.folio, saldoPendiente, estadoPago);
               }
+              
+              if (estaEnArchivoPendientes) {
+                facturasActualizadas++;
+                saldoTotalActualizado += saldoPendiente;
+              }
+            }
+            
+            console.log(`[DEBUG] Facturas actualizadas: ${facturasActualizadas}`);
+            console.log(`[DEBUG] Saldo total actualizado: $${saldoTotalActualizado.toFixed(2)}`);
+            if (facturasIgnoradasHistoricas > 0) {
+              console.log(`[DEBUG] Facturas históricas ignoradas: ${facturasIgnoradasHistoricas}`);
             }
           } else {
             // Insertar o actualizar facturas
@@ -275,6 +337,28 @@ export const appRouter = router({
             },
           });
           
+          // Validar totales después de la carga de pendientes
+          let validacionTotales = null;
+          if (tipoArchivo === 'pendientes') {
+            const totalArchivo = Array.from(saldosPendientes.values()).reduce((sum: number, val: number) => sum + val, 0);
+            const allFacturasPendientes = await db.getFacturasCarteraPendiente();
+            const totalBD = allFacturasPendientes.reduce((sum, f) => sum + parseFloat(f.saldoPendiente || '0'), 0);
+            const diferencia = Math.abs(totalArchivo - totalBD);
+            const tolerancia = 0.01; // Tolerancia de 1 centavo
+            
+            validacionTotales = {
+              totalArchivo,
+              totalBD,
+              diferencia,
+              coincide: diferencia < tolerancia
+            };
+            
+            console.log(`[VALIDACIÓN] Total archivo: $${totalArchivo.toFixed(2)}`);
+            console.log(`[VALIDACIÓN] Total BD: $${totalBD.toFixed(2)}`);
+            console.log(`[VALIDACIÓN] Diferencia: $${diferencia.toFixed(2)}`);
+            console.log(`[VALIDACIÓN] Coincide: ${validacionTotales.coincide}`);
+          }
+          
           return {
             success: true,
             historialId,
@@ -282,6 +366,7 @@ export const appRouter = router({
             registrosExitosos: result.registrosExitosos,
             registrosError: result.registrosError,
             errores: result.errores,
+            validacionTotales,
             facturasFaltantes: tipoArchivo === 'pendientes' ? facturasFaltantes : undefined,
           };
         } catch (error) {

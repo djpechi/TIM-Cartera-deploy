@@ -246,3 +246,21 @@ export const partidasFactura = mysqlTable("partidasFactura", {
 
 export type PartidaFactura = typeof partidasFactura.$inferSelect;
 export type InsertPartidaFactura = typeof partidasFactura.$inferInsert;
+
+/**
+ * Facturas Faltantes - Registro de facturas detectadas en archivo de pendientes pero no encontradas en BD
+ */
+export const facturasFaltantes = mysqlTable("facturasFaltantes", {
+  id: int("id").autoincrement().primaryKey(),
+  folio: varchar("folio", { length: 50 }).notNull(),
+  saldo: decimal("saldo", { precision: 15, scale: 2 }).notNull(),
+  fecha: date("fecha"),
+  fechaVencimiento: date("fechaVencimiento"),
+  archivoOrigen: varchar("archivoOrigen", { length: 255 }), // Nombre del archivo donde se detectó
+  detectadoEn: timestamp("detectadoEn").defaultNow().notNull(),
+  resuelta: boolean("resuelta").default(false).notNull(), // Se marca como true cuando se carga la factura
+  resueltaEn: timestamp("resueltaEn"),
+});
+
+export type FacturaFaltante = typeof facturasFaltantes.$inferSelect;
+export type InsertFacturaFaltante = typeof facturasFaltantes.$inferInsert;
