@@ -113,7 +113,7 @@ export type InsertPendientePago = typeof pendientesPago.$inferInsert;
  */
 export const historialCargas = mysqlTable("historialCargas", {
   id: int("id").autoincrement().primaryKey(),
-  tipoArchivo: mysqlEnum("tipoArchivo", ["tim_transp", "tim_value", "pendientes"]).notNull(),
+  tipoArchivo: mysqlEnum("tipoArchivo", ["tim_transp", "tim_value", "pendientes", "contratos"]).notNull(),
   nombreArchivo: varchar("nombreArchivo", { length: 255 }).notNull(),
   registrosProcesados: int("registrosProcesados").default(0),
   registrosExitosos: int("registrosExitosos").default(0),

@@ -555,3 +555,7 @@
 - [ ] Agregar opción de carga en página "Cargar Archivos"
 - [ ] Actualizar lógica de proyección de deuda para usar datos reales de contratos
 - [ ] Validar que proyecciones coincidan con información de contratos activos
+
+- [x] Agregar endpoint tRPC para procesar archivo de contratos activos
+- [x] Actualizar UI de Cargar Archivos para incluir opción "Contratos Activos"
+- [ ] Probar carga de archivo ContratosactivosTIM.xlsx

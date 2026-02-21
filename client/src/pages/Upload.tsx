@@ -11,7 +11,7 @@ import { Progress } from "@/components/ui/progress";
 
 export default function Upload() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [tipoArchivo, setTipoArchivo] = useState<'tim_transp' | 'tim_value' | 'pendientes'>('tim_transp');
+  const [tipoArchivo, setTipoArchivo] = useState<'tim_transp' | 'tim_value' | 'pendientes' | 'contratos'>('tim_transp');
   const [uploading, setUploading] = useState(false);
   const [uploadResult, setUploadResult] = useState<any>(null);
 
@@ -111,7 +111,7 @@ export default function Upload() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <a
               href="/templates/plantilla_tim_transp.xlsx"
               download
@@ -135,6 +135,14 @@ export default function Upload() {
             >
               <Download className="h-4 w-4" />
               <span>Pendientes</span>
+            </a>
+            <a
+              href="/templates/plantilla_contratos.xlsx"
+              download
+              className="flex items-center justify-center gap-2 px-4 py-3 border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-md transition-colors"
+            >
+              <Download className="h-4 w-4" />
+              <span>Contratos</span>
             </a>
           </div>
         </CardContent>
@@ -168,6 +176,12 @@ export default function Upload() {
                 <RadioGroupItem value="pendientes" id="pendientes" />
                 <Label htmlFor="pendientes" className="font-normal cursor-pointer">
                   Pendientes de Pago
+                </Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="contratos" id="contratos" />
+                <Label htmlFor="contratos" className="font-normal cursor-pointer">
+                  Contratos Activos
                 </Label>
               </div>
             </RadioGroup>

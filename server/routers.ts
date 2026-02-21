@@ -64,7 +64,7 @@ export const appRouter = router({
   upload: router({
     processFile: protectedProcedure
       .input(z.object({
-        tipoArchivo: z.enum(['tim_transp', 'tim_value', 'pendientes']),
+        tipoArchivo: z.enum(['tim_transp', 'tim_value', 'pendientes', 'contratos']),
         fileName: z.string(),
         fileData: z.string(), // Base64 encoded
       }))
@@ -93,6 +93,24 @@ export const appRouter = router({
             result = processTimTranspFile(buffer);
           } else if (tipoArchivo === 'tim_value') {
             result = processTimValueFile(buffer);
+          } else if (tipoArchivo === 'contratos') {
+            // Guardar archivo temporalmente para procesarlo
+            const fs = await import('fs/promises');
+            const path = await import('path');
+            const tempPath = path.join('/tmp', `contratos_${Date.now()}.xlsx`);
+            await fs.writeFile(tempPath, buffer);
+            
+            const contratosResult = await processContratosFile(tempPath);
+            
+            // Limpiar archivo temporal
+            await fs.unlink(tempPath);
+            
+            result = {
+              success: true,
+              data: contratosResult.contratos,
+              resumen: contratosResult.resumen,
+              errores: contratosResult.resumen.errores
+            };
           } else {
             result = processPendientesFile(buffer);
           }
@@ -268,6 +286,36 @@ export const appRouter = router({
             if (facturasIgnoradasHistoricas > 0) {
               console.log(`[DEBUG] Facturas históricas ignoradas: ${facturasIgnoradasHistoricas}`);
             }
+          } else if (tipoArchivo === 'contratos') {
+            // Guardar contratos en la base de datos
+            let contratosActualizados = 0;
+            let contratosNuevos = 0;
+            
+            for (const contrato of result.data || []) {
+              const contratoExistente = await db.getContratoByNumero(contrato.numeroContrato);
+              
+              await db.upsertContratoFromFile({
+                numeroContrato: contrato.numeroContrato,
+                nombreCliente: contrato.cliente,
+                fechaInicio: contrato.fechaInicio,
+                plazo: contrato.plazo,
+                fechaTerminacion: contrato.fechaTerminacion,
+                rentaMensual: contrato.rentaMensual,
+                rentaAdministracion: contrato.rentaAdministracion,
+                rentaClubTim: contrato.rentaClubTim,
+                descripcion: contrato.descripcion,
+                numeroSerie: contrato.numeroSerie,
+                estado: contrato.estado,
+              });
+              
+              if (contratoExistente) {
+                contratosActualizados++;
+              } else {
+                contratosNuevos++;
+              }
+            }
+            
+            console.log(`[CONTRATOS] Nuevos: ${contratosNuevos}, Actualizados: ${contratosActualizados}`);
           } else {
             // Insertar o actualizar facturas
             const facturasConId: Array<{
