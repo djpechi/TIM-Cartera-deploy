@@ -1534,3 +1534,236 @@ export async function deleteFacturasFaltantesResueltas() {
     .delete(facturasFaltantes)
     .where(eq(facturasFaltantes.resuelta, true));
 }
+
+// ============ Deuda Total con Proyección ============
+
+/**
+ * Calcula la deuda total de un cliente incluyendo:
+ * - Cartera vencida (facturas pendientes actuales)
+ * - Proyección de contratos (pagos futuros)
+ * 
+ * Agrupa facturas por contrato+periodo y clasifica por tipo:
+ * - Arrendamiento (sin prefijo)
+ * - Administración (A + número)
+ * - Club Tim (C + número)
+ * - Otros (O + número o sin contrato)
+ */
+export async function getDeudaTotalCliente(clienteId: number) {
+  const db = await getDb();
+  if (!db) return null;
+
+  // Obtener nombre del cliente
+  const clienteResult = await db
+    .select()
+    .from(clientes)
+    .where(eq(clientes.id, clienteId))
+    .limit(1);
+
+  if (clienteResult.length === 0) return null;
+  const nombreCliente = clienteResult[0].nombre;
+
+  // 1. CARTERA VENCIDA: Todas las facturas pendientes
+  const facturasVencidas = await db
+    .select()
+    .from(facturas)
+    .where(
+      and(
+        eq(facturas.nombreCliente, nombreCliente),
+        sql`CAST(${facturas.saldoPendiente} AS DECIMAL(10,2)) > 0`
+      )
+    );
+
+  const totalCarteraVencida = facturasVencidas.reduce(
+    (sum, f) => sum + Number(f.saldoPendiente),
+    0
+  );
+
+  // 2. PROYECCIÓN DE CONTRATOS
+  // Agrupar facturas por contrato + periodo
+  const contratosPorPeriodo: Map<string, {
+    numeroContrato: string;
+    periodo: string;
+    pagoActual: number;
+    pagosTotales: number;
+    facturas: Array<{
+      tipo: 'arrendamiento' | 'administracion' | 'club_tim' | 'otros';
+      descripcion: string;
+      precioMensual: number;
+    }>;
+  }> = new Map();
+
+  for (const factura of facturasVencidas) {
+    if (!factura.descripcion || !factura.numeroContrato) continue;
+
+    // Extraer "X de Y" de la descripción
+    const match = factura.descripcion.match(/(\d+)\s+de\s+(\d+)/i);
+    if (!match) continue;
+
+    const pagoActual = parseInt(match[1]);
+    const pagosTotales = parseInt(match[2]);
+    const periodo = `${pagoActual} de ${pagosTotales}`;
+    const key = `${factura.numeroContrato}-${periodo}`;
+
+    // Clasificar tipo de factura
+    let tipo: 'arrendamiento' | 'administracion' | 'club_tim' | 'otros' = 'arrendamiento';
+    if (factura.descripcion.toLowerCase().includes('administraci')) {
+      tipo = 'administracion';
+    } else if (factura.descripcion.toLowerCase().includes('club tim')) {
+      tipo = 'club_tim';
+    } else if (!factura.descripcion.toLowerCase().includes('contrato')) {
+      tipo = 'otros';
+    }
+
+    if (!contratosPorPeriodo.has(key)) {
+      contratosPorPeriodo.set(key, {
+        numeroContrato: factura.numeroContrato,
+        periodo,
+        pagoActual,
+        pagosTotales,
+        facturas: []
+      });
+    }
+
+    contratosPorPeriodo.get(key)!.facturas.push({
+      tipo,
+      descripcion: factura.descripcion,
+      precioMensual: Number(factura.importeTotal)
+    });
+  }
+
+  // Calcular proyección por contrato y línea
+  const proyeccionContratos: Array<{
+    numeroContrato: string;
+    linea: string; // "234", "A234", "C234", "O234"
+    tipo: string;
+    pagosFaltantes: number;
+    precioMensual: number;
+    proyeccion: number;
+  }> = [];
+
+  // Agrupar por contrato base (sin periodo)
+  const contratosPorNumero: Map<string, Map<string, {
+    tipo: string;
+    precioMensual: number;
+    pagosFaltantes: number;
+  }>> = new Map();
+
+  for (const [key, data] of Array.from(contratosPorPeriodo.entries())) {
+    const pagosFaltantes = data.pagosTotales - data.pagoActual;
+    
+    if (!contratosPorNumero.has(data.numeroContrato)) {
+      contratosPorNumero.set(data.numeroContrato, new Map());
+    }
+
+    const lineasContrato = contratosPorNumero.get(data.numeroContrato)!;
+
+    for (const factura of data.facturas) {
+      let prefijo = '';
+      let tipoNombre = 'Arrendamiento';
+      
+      if (factura.tipo === 'administracion') {
+        prefijo = 'A';
+        tipoNombre = 'Administración';
+      } else if (factura.tipo === 'club_tim') {
+        prefijo = 'C';
+        tipoNombre = 'Club Tim';
+      } else if (factura.tipo === 'otros') {
+        prefijo = 'O';
+        tipoNombre = 'Otros';
+      }
+
+      const linea = prefijo + data.numeroContrato;
+
+      if (!lineasContrato.has(linea)) {
+        lineasContrato.set(linea, {
+          tipo: tipoNombre,
+          precioMensual: factura.precioMensual,
+          pagosFaltantes
+        });
+      }
+    }
+  }
+
+  // Generar array de proyecciones
+  let totalProyeccion = 0;
+  for (const [numeroContrato, lineas] of Array.from(contratosPorNumero.entries())) {
+    for (const [linea, data] of Array.from(lineas.entries())) {
+      const proyeccion = data.pagosFaltantes * data.precioMensual;
+      totalProyeccion += proyeccion;
+
+      proyeccionContratos.push({
+        numeroContrato,
+        linea,
+        tipo: data.tipo,
+        pagosFaltantes: data.pagosFaltantes,
+        precioMensual: data.precioMensual,
+        proyeccion
+      });
+    }
+  }
+
+  return {
+    cliente: clienteResult[0],
+    carteraVencida: totalCarteraVencida,
+    proyeccionContratos: totalProyeccion,
+    totalAdeudado: totalCarteraVencida + totalProyeccion,
+    detalleProyeccion: proyeccionContratos,
+    facturasPendientes: facturasVencidas.length
+  };
+}
+
+/**
+ * Calcula la deuda total de un grupo de clientes
+ */
+export async function getDeudaTotalGrupo(grupoId: number) {
+  const db = await getDb();
+  if (!db) return null;
+
+  // Obtener grupo
+  const grupoResult = await db
+    .select()
+    .from(gruposClientes)
+    .where(eq(gruposClientes.id, grupoId))
+    .limit(1);
+
+  if (grupoResult.length === 0) return null;
+
+  // Obtener clientes del grupo
+  const clientesGrupo = await db
+    .select()
+    .from(clientes)
+    .where(eq(clientes.grupoId, grupoId));
+
+  // Calcular deuda de cada cliente
+  const deudaPorCliente = [];
+  let totalCarteraVencida = 0;
+  let totalProyeccion = 0;
+  let totalFacturasPendientes = 0;
+
+  for (const cliente of clientesGrupo) {
+    const deuda = await getDeudaTotalCliente(cliente.id);
+    if (deuda) {
+      deudaPorCliente.push({
+        cliente: deuda.cliente,
+        carteraVencida: deuda.carteraVencida,
+        proyeccionContratos: deuda.proyeccionContratos,
+        totalAdeudado: deuda.totalAdeudado,
+        detalleProyeccion: deuda.detalleProyeccion
+      });
+
+      totalCarteraVencida += deuda.carteraVencida;
+      totalProyeccion += deuda.proyeccionContratos;
+      totalFacturasPendientes += deuda.facturasPendientes;
+    }
+  }
+
+  return {
+    grupo: grupoResult[0],
+    carteraVencida: totalCarteraVencida,
+    proyeccionContratos: totalProyeccion,
+    totalAdeudado: totalCarteraVencida + totalProyeccion,
+    clientesCount: clientesGrupo.length,
+    facturasPendientes: totalFacturasPendientes,
+    deudaPorCliente
+  };
+}

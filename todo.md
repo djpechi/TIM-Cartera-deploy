@@ -530,3 +530,15 @@
 - [x] Agregar validador en modal que muestre cuántas facturas aparecerán en el estado de cuenta antes de generarlo
 - [x] Corregir consulta de estados de cuenta para filtrar por saldoPendiente > 0
 - [x] Actualizar manualmente AA1455 a saldo 0 para que no aparezca en estados de cuenta
+
+## Análisis de Contratos - Deuda Total con Proyección
+- [x] Crear función de backend para agrupar facturas por contrato+periodo
+- [x] Implementar clasificación de líneas de contrato (Arrendamiento, Administración A, Club Tim C, Otros O)
+- [x] Calcular cartera vencida (facturas con saldoPendiente > 0)
+- [x] Calcular proyección de contratos (pagos faltantes × precio mensual por línea)
+- [x] Crear endpoint tRPC para obtener deuda total por cliente
+- [x] Crear endpoint tRPC para obtener deuda total por grupo
+- [x] Diseñar UI para mostrar desglose: Vencidas | Proyectadas | Total
+- [x] Mostrar detalle de cada contrato con sus líneas (234, A234, C234, O234)
+- [x] Agregar tab "Resumen de Deuda" en página de Análisis de Contratos
+- [ ] Probar cálculos con casos reales

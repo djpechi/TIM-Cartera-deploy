@@ -1069,6 +1069,20 @@ export const appRouter = router({
       .query(async ({ input }) => {
         return await db.getContratosPorCliente(input.clienteId);
       }),
+
+    // Obtener deuda total de un cliente (vencida + proyectada)
+    deudaTotalCliente: protectedProcedure
+      .input(z.object({ clienteId: z.number() }))
+      .query(async ({ input }) => {
+        return await db.getDeudaTotalCliente(input.clienteId);
+      }),
+
+    // Obtener deuda total de un grupo (vencida + proyectada)
+    deudaTotalGrupo: protectedProcedure
+      .input(z.object({ grupoId: z.number() }))
+      .query(async ({ input }) => {
+        return await db.getDeudaTotalGrupo(input.grupoId);
+      }),
   }),
 });
 

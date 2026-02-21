@@ -6,7 +6,7 @@ import { Input } from '../components/ui/input';
 import { Button } from '../components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/table';
-import { Search, FileText, TrendingUp } from 'lucide-react';
+import { Search, FileText, TrendingUp, DollarSign } from 'lucide-react';
 import { formatearMoneda, FormatoMoneda } from '../../../shared/formatoMoneda';
 
 export default function AnalisisContratos() {
@@ -20,6 +20,11 @@ export default function AnalisisContratos() {
   // Estado para búsqueda por cliente
   const [clienteId, setClienteId] = useState<number | null>(null);
 
+  // Estado para resumen de deuda
+  const [tipoResumen, setTipoResumen] = useState<'cliente' | 'grupo'>('cliente');
+  const [clienteResumenId, setClienteResumenId] = useState<number | null>(null);
+  const [grupoResumenId, setGrupoResumenId] = useState<number | null>(null);
+
   // Queries
   const { data: clientes } = trpc.clientes.list.useQuery();
   const { data: facturasContrato, isLoading: loadingFacturas } = trpc.analisis.facturasPorContrato.useQuery(
@@ -29,6 +34,17 @@ export default function AnalisisContratos() {
   const { data: contratosCliente, isLoading: loadingContratos } = trpc.analisis.contratosPorCliente.useQuery(
     { clienteId: clienteId! },
     { enabled: clienteId !== null }
+  );
+
+  // Queries para resumen de deuda
+  const { data: grupos } = trpc.grupos.list.useQuery();
+  const { data: deudaCliente, isLoading: loadingDeudaCliente } = trpc.analisis.deudaTotalCliente.useQuery(
+    { clienteId: clienteResumenId! },
+    { enabled: clienteResumenId !== null && tipoResumen === 'cliente' }
+  );
+  const { data: deudaGrupo, isLoading: loadingDeudaGrupo } = trpc.analisis.deudaTotalGrupo.useQuery(
+    { grupoId: grupoResumenId! },
+    { enabled: grupoResumenId !== null && tipoResumen === 'grupo' }
   );
 
   const handleBuscarContrato = () => {
@@ -96,7 +112,7 @@ export default function AnalisisContratos() {
       </div>
 
       <Tabs defaultValue="contrato" className="space-y-6">
-        <TabsList className="grid w-full max-w-md grid-cols-2">
+        <TabsList className="grid w-full max-w-2xl grid-cols-3">
           <TabsTrigger value="contrato">
             <FileText className="h-4 w-4 mr-2" />
             Por Número de Contrato
@@ -104,6 +120,10 @@ export default function AnalisisContratos() {
           <TabsTrigger value="cliente">
             <TrendingUp className="h-4 w-4 mr-2" />
             Por Cliente
+          </TabsTrigger>
+          <TabsTrigger value="resumen">
+            <DollarSign className="h-4 w-4 mr-2" />
+            Resumen de Deuda
           </TabsTrigger>
         </TabsList>
 
@@ -356,6 +376,261 @@ export default function AnalisisContratos() {
                 <Card>
                   <CardContent className="py-8 text-center text-muted-foreground">
                     No se encontraron contratos pendientes para este cliente
+                  </CardContent>
+                </Card>
+              )}
+            </>
+          )}
+        </TabsContent>
+
+        <TabsContent value="resumen" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>
+                <Search className="h-5 w-5 inline mr-2" />
+                Resumen de Deuda Total
+              </CardTitle>
+              <CardDescription>
+                Consulta la deuda total (vencida + proyectada) por cliente o grupo
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <Tabs value={tipoResumen} onValueChange={(v) => setTipoResumen(v as 'cliente' | 'grupo')} className="w-full">
+                  <TabsList className="grid w-full max-w-md grid-cols-2">
+                    <TabsTrigger value="cliente">Por Cliente</TabsTrigger>
+                    <TabsTrigger value="grupo">Por Grupo</TabsTrigger>
+                  </TabsList>
+
+                  <TabsContent value="cliente" className="mt-4">
+                    <Select
+                      value={clienteResumenId?.toString() || ''}
+                      onValueChange={(value) => setClienteResumenId(parseInt(value))}
+                    >
+                      <SelectTrigger className="max-w-md">
+                        <SelectValue placeholder="Selecciona un cliente" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {clientes?.map((cliente: any) => (
+                          <SelectItem key={cliente.id} value={cliente.id.toString()}>
+                            {cliente.nombre}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </TabsContent>
+
+                  <TabsContent value="grupo" className="mt-4">
+                    <Select
+                      value={grupoResumenId?.toString() || ''}
+                      onValueChange={(value) => setGrupoResumenId(parseInt(value))}
+                    >
+                      <SelectTrigger className="max-w-md">
+                        <SelectValue placeholder="Selecciona un grupo" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {grupos?.map((grupo: any) => (
+                          <SelectItem key={grupo.id} value={grupo.id.toString()}>
+                            {grupo.nombre}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </TabsContent>
+                </Tabs>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Mostrar resumen de deuda del cliente */}
+          {tipoResumen === 'cliente' && clienteResumenId && (
+            <>
+              {loadingDeudaCliente ? (
+                <Card>
+                  <CardContent className="py-8 text-center text-muted-foreground">
+                    Cargando...
+                  </CardContent>
+                </Card>
+              ) : deudaCliente ? (
+                <>
+                  <div className="grid gap-4 md:grid-cols-3">
+                    <Card>
+                      <CardHeader className="pb-3">
+                        <CardDescription>Cartera Vencida</CardDescription>
+                        <CardTitle className="text-2xl text-orange-600">
+                          {formatearMoneda(deudaCliente.carteraVencida, formatoUsuario)}
+                        </CardTitle>
+                        <p className="text-xs text-muted-foreground">
+                          {deudaCliente.facturasPendientes} facturas pendientes
+                        </p>
+                      </CardHeader>
+                    </Card>
+                    <Card>
+                      <CardHeader className="pb-3">
+                        <CardDescription>Proyección de Contratos</CardDescription>
+                        <CardTitle className="text-2xl text-blue-600">
+                          {formatearMoneda(deudaCliente.proyeccionContratos, formatoUsuario)}
+                        </CardTitle>
+                        <p className="text-xs text-muted-foreground">
+                          Pagos futuros estimados
+                        </p>
+                      </CardHeader>
+                    </Card>
+                    <Card>
+                      <CardHeader className="pb-3">
+                        <CardDescription>Total Adeudado</CardDescription>
+                        <CardTitle className="text-2xl text-destructive">
+                          {formatearMoneda(deudaCliente.totalAdeudado, formatoUsuario)}
+                        </CardTitle>
+                        <p className="text-xs text-muted-foreground">
+                          Vencida + Proyectada
+                        </p>
+                      </CardHeader>
+                    </Card>
+                  </div>
+
+                  {deudaCliente.detalleProyeccion.length > 0 && (
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Detalle de Proyección por Contrato</CardTitle>
+                        <CardDescription>
+                          Desglose de líneas de contrato (Arrendamiento, Administración, Club Tim, Otros)
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <Table>
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead>Contrato</TableHead>
+                              <TableHead>Línea</TableHead>
+                              <TableHead>Tipo</TableHead>
+                              <TableHead className="text-right">Pagos Faltantes</TableHead>
+                              <TableHead className="text-right">Precio Mensual</TableHead>
+                              <TableHead className="text-right">Proyección</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {deudaCliente.detalleProyeccion.map((linea: any, idx: number) => (
+                              <TableRow key={idx}>
+                                <TableCell className="font-medium">{linea.numeroContrato}</TableCell>
+                                <TableCell className="font-mono text-sm">{linea.linea}</TableCell>
+                                <TableCell>
+                                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                                    {linea.tipo}
+                                  </span>
+                                </TableCell>
+                                <TableCell className="text-right">{linea.pagosFaltantes}</TableCell>
+                                <TableCell className="text-right">
+                                  {formatearMoneda(linea.precioMensual, formatoUsuario)}
+                                </TableCell>
+                                <TableCell className="text-right font-semibold text-blue-600">
+                                  {formatearMoneda(linea.proyeccion, formatoUsuario)}
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </CardContent>
+                    </Card>
+                  )}
+                </>
+              ) : (
+                <Card>
+                  <CardContent className="py-8 text-center text-muted-foreground">
+                    No se encontraron datos para este cliente
+                  </CardContent>
+                </Card>
+              )}
+            </>
+          )}
+
+          {/* Mostrar resumen de deuda del grupo */}
+          {tipoResumen === 'grupo' && grupoResumenId && (
+            <>
+              {loadingDeudaGrupo ? (
+                <Card>
+                  <CardContent className="py-8 text-center text-muted-foreground">
+                    Cargando...
+                  </CardContent>
+                </Card>
+              ) : deudaGrupo ? (
+                <>
+                  <div className="grid gap-4 md:grid-cols-4">
+                    <Card>
+                      <CardHeader className="pb-3">
+                        <CardDescription>Clientes</CardDescription>
+                        <CardTitle className="text-2xl">{deudaGrupo.clientesCount}</CardTitle>
+                      </CardHeader>
+                    </Card>
+                    <Card>
+                      <CardHeader className="pb-3">
+                        <CardDescription>Cartera Vencida</CardDescription>
+                        <CardTitle className="text-2xl text-orange-600">
+                          {formatearMoneda(deudaGrupo.carteraVencida, formatoUsuario)}
+                        </CardTitle>
+                      </CardHeader>
+                    </Card>
+                    <Card>
+                      <CardHeader className="pb-3">
+                        <CardDescription>Proyección</CardDescription>
+                        <CardTitle className="text-2xl text-blue-600">
+                          {formatearMoneda(deudaGrupo.proyeccionContratos, formatoUsuario)}
+                        </CardTitle>
+                      </CardHeader>
+                    </Card>
+                    <Card>
+                      <CardHeader className="pb-3">
+                        <CardDescription>Total Adeudado</CardDescription>
+                        <CardTitle className="text-2xl text-destructive">
+                          {formatearMoneda(deudaGrupo.totalAdeudado, formatoUsuario)}
+                        </CardTitle>
+                      </CardHeader>
+                    </Card>
+                  </div>
+
+                  {deudaGrupo.deudaPorCliente.length > 0 && (
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Deuda por Cliente</CardTitle>
+                        <CardDescription>
+                          Desglose de deuda total por cada cliente del grupo
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <Table>
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead>Cliente</TableHead>
+                              <TableHead className="text-right">Cartera Vencida</TableHead>
+                              <TableHead className="text-right">Proyección</TableHead>
+                              <TableHead className="text-right">Total</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {deudaGrupo.deudaPorCliente.map((item: any, idx: number) => (
+                              <TableRow key={idx}>
+                                <TableCell className="font-medium">{item.cliente.nombre}</TableCell>
+                                <TableCell className="text-right text-orange-600">
+                                  {formatearMoneda(item.carteraVencida, formatoUsuario)}
+                                </TableCell>
+                                <TableCell className="text-right text-blue-600">
+                                  {formatearMoneda(item.proyeccionContratos, formatoUsuario)}
+                                </TableCell>
+                                <TableCell className="text-right font-semibold text-destructive">
+                                  {formatearMoneda(item.totalAdeudado, formatoUsuario)}
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </CardContent>
+                    </Card>
+                  )}
+                </>
+              ) : (
+                <Card>
+                  <CardContent className="py-8 text-center text-muted-foreground">
+                    No se encontraron datos para este grupo
                   </CardContent>
                 </Card>
               )}
