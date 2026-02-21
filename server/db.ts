@@ -1107,7 +1107,7 @@ export async function getFacturasPendientesPorCliente(clienteId: number) {
     .from(facturas)
     .where(and(
       eq(facturas.nombreCliente, cliente[0].nombre),
-      eq(facturas.estadoPago, 'pendiente')
+      sql`CAST(${facturas.saldoPendiente} AS DECIMAL(10,2)) > 0`
     ))
     .orderBy(facturas.fecha);
 
@@ -1139,7 +1139,7 @@ export async function getFacturasPendientesPorGrupo(grupoId: number) {
     .innerJoin(clientes, eq(facturas.nombreCliente, clientes.nombre))
     .where(and(
       eq(clientes.grupoId, grupoId),
-      eq(facturas.estadoPago, 'pendiente')
+      sql`CAST(${facturas.saldoPendiente} AS DECIMAL(10,2)) > 0`
     ))
     .orderBy(clientes.nombre, facturas.fecha);
 
@@ -1221,7 +1221,8 @@ export async function getClientesConDeuda() {
     })
     .from(clientes)
     .innerJoin(facturas, eq(facturas.nombreCliente, clientes.nombre))
-    .where(eq(facturas.estadoPago, 'pendiente'));
+    .where(sql`CAST(${facturas.saldoPendiente} AS DECIMAL(10,2)) > 0`)
+    .orderBy(clientes.nombre);
   
   return clientesConFacturasPendientes;
 }
@@ -1243,7 +1244,8 @@ export async function getGruposConDeuda() {
     .from(gruposClientes)
     .innerJoin(clientes, eq(clientes.grupoId, gruposClientes.id))
     .innerJoin(facturas, eq(facturas.nombreCliente, clientes.nombre))
-    .where(eq(facturas.estadoPago, 'pendiente'));
+    .where(sql`CAST(${facturas.saldoPendiente} AS DECIMAL(10,2)) > 0`)
+    .orderBy(gruposClientes.nombre);
   
   return gruposConFacturasPendientes;
 }

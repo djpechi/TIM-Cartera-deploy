@@ -4,7 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { FileText, Download, Loader2 } from 'lucide-react';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { FileText, Download, Loader2, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function EstadosCuenta() {
@@ -13,6 +14,7 @@ export default function EstadosCuenta() {
   const [grupoSeleccionado, setGrupoSeleccionado] = useState<string>('');
   const [tasaInteresMoratorio, setTasaInteresMoratorio] = useState<number>(0);
   const [clientesSeleccionados, setClientesSeleccionados] = useState<number[]>([]);
+  const [showValidacionModal, setShowValidacionModal] = useState(false);
 
   const { data: clientes, isLoading: loadingClientes } = trpc.estadosCuenta.clientesConDeuda.useQuery();
   const { data: grupos, isLoading: loadingGrupos } = trpc.estadosCuenta.gruposConDeuda.useQuery();
@@ -461,7 +463,7 @@ export default function EstadosCuenta() {
 
                   <div className="flex justify-end">
                     <Button
-                      onClick={handleGenerarPDF}
+                      onClick={() => setShowValidacionModal(true)}
                       disabled={isGenerating}
                       size="lg"
                       className="gap-2"
@@ -503,6 +505,82 @@ export default function EstadosCuenta() {
           </Card>
         )}
       </div>
+
+      {/* Modal de Validación */}
+      <Dialog open={showValidacionModal} onOpenChange={setShowValidacionModal}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <AlertCircle className="h-5 w-5 text-primary" />
+              Validación de Estado de Cuenta
+            </DialogTitle>
+            <DialogDescription>
+              Verifica que la información sea correcta antes de generar el PDF
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <p className="text-sm text-muted-foreground">Cliente/Grupo:</p>
+                <p className="font-semibold">
+                  {tipoSeleccion === 'cliente'
+                    ? estadoActual && 'cliente' in estadoActual
+                      ? estadoActual.cliente.nombre
+                      : 'N/A'
+                    : estadoActual && 'grupo' in estadoActual
+                    ? estadoActual.grupo.nombre
+                    : 'N/A'}
+                </p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm text-muted-foreground">Facturas Pendientes:</p>
+                <p className="text-2xl font-bold text-primary">
+                  {estadoActual?.facturas.length || 0}
+                </p>
+              </div>
+            </div>
+            <div className="border-t pt-4">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-muted-foreground">Total a Pagar:</span>
+                <span className="text-xl font-bold">
+                  {estadoActual
+                    ? formatCurrency(
+                        estadoActual.facturas.reduce((sum: number, f: any) => {
+                          const saldo = Number(f.saldoPendiente || 0);
+                          const diasAtraso = Number(f.diasAtraso || 0);
+                          const intereses = saldo * (tasaInteresMoratorio / 100) * (diasAtraso / 30);
+                          return sum + saldo + intereses;
+                        }, 0)
+                      )
+                    : '$0.00'}
+                </span>
+              </div>
+            </div>
+            {estadoActual && estadoActual.facturas.length === 0 && (
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <p className="text-sm text-yellow-800">
+                  ⚠️ No hay facturas pendientes para este {tipoSeleccion}. El PDF estará vacío.
+                </p>
+              </div>
+            )}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowValidacionModal(false)}>
+              Cancelar
+            </Button>
+            <Button
+              onClick={() => {
+                setShowValidacionModal(false);
+                handleGenerarPDF();
+              }}
+              disabled={!estadoActual || estadoActual.facturas.length === 0}
+            >
+              <Download className="mr-2 h-4 w-4" />
+              Generar PDF
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

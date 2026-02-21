@@ -1,0 +1,17 @@
+{
+  "query": "SELECT folio, nombreCliente, saldoPendiente, estadoPago, CAST(saldoPendiente AS DECIMAL(10,2)) as saldo_decimal FROM facturas WHERE folio = 'AA1455';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute SELECT folio, nombreCliente, saldoPendiente, estadoPago, CAST(saldoPendiente AS DECIMAL(10,2)) as saldo_decimal FROM facturas WHERE folio = 'AA1455';",
+  "rows": [
+    {
+      "folio": "AA1455",
+      "nombreCliente": "MOTEL TUNA",
+      "saldoPendiente": "1102.00",
+      "estadoPago": "pendiente",
+      "saldo_decimal": "1102.00"
+    }
+  ],
+  "messages": [],
+  "stdout": "folio\tnombreCliente\tsaldoPendiente\testadoPago\tsaldo_decimal\nAA1455\tMOTEL TUNA\t1102.00\tpendiente\t1102.00\n",
+  "stderr": "",
+  "execution_time_ms": 73
+}

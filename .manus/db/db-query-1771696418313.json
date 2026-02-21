@@ -1,0 +1,19 @@
+{
+  "query": "SELECT folio, nombreCliente, fecha, fechaVencimiento, CAST(saldoPendiente AS DECIMAL(10,2)) as saldo, estadoPago, diasAtraso FROM facturas WHERE folio = 'AA1455';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute SELECT folio, nombreCliente, fecha, fechaVencimiento, CAST(saldoPendiente AS DECIMAL(10,2)) as saldo, estadoPago, diasAtraso FROM facturas WHERE folio = 'AA1455';",
+  "rows": [
+    {
+      "folio": "AA1455",
+      "nombreCliente": "MOTEL TUNA",
+      "fecha": "2026-01-20 00:00:00",
+      "fechaVencimiento": "2026-01-22 00:00:00",
+      "saldo": "1102.00",
+      "estadoPago": "pendiente",
+      "diasAtraso": "30"
+    }
+  ],
+  "messages": [],
+  "stdout": "folio\tnombreCliente\tfecha\tfechaVencimiento\tsaldo\testadoPago\tdiasAtraso\nAA1455\tMOTEL TUNA\t2026-01-20 00:00:00\t2026-01-22 00:00:00\t1102.00\tpendiente\t30\n",
+  "stderr": "",
+  "execution_time_ms": 65
+}

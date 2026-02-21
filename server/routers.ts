@@ -201,17 +201,33 @@ export const appRouter = router({
             let saldoTotalActualizado = 0;
             let facturasIgnoradasHistoricas = 0;
             for (const factura of allFacturas) {
-              // Ignorar facturas históricas (anteriores a la fecha mínima del archivo)
+              // Log para AA1455 - verificar si entra en el bucle
+              if (factura.folio === 'AA1455') {
+                console.log(`[DEBUG AA1455] Procesando factura - Fecha: ${factura.fecha}, Fecha mínima archivo: ${fechaMinimaArchivo}`);
+              }
+              
+              // TEMPORALMENTE DESHABILITADO: Ignorar facturas históricas
+              // TODO: Revisar lógica de fecha mínima después de resolver problema de actualización
+              /*
               if (fechaMinimaArchivo && factura.fecha) {
                 const fechaFactura = new Date(factura.fecha);
                 if (fechaFactura < fechaMinimaArchivo) {
+                  if (factura.folio === 'AA1455') {
+                    console.log(`[DEBUG AA1455] IGNORADA como histórica - Fecha factura: ${fechaFactura.toISOString()}, Fecha mínima: ${fechaMinimaArchivo.toISOString()}`);
+                  }
                   facturasIgnoradasHistoricas++;
                   continue; // No modificar esta factura
                 }
               }
+              */
               const estaEnArchivoPendientes = foliosPendientes.has(factura.folio);
               const saldoPendiente = estaEnArchivoPendientes ? (saldosPendientes.get(factura.folio) || 0) : 0;
               const estadoPago = estaEnArchivoPendientes ? 'pendiente' : 'pagado';
+              
+              // Log para facturas que se marcan como pagadas (para debug)
+              if (!estaEnArchivoPendientes && factura.folio === 'AA1455') {
+                console.log(`[DEBUG AA1455] Marcando como pagada - Fecha: ${factura.fecha}, Estado anterior: ${factura.estadoPago}`);
+              }
               
               // Si el archivo tiene fechas para esta factura, actualizarlas también
               const fechasDelArchivo = fechasArchivo.get(factura.folio);

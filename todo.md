@@ -522,3 +522,11 @@
 - [x] Ignorar facturas históricas (anteriores a fecha mínima) en actualización automática
 - [x] Agregar logs para mostrar fecha mínima detectada y facturas excluidas
 - [ ] Probar que facturas históricas mantienen su estado actual sin modificarse
+
+- [x] BUG: Factura AA1455 aparece en estados de cuenta cuando NO está en archivo de pendientes (debería estar marcada como pagada)
+
+## Mejoras en Estados de Cuenta
+- [x] Ordenar selectores de clientes y grupos alfabéticamente por nombre
+- [x] Agregar validador en modal que muestre cuántas facturas aparecerán en el estado de cuenta antes de generarlo
+- [x] Corregir consulta de estados de cuenta para filtrar por saldoPendiente > 0
+- [x] Actualizar manualmente AA1455 a saldo 0 para que no aparezca en estados de cuenta
