@@ -561,3 +561,5 @@
 - [ ] Probar carga de archivo ContratosactivosTIM.xlsx
 
 - [x] BUG: Error "XLSX.readFile is not a function" al cargar archivo de contratos
+
+- [x] BUG: Carga de archivo de contratos resultó en 0 registros exitosos

@@ -108,7 +108,9 @@ export const appRouter = router({
             result = {
               success: true,
               data: contratosResult.contratos,
-              resumen: contratosResult.resumen,
+              registrosProcesados: contratosResult.resumen.totalRegistros,
+              registrosExitosos: contratosResult.resumen.contratosActivos + contratosResult.resumen.contratosInactivos,
+              registrosError: contratosResult.resumen.errores.length,
               errores: contratosResult.resumen.errores
             };
           } else {
