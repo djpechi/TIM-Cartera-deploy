@@ -570,3 +570,5 @@
 
 - [x] BUG: Select.Item con valor vacío en Análisis de Contratos
 - [x] BUG: Elementos de lista sin key prop en Análisis de Contratos
+
+- [x] BUG: Cliente "Sacar del centro mexico" solo muestra 4 contratos en lugar de 31 contratos activos

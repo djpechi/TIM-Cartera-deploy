@@ -1579,124 +1579,68 @@ export async function getDeudaTotalCliente(clienteId: number) {
   );
 
   // 2. PROYECCIÓN DE CONTRATOS
-  // Agrupar facturas por contrato + periodo
-  const contratosPorPeriodo: Map<string, {
-    numeroContrato: string;
-    periodo: string;
-    pagoActual: number;
-    pagosTotales: number;
-    facturas: Array<{
-      tipo: 'arrendamiento' | 'administracion' | 'club_tim' | 'otros';
-      descripcion: string;
-      precioMensual: number;
-    }>;
-  }> = new Map();
+  // Obtener TODOS los contratos activos del cliente desde la tabla contratos
+  const contratosActivos = await db
+    .select()
+    .from(contratos)
+    .where(eq(contratos.clienteId, clienteId));
 
-  for (const factura of facturasVencidas) {
-    if (!factura.descripcion || !factura.numeroContrato) continue;
-
-    // Extraer "X de Y" de la descripción
-    const match = factura.descripcion.match(/(\d+)\s+de\s+(\d+)/i);
-    if (!match) continue;
-
-    const pagoActual = parseInt(match[1]);
-    const pagosTotales = parseInt(match[2]);
-    const periodo = `${pagoActual} de ${pagosTotales}`;
-    const key = `${factura.numeroContrato}-${periodo}`;
-
-    // Clasificar tipo de factura
-    let tipo: 'arrendamiento' | 'administracion' | 'club_tim' | 'otros' = 'arrendamiento';
-    if (factura.descripcion.toLowerCase().includes('administraci')) {
-      tipo = 'administracion';
-    } else if (factura.descripcion.toLowerCase().includes('club tim')) {
-      tipo = 'club_tim';
-    } else if (!factura.descripcion.toLowerCase().includes('contrato')) {
-      tipo = 'otros';
-    }
-
-    if (!contratosPorPeriodo.has(key)) {
-      contratosPorPeriodo.set(key, {
-        numeroContrato: factura.numeroContrato,
-        periodo,
-        pagoActual,
-        pagosTotales,
-        facturas: []
-      });
-    }
-
-    contratosPorPeriodo.get(key)!.facturas.push({
-      tipo,
-      descripcion: factura.descripcion,
-      precioMensual: Number(factura.importeTotal)
-    });
-  }
-
-  // Calcular proyección por contrato y línea
   const proyeccionContratos: Array<{
     numeroContrato: string;
-    linea: string; // "234", "A234", "C234", "O234"
+    linea: string;
     tipo: string;
     pagosFaltantes: number;
     precioMensual: number;
     proyeccion: number;
   }> = [];
 
-  // Agrupar por contrato base (sin periodo)
-  const contratosPorNumero: Map<string, Map<string, {
-    tipo: string;
-    precioMensual: number;
-    pagosFaltantes: number;
-  }>> = new Map();
-
-  for (const [key, data] of Array.from(contratosPorPeriodo.entries())) {
-    const pagosFaltantes = data.pagosTotales - data.pagoActual;
-    
-    if (!contratosPorNumero.has(data.numeroContrato)) {
-      contratosPorNumero.set(data.numeroContrato, new Map());
-    }
-
-    const lineasContrato = contratosPorNumero.get(data.numeroContrato)!;
-
-    for (const factura of data.facturas) {
-      let prefijo = '';
-      let tipoNombre = 'Arrendamiento';
-      
-      if (factura.tipo === 'administracion') {
-        prefijo = 'A';
-        tipoNombre = 'Administración';
-      } else if (factura.tipo === 'club_tim') {
-        prefijo = 'C';
-        tipoNombre = 'Club Tim';
-      } else if (factura.tipo === 'otros') {
-        prefijo = 'O';
-        tipoNombre = 'Otros';
-      }
-
-      const linea = prefijo + data.numeroContrato;
-
-      if (!lineasContrato.has(linea)) {
-        lineasContrato.set(linea, {
-          tipo: tipoNombre,
-          precioMensual: factura.precioMensual,
-          pagosFaltantes
-        });
-      }
-    }
-  }
-
-  // Generar array de proyecciones
   let totalProyeccion = 0;
-  for (const [numeroContrato, lineas] of Array.from(contratosPorNumero.entries())) {
-    for (const [linea, data] of Array.from(lineas.entries())) {
-      const proyeccion = data.pagosFaltantes * data.precioMensual;
-      totalProyeccion += proyeccion;
 
+  for (const contrato of contratosActivos) {
+    // Calcular pagos restantes: totalRentas - rentaActual
+    const pagosFaltantes = contrato.totalRentas - contrato.rentaActual;
+
+    // Si no hay pagos faltantes, saltar este contrato
+    if (pagosFaltantes <= 0) continue;
+
+    // Agregar línea de Arrendamiento (sin prefijo)
+    if (contrato.montoMensual && Number(contrato.montoMensual) > 0) {
+      const proyeccion = pagosFaltantes * Number(contrato.montoMensual);
+      totalProyeccion += proyeccion;
       proyeccionContratos.push({
-        numeroContrato,
-        linea,
-        tipo: data.tipo,
-        pagosFaltantes: data.pagosFaltantes,
-        precioMensual: data.precioMensual,
+        numeroContrato: contrato.numeroContrato,
+        linea: contrato.numeroContrato,
+        tipo: 'Arrendamiento',
+        pagosFaltantes,
+        precioMensual: Number(contrato.montoMensual),
+        proyeccion
+      });
+    }
+
+    // Agregar línea de Administración (prefijo A)
+    if (contrato.rentaAdministracion && Number(contrato.rentaAdministracion) > 0) {
+      const proyeccion = pagosFaltantes * Number(contrato.rentaAdministracion);
+      totalProyeccion += proyeccion;
+      proyeccionContratos.push({
+        numeroContrato: contrato.numeroContrato,
+        linea: 'A' + contrato.numeroContrato,
+        tipo: 'Administración',
+        pagosFaltantes,
+        precioMensual: Number(contrato.rentaAdministracion),
+        proyeccion
+      });
+    }
+
+    // Agregar línea de Club Tim (prefijo C)
+    if (contrato.rentaClubTim && Number(contrato.rentaClubTim) > 0) {
+      const proyeccion = pagosFaltantes * Number(contrato.rentaClubTim);
+      totalProyeccion += proyeccion;
+      proyeccionContratos.push({
+        numeroContrato: contrato.numeroContrato,
+        linea: 'C' + contrato.numeroContrato,
+        tipo: 'Club Tim',
+        pagosFaltantes,
+        precioMensual: Number(contrato.rentaClubTim),
         proyeccion
       });
     }

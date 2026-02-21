@@ -1,0 +1,133 @@
+{
+  "query": "SELECT numeroContrato FROM contratos WHERE clienteId = (SELECT id FROM clientes WHERE nombre LIKE '%sacar%' LIMIT 1) ORDER BY numeroContrato;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute SELECT numeroContrato FROM contratos WHERE clienteId = (SELECT id FROM clientes WHERE nombre LIKE '%sacar%' LIMIT 1) ORDER BY numeroContrato;",
+  "rows": [
+    {
+      "numeroContrato": "17"
+    },
+    {
+      "numeroContrato": "18"
+    },
+    {
+      "numeroContrato": "2"
+    },
+    {
+      "numeroContrato": "259"
+    },
+    {
+      "numeroContrato": "263"
+    },
+    {
+      "numeroContrato": "264"
+    },
+    {
+      "numeroContrato": "270"
+    },
+    {
+      "numeroContrato": "271"
+    },
+    {
+      "numeroContrato": "287"
+    },
+    {
+      "numeroContrato": "288"
+    },
+    {
+      "numeroContrato": "289"
+    },
+    {
+      "numeroContrato": "290"
+    },
+    {
+      "numeroContrato": "291"
+    },
+    {
+      "numeroContrato": "292"
+    },
+    {
+      "numeroContrato": "293"
+    },
+    {
+      "numeroContrato": "299"
+    },
+    {
+      "numeroContrato": "305"
+    },
+    {
+      "numeroContrato": "307"
+    },
+    {
+      "numeroContrato": "314"
+    },
+    {
+      "numeroContrato": "362"
+    },
+    {
+      "numeroContrato": "385"
+    },
+    {
+      "numeroContrato": "407"
+    },
+    {
+      "numeroContrato": "408"
+    },
+    {
+      "numeroContrato": "415"
+    },
+    {
+      "numeroContrato": "417"
+    },
+    {
+      "numeroContrato": "418"
+    },
+    {
+      "numeroContrato": "422"
+    },
+    {
+      "numeroContrato": "426"
+    },
+    {
+      "numeroContrato": "431"
+    },
+    {
+      "numeroContrato": "439"
+    },
+    {
+      "numeroContrato": "441"
+    },
+    {
+      "numeroContrato": "450"
+    },
+    {
+      "numeroContrato": "451"
+    },
+    {
+      "numeroContrato": "452"
+    },
+    {
+      "numeroContrato": "453"
+    },
+    {
+      "numeroContrato": "474"
+    },
+    {
+      "numeroContrato": "476"
+    },
+    {
+      "numeroContrato": "5"
+    },
+    {
+      "numeroContrato": "60"
+    },
+    {
+      "numeroContrato": "9"
+    },
+    {
+      "numeroContrato": "95"
+    }
+  ],
+  "messages": [],
+  "stdout": "numeroContrato\n17\n18\n2\n259\n263\n264\n270\n271\n287\n288\n289\n290\n291\n292\n293\n299\n305\n307\n314\n362\n385\n407\n408\n415\n417\n418\n422\n426\n431\n439\n441\n450\n451\n452\n453\n474\n476\n5\n60\n9\n95\n",
+  "stderr": "",
+  "execution_time_ms": 56
+}
