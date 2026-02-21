@@ -1,0 +1,24 @@
+{
+  "query": "SELECT folio, fecha, fechaVencimiento, DATEDIFF(CURDATE(), fechaVencimiento) as diasAtrasoCalculado, estadoPago FROM facturas WHERE folio IN ('AB11085', 'AB11415') LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute SELECT folio, fecha, fechaVencimiento, DATEDIFF(CURDATE(), fechaVencimiento) as diasAtrasoCalculado, estadoPago FROM facturas WHERE folio IN ('AB11085', 'AB11415') LIMIT 10;",
+  "rows": [
+    {
+      "folio": "AB11085",
+      "fecha": "2025-12-02 00:00:00",
+      "fechaVencimiento": "2026-01-01 00:00:00",
+      "diasAtrasoCalculado": "51",
+      "estadoPago": "pendiente"
+    },
+    {
+      "folio": "AB11415",
+      "fecha": "2026-01-02 00:00:00",
+      "fechaVencimiento": "2026-02-01 00:00:00",
+      "diasAtrasoCalculado": "20",
+      "estadoPago": "pendiente"
+    }
+  ],
+  "messages": [],
+  "stdout": "folio\tfecha\tfechaVencimiento\tdiasAtrasoCalculado\testadoPago\nAB11085\t2025-12-02 00:00:00\t2026-01-01 00:00:00\t51\tpendiente\nAB11415\t2026-01-02 00:00:00\t2026-02-01 00:00:00\t20\tpendiente\n",
+  "stderr": "",
+  "execution_time_ms": 68
+}

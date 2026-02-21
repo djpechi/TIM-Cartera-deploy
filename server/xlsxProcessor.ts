@@ -323,6 +323,8 @@ export function processPendientesFile(buffer: Buffer): ProcessResult {
     const folioIdx = headers.findIndex(h => h.includes('folio'));
     const saldoIdx = headers.findIndex(h => h.includes('saldo'));
     const atrasoIdx = headers.findIndex(h => h.includes('atraso'));
+    const fechaIdx = headers.findIndex(h => h === 'fecha');
+    const venceIdx = headers.findIndex(h => h.includes('vence'));
     
     if (folioIdx === -1) {
       errores.push('No se encontró columna de Folio en el archivo');
@@ -347,8 +349,20 @@ export function processPendientesFile(buffer: Buffer): ProcessResult {
         const saldo = saldoIdx !== -1 ? parseNumber(row[saldoIdx]) : 0;
         const diasVencido = atrasoIdx !== -1 ? parseNumber(row[atrasoIdx]) : 0;
         
+        // Leer fechas del archivo si están disponibles
+        let fecha = null;
+        let fechaVencimiento = null;
+        
+        if (fechaIdx !== -1 && row[fechaIdx]) {
+          fecha = parseExcelDate(row[fechaIdx]);
+        }
+        
+        if (venceIdx !== -1 && row[venceIdx]) {
+          fechaVencimiento = parseExcelDate(row[venceIdx]);
+        }
+        
         // Si el folio aparece en pendientes, significa que NO está pagado
-        // Guardamos solo el folio y saldo para marcar como pendiente
+        // Guardamos folio, saldo y fechas para marcar como pendiente
         pendientes.push({
           folio,
           nombreCliente: '', // Se llenará al cruzar con facturas
@@ -357,7 +371,9 @@ export function processPendientesFile(buffer: Buffer): ProcessResult {
           diasVencido,
           saldo: saldo.toString(),
           interesesMoratorios: '0.00',
-        });
+          fecha: fecha,
+          fechaVencimiento: fechaVencimiento,
+        } as any);
       } catch (error) {
         errores.push(`Fila ${i + 1}: Error al procesar - ${error}`);
       }

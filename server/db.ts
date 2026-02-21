@@ -1096,7 +1096,7 @@ export async function getFacturasPendientesPorCliente(clienteId: number) {
       fechaVencimiento: facturas.fechaVencimiento,
       importeTotal: facturas.importeTotal,
       saldoPendiente: facturas.saldoPendiente,
-      diasAtraso: sql<number>`GREATEST(0, DATEDIFF(CURDATE(), ${facturas.fechaVencimiento}))`,
+      diasAtraso: facturas.diasAtraso,  // Usar campo almacenado en lugar de calcular
       interesesMoratorios: facturas.interesesMoratorios,
       estadoPago: facturas.estadoPago,
       sistema: facturas.sistema,
@@ -1126,7 +1126,7 @@ export async function getFacturasPendientesPorGrupo(grupoId: number) {
       fechaVencimiento: facturas.fechaVencimiento,
       importeTotal: facturas.importeTotal,
       saldoPendiente: facturas.saldoPendiente,
-      diasAtraso: sql<number>`GREATEST(0, DATEDIFF(CURDATE(), ${facturas.fechaVencimiento}))`,
+      diasAtraso: facturas.diasAtraso,  // Usar campo almacenado en lugar de calcular
       interesesMoratorios: facturas.interesesMoratorios,
       estadoPago: facturas.estadoPago,
       sistema: facturas.sistema,
@@ -1368,7 +1368,7 @@ export async function getFacturasPorContrato(numeroContrato: string) {
       nombreCliente: facturas.nombreCliente,
       importeTotal: facturas.importeTotal,
       saldoPendiente: facturas.saldoPendiente,
-      diasAtraso: sql<number>`GREATEST(0, DATEDIFF(CURDATE(), ${facturas.fechaVencimiento}))`,
+      diasAtraso: facturas.diasAtraso,  // Usar campo almacenado en lugar de calcular
       sistema: facturas.sistema,
       estadoPago: facturas.estadoPago,
       descripcion: facturas.descripcion,

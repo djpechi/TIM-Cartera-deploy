@@ -133,14 +133,33 @@ export const appRouter = router({
             const foliosFaltantes = (result.data || []).filter((p: any) => !foliosExistentes.has(p.folio));
             
             for (const pendiente of foliosFaltantes) {
-              const diasAtraso = pendiente.diasVencido || 0;
               const saldo = parseFloat(pendiente.saldo || '0');
               
-              const fechaVencimiento = new Date();
-              fechaVencimiento.setDate(fechaVencimiento.getDate() - diasAtraso);
+              // Usar fechas del archivo si están disponibles, sino calcularlas
+              let fechaFactura: Date;
+              let fechaVencimiento: Date;
+              let diasAtraso: number;
               
-              const fechaFactura = new Date(fechaVencimiento);
-              fechaFactura.setDate(fechaFactura.getDate() - 30);
+              if ((pendiente as any).fecha && (pendiente as any).fechaVencimiento) {
+                // Usar fechas del archivo
+                fechaFactura = new Date((pendiente as any).fecha);
+                fechaVencimiento = new Date((pendiente as any).fechaVencimiento);
+                
+                // Recalcular diasAtraso basado en fechaVencimiento real
+                const hoy = new Date();
+                hoy.setHours(0, 0, 0, 0);
+                const vence = new Date(fechaVencimiento);
+                vence.setHours(0, 0, 0, 0);
+                diasAtraso = Math.max(0, Math.floor((hoy.getTime() - vence.getTime()) / (1000 * 60 * 60 * 24)));
+                // No modificar fechaVencimiento original
+              } else {
+                // Fallback: calcular fechas (método anterior)
+                diasAtraso = pendiente.diasVencido || 0;
+                fechaVencimiento = new Date();
+                fechaVencimiento.setDate(fechaVencimiento.getDate() - diasAtraso);
+                fechaFactura = new Date(fechaVencimiento);
+                fechaFactura.setDate(fechaFactura.getDate() - 30);
+              }
               
               await db.upsertFactura({
                 folio: pendiente.folio,
@@ -158,12 +177,44 @@ export const appRouter = router({
               } as any);
             }
             
-            // Actualizar saldoPendiente y estado de todas las facturas
+            // Crear mapa de fechas del archivo para actualizar facturas existentes
+            const fechasArchivo = new Map(
+              (result.data || [])
+                .filter((p: any) => p.fecha && p.fechaVencimiento)
+                .map((p: any) => [p.folio, { fecha: p.fecha, fechaVencimiento: p.fechaVencimiento }])
+            );
+            
+            // Actualizar saldoPendiente, estado y fechas de todas las facturas
             for (const factura of allFacturas) {
               const saldoPendiente = saldosPendientes.get(factura.folio) || 0;
               const estadoPago = saldoPendiente > 0 ? 'pendiente' : 'pagado';
               
-              await db.updateFacturaSaldoPendiente(factura.folio, saldoPendiente, estadoPago);
+              // Si el archivo tiene fechas para esta factura, actualizarlas también
+              const fechasDelArchivo = fechasArchivo.get(factura.folio);
+              if (fechasDelArchivo) {
+                const fechaFactura = new Date(fechasDelArchivo.fecha);
+                const fechaVencimiento = new Date(fechasDelArchivo.fechaVencimiento);
+                
+                // Recalcular diasAtraso basado en fechaVencimiento real
+                const hoy = new Date();
+                hoy.setHours(0, 0, 0, 0);
+                const vence = new Date(fechaVencimiento);
+                vence.setHours(0, 0, 0, 0);
+                const diasAtraso = Math.max(0, Math.floor((hoy.getTime() - vence.getTime()) / (1000 * 60 * 60 * 24)));
+                
+                // Actualizar factura con fechas y saldo
+                await db.upsertFactura({
+                  ...factura,
+                  fecha: fechaFactura,
+                  fechaVencimiento,
+                  saldoPendiente: saldoPendiente.toString(),
+                  estadoPago,
+                  diasAtraso,
+                } as any);
+              } else {
+                // Solo actualizar saldo si no hay fechas en el archivo
+                await db.updateFacturaSaldoPendiente(factura.folio, saldoPendiente, estadoPago);
+              }
             }
           } else {
             // Insertar o actualizar facturas

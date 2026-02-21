@@ -460,3 +460,25 @@
 - [x] Corregir lógica de cálculo en backend (adeudo actual + pagos futuros)
 - [x] Corregir frontend para usar datos directos del backend en lugar de calcularProyeccion()
 - [x] Probar con contrato 263 y BOTANAS CAMPESINAS - funcionando correctamente
+
+## Revisión: Cálculo de Días de Atraso en Estados de Cuenta
+- [x] Revisar código del generador de estados de cuenta (EstadosCuenta.tsx)
+- [x] Verificar cálculo de días de atraso en backend (db.ts)
+- [x] Identificar lógica actual de cálculo (fecha de vencimiento vs fecha actual)
+- [x] Probar con facturas reales para validar precisión
+- [x] Documentar hallazgos: Cálculo es correcto usando DATEDIFF(CURDATE(), fechaVencimiento)
+
+## ERROR CRÍTICO: Cálculo Incorrecto de Días de Atraso
+- [x] Investigar factura AB11711 que muestra 2 días de atraso en lugar de 29 días
+- [x] Verificar fechaVencimiento real en base de datos para AB11711
+- [x] Identificar si el problema es en el cálculo SQL o en los datos almacenados
+- [x] Corregir procesamiento de archivos para leer columnas Fecha y Vence
+- [x] Modificar routers.ts para usar fechas del archivo en lugar de calcularlas
+- [x] Modificar código para actualizar fechas de facturas EXISTENTES (no solo nuevas)
+- [x] Recargar archivo de pendientes para actualizar fechas existentes
+- [x] Probar con múltiples facturas para asegurar corrección global (AB11711 y AA1455)
+
+## Corrección: DATEDIFF muestra 30 días en lugar de 29
+- [x] Identificar consultas SQL que usan DATEDIFF(CURDATE(), fechaVencimiento)
+- [x] Cambiar para usar el campo diasAtraso almacenado en 3 funciones
+- [x] Verificar que todas las vistas muestren 29 días correctamente
