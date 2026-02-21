@@ -1809,3 +1809,70 @@ export async function getGruposConContratosActivos() {
   const rows = Array.isArray(result) ? result : (result.rows || []);
   return rows;
 }
+
+
+/**
+ * Inserta o actualiza un contrato desde archivo de contratos activos
+ */
+export async function upsertContratoFromFile(contrato: {
+  numeroContrato: string;
+  nombreCliente: string;
+  fechaInicio: Date | null;
+  plazo: number | null;
+  fechaTerminacion: Date | null;
+  rentaMensual: number;
+  rentaAdministracion: number | null;
+  rentaClubTim: number | null;
+  descripcion: string;
+  numeroSerie: string;
+  estado: string;
+}) {
+  const db = await getDb();
+  if (!db) return null;
+
+  // Buscar cliente por nombre
+  const clienteResult: any = await db.execute(sql`
+    SELECT id FROM clientes WHERE nombre = ${contrato.nombreCliente} LIMIT 1
+  `);
+  const clienteRows = Array.isArray(clienteResult) ? clienteResult : (clienteResult.rows || []);
+  const clienteId = clienteRows.length > 0 ? clienteRows[0].id : null;
+
+  // Determinar empresa (por defecto tim_value si no se especifica)
+  const empresa = 'tim_value';
+
+  await db.insert(contratos).values({
+    numeroContrato: contrato.numeroContrato,
+    clienteId,
+    nombreCliente: contrato.nombreCliente,
+    empresa,
+    tipoServicio: 'ARRENDAMIENTO',
+    descripcionActivo: contrato.descripcion,
+    numeroSerie: contrato.numeroSerie,
+    totalRentas: contrato.plazo || 0,
+    rentaActual: 0, // Se actualizará cuando se procesen facturas
+    montoMensual: contrato.rentaMensual.toString(),
+    rentaAdministracion: contrato.rentaAdministracion?.toString() || null,
+    rentaClubTim: contrato.rentaClubTim?.toString() || null,
+    plazo: contrato.plazo,
+    fechaInicio: contrato.fechaInicio,
+    fechaTermino: contrato.fechaTerminacion,
+    activo: contrato.estado === 'ACTIVO',
+  }).onDuplicateKeyUpdate({
+    set: {
+      nombreCliente: contrato.nombreCliente,
+      clienteId,
+      descripcionActivo: contrato.descripcion,
+      numeroSerie: contrato.numeroSerie,
+      totalRentas: contrato.plazo || 0,
+      montoMensual: contrato.rentaMensual.toString(),
+      rentaAdministracion: contrato.rentaAdministracion?.toString() || null,
+      rentaClubTim: contrato.rentaClubTim?.toString() || null,
+      plazo: contrato.plazo,
+      fechaInicio: contrato.fechaInicio,
+      fechaTermino: contrato.fechaTerminacion,
+      activo: contrato.estado === 'ACTIVO',
+    },
+  });
+
+  return true;
+}

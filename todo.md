@@ -546,3 +546,12 @@
 - [x] Filtrar selectores de Resumen de Deuda para mostrar solo clientes/grupos con contratos activos
 
 - [x] BUG: Error "Cannot read properties of undefined (reading 'toString')" en Análisis de Contratos
+
+
+## Tabla de Contratos Activos
+- [x] Crear tabla `contratos` en schema con campos: numeroContrato, cliente, fechaInicio, plazo, rentaMensual, rentaAdministracion, rentaClubTim, estado
+- [ ] Migrar schema a base de datos (pnpm db:push) - PENDIENTE: Ejecutar manualmente
+- [x] Crear procesador de archivo ContratosactivosTIM.xlsx
+- [ ] Agregar opción de carga en página "Cargar Archivos"
+- [ ] Actualizar lógica de proyección de deuda para usar datos reales de contratos
+- [ ] Validar que proyecciones coincidan con información de contratos activos

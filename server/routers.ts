@@ -11,6 +11,7 @@ import {
   processPendientesFile,
   calcularAtrasoEIntereses 
 } from "./xlsxProcessor";
+import { processContratosFile } from "./contratosProcessor";
 import { TRPCError } from "@trpc/server";
 
 export const appRouter = router({

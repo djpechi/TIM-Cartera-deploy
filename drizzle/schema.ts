@@ -194,6 +194,9 @@ export const contratos = mysqlTable("contratos", {
   totalRentas: int("totalRentas").notNull(),
   rentaActual: int("rentaActual").notNull(),
   montoMensual: decimal("montoMensual", { precision: 15, scale: 2 }).notNull(),
+  rentaAdministracion: decimal("rentaAdministracion", { precision: 15, scale: 2 }),
+  rentaClubTim: decimal("rentaClubTim", { precision: 15, scale: 2 }),
+  plazo: int("plazo"), // Duración total en meses
   fechaInicio: date("fechaInicio"),
   fechaProximaRenta: date("fechaProximaRenta"),
   fechaTermino: date("fechaTermino"),
