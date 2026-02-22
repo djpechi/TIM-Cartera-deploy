@@ -1794,6 +1794,82 @@ export async function getGruposConContratosActivos() {
 
 
 /**
+ * Obtiene los totales globales de proyección por empresa (TT, TV, TT+TV)
+ * Suma todos los contratos activos de todos los clientes
+ */
+export async function getTotalesGlobalesPorEmpresa() {
+  const db = await getDb();
+  if (!db) return null;
+
+  // Obtener TODOS los contratos activos
+  const contratosActivos = await db
+    .select()
+    .from(contratos);
+
+  let proyeccionTT = 0;
+  let proyeccionTV = 0;
+  let fechaTerminoTT: Date | null = null;
+  let fechaTerminoTV: Date | null = null;
+
+  for (const contrato of contratosActivos) {
+    // Calcular pagos restantes: totalRentas - rentaActual
+    const pagosFaltantes = contrato.totalRentas - contrato.rentaActual;
+
+    // Si no hay pagos faltantes, saltar este contrato
+    if (pagosFaltantes <= 0) continue;
+
+    // Calcular proyección de Arrendamiento
+    if (contrato.montoMensual && Number(contrato.montoMensual) > 0) {
+      const proyeccion = pagosFaltantes * Number(contrato.montoMensual);
+      
+      // Acumular por empresa
+      if (contrato.empresa === 'tim_transp') {
+        proyeccionTT += proyeccion;
+        if (!fechaTerminoTT || (contrato.fechaTermino && contrato.fechaTermino > fechaTerminoTT)) {
+          fechaTerminoTT = contrato.fechaTermino;
+        }
+      } else if (contrato.empresa === 'tim_value') {
+        proyeccionTV += proyeccion;
+        if (!fechaTerminoTV || (contrato.fechaTermino && contrato.fechaTermino > fechaTerminoTV)) {
+          fechaTerminoTV = contrato.fechaTermino;
+        }
+      }
+    }
+
+    // Calcular proyección de Administración
+    if (contrato.rentaAdministracion && Number(contrato.rentaAdministracion) > 0) {
+      const proyeccion = pagosFaltantes * Number(contrato.rentaAdministracion);
+      
+      if (contrato.empresa === 'tim_transp') {
+        proyeccionTT += proyeccion;
+      } else if (contrato.empresa === 'tim_value') {
+        proyeccionTV += proyeccion;
+      }
+    }
+
+    // Calcular proyección de Club Tim
+    if (contrato.rentaClubTim && Number(contrato.rentaClubTim) > 0) {
+      const proyeccion = pagosFaltantes * Number(contrato.rentaClubTim);
+      
+      if (contrato.empresa === 'tim_transp') {
+        proyeccionTT += proyeccion;
+      } else if (contrato.empresa === 'tim_value') {
+        proyeccionTV += proyeccion;
+      }
+    }
+  }
+
+  return {
+    proyeccionTT,
+    proyeccionTV,
+    proyeccionTotal: proyeccionTT + proyeccionTV,
+    fechaTerminoTT: fechaTerminoTT?.toISOString().split('T')[0] || null,
+    fechaTerminoTV: fechaTerminoTV?.toISOString().split('T')[0] || null,
+    fechaTerminoTotal: (fechaTerminoTT && fechaTerminoTV ? (fechaTerminoTT > fechaTerminoTV ? fechaTerminoTT : fechaTerminoTV) : (fechaTerminoTT || fechaTerminoTV))?.toISOString().split('T')[0] || null
+  };
+}
+
+/**
  * Inserta o actualiza un contrato desde archivo de contratos activos
  */
 export async function upsertContratoFromFile(contrato: {

@@ -1144,6 +1144,11 @@ export const appRouter = router({
     gruposConContratosActivos: protectedProcedure.query(async () => {
       return await db.getGruposConContratosActivos();
     }),
+
+    // Obtener totales globales por empresa (TT, TV, TT+TV)
+    totalesGlobalesPorEmpresa: protectedProcedure.query(async () => {
+      return await db.getTotalesGlobalesPorEmpresa();
+    }),
   }),
 });
 

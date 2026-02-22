@@ -47,6 +47,7 @@ export default function AnalisisContratos() {
     { grupoId: grupoResumenId! },
     { enabled: grupoResumenId !== null && tipoResumen === 'grupo' }
   );
+  const { data: totalesGlobales, isLoading: loadingTotalesGlobales } = trpc.analisis.totalesGlobalesPorEmpresa.useQuery();
 
   const handleBuscarContrato = () => {
     if (numeroContrato.trim()) {
@@ -113,7 +114,7 @@ export default function AnalisisContratos() {
       </div>
 
       <Tabs defaultValue="contrato" className="space-y-6">
-        <TabsList className="grid w-full max-w-2xl grid-cols-3">
+        <TabsList className="grid w-full max-w-3xl grid-cols-4">
           <TabsTrigger value="contrato">
             <FileText className="h-4 w-4 mr-2" />
             Por Número de Contrato
@@ -125,6 +126,10 @@ export default function AnalisisContratos() {
           <TabsTrigger value="resumen">
             <DollarSign className="h-4 w-4 mr-2" />
             Resumen de Deuda
+          </TabsTrigger>
+          <TabsTrigger value="global">
+            <DollarSign className="h-4 w-4 mr-2" />
+            Resumen Global
           </TabsTrigger>
         </TabsList>
 
@@ -673,6 +678,67 @@ export default function AnalisisContratos() {
                 </Card>
               )}
             </>
+          )}
+        </TabsContent>
+
+        <TabsContent value="global" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Resumen Global por Empresa</CardTitle>
+              <CardDescription>
+                Total proyectado de todos los contratos de todos los clientes, desglosado por empresa
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          {loadingTotalesGlobales ? (
+            <Card>
+              <CardContent className="py-8 text-center text-muted-foreground">
+                Cargando totales globales...
+              </CardContent>
+            </Card>
+          ) : totalesGlobales ? (
+            <div className="grid gap-4 md:grid-cols-3">
+              <Card key="global-tim-transp">
+                <CardHeader className="pb-3">
+                  <CardDescription>Tim Transp (TT)</CardDescription>
+                  <CardTitle className="text-3xl text-blue-600">
+                    {formatearMoneda(totalesGlobales.proyeccionTT || 0, formatoUsuario)}
+                  </CardTitle>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    Último contrato termina: {totalesGlobales.fechaTerminoTT || 'N/A'}
+                  </p>
+                </CardHeader>
+              </Card>
+              <Card key="global-tim-value">
+                <CardHeader className="pb-3">
+                  <CardDescription>Tim Value (TV)</CardDescription>
+                  <CardTitle className="text-3xl text-green-600">
+                    {formatearMoneda(totalesGlobales.proyeccionTV || 0, formatoUsuario)}
+                  </CardTitle>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    Último contrato termina: {totalesGlobales.fechaTerminoTV || 'N/A'}
+                  </p>
+                </CardHeader>
+              </Card>
+              <Card key="global-tt-tv-total">
+                <CardHeader className="pb-3">
+                  <CardDescription>TT + TV (Total General)</CardDescription>
+                  <CardTitle className="text-3xl text-purple-600">
+                    {formatearMoneda(totalesGlobales.proyeccionTotal || 0, formatoUsuario)}
+                  </CardTitle>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    Último contrato termina: {totalesGlobales.fechaTerminoTotal || 'N/A'}
+                  </p>
+                </CardHeader>
+              </Card>
+            </div>
+          ) : (
+            <Card>
+              <CardContent className="py-8 text-center text-muted-foreground">
+                No se encontraron datos
+              </CardContent>
+            </Card>
           )}
         </TabsContent>
       </Tabs>
