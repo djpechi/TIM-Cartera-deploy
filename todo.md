@@ -576,3 +576,5 @@
 - [x] Crear tab "Resumen General por Empresa" con totales globales de TT, TV y TT+TV de todos los contratos
 
 - [x] Agregar modales clickeables a cards de Resumen Global con detalle de contratos por empresa
+
+- [x] Modificar Tabla de Proyección para basarse en contratos activos en lugar de facturas con patrón "X de Y"

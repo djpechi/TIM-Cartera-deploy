@@ -987,7 +987,7 @@ export async function getProyeccionMatricial(
     }
   }
 
-  // Obtener contratos filtrados con información de cliente y grupo
+  // Obtener contratos filtrados con información completa
   const contratosData = await db
     .select({
       id: contratos.id,
@@ -998,6 +998,12 @@ export async function getProyeccionMatricial(
       nombreCliente: clientes.nombre,
       grupoId: clientes.grupoId,
       grupoNombre: gruposClientes.nombre,
+      fechaInicio: contratos.fechaInicio,
+      fechaTermino: contratos.fechaTermino,
+      plazo: contratos.plazo,
+      montoMensual: contratos.montoMensual,
+      rentaAdministracion: contratos.rentaAdministracion,
+      rentaClubTim: contratos.rentaClubTim,
     })
     .from(contratos)
     .leftJoin(clientes, eq(contratos.clienteId, clientes.id))
@@ -1015,17 +1021,40 @@ export async function getProyeccionMatricial(
     };
   });
 
-  // Obtener proyecciones del año
-  const fechaInicio = new Date(anio, 0, 1);
-  const fechaFin = new Date(anio, 11, 31);
-
-  const proyecciones = await db.select().from(proyeccionMensual)
-    .where(
-      and(
-        gte(proyeccionMensual.mes, fechaInicio),
-        lte(proyeccionMensual.mes, fechaFin)
-      )
-    );
+  // Obtener todas las partidas de todos los contratos en una sola consulta
+  const numerosContratos = contratosData.map(c => c.numeroContrato);
+  const todasLasPartidas = numerosContratos.length > 0 ? await db.select({
+    numeroContrato: partidasFactura.numeroContrato,
+    descripcion: partidasFactura.descripcion,
+    fecha: facturas.fecha
+  })
+  .from(partidasFactura)
+  .innerJoin(facturas, eq(partidasFactura.facturaId, facturas.id))
+  .where(inArray(partidasFactura.numeroContrato, numerosContratos))
+  .orderBy(desc(facturas.fecha)) : [];
+  
+  // Procesar partidas para encontrar la última renta de cada contrato
+  const ultimasRentasPorContrato: Record<number, number> = {};
+  
+  for (const contrato of contratosData) {
+    let ultimaRenta = 0;
+    
+    // Filtrar partidas de este contrato
+    const partidasContrato = todasLasPartidas.filter(p => p.numeroContrato === contrato.numeroContrato);
+    
+    // Buscar en las partidas el patrón "RENTA X DE Y"
+    for (const partida of partidasContrato) {
+      const match = partida.descripcion?.match(/RENTA\s+(\d+)\s+DE\s+(\d+)/i);
+      if (match) {
+        const rentaActual = parseInt(match[1]);
+        if (rentaActual > ultimaRenta) {
+          ultimaRenta = rentaActual;
+        }
+      }
+    }
+    
+    ultimasRentasPorContrato[contrato.id] = ultimaRenta;
+  }
 
   // Construir matriz de datos: { contratoId: { mesNumero: monto } }
   const datos: Record<number, Record<number, number>> = {};
@@ -1037,15 +1066,38 @@ export async function getProyeccionMatricial(
     for (let i = 1; i <= 12; i++) {
       datos[contrato.id][i] = 0;
     }
-  }
 
-  // Llenar con proyecciones reales
-  for (const proyeccion of proyecciones) {
-    const mesNumero = new Date(proyeccion.mes).getMonth() + 1;
-    const contratoId = proyeccion.contratoId;
-    
-    if (datos[contratoId]) {
-      datos[contratoId][mesNumero] = parseFloat(proyeccion.montoProyectado);
+    // Calcular proyección mes a mes desde el contrato
+    if (contrato.fechaInicio && contrato.fechaTermino && contrato.plazo) {
+      const fechaInicio = new Date(contrato.fechaInicio);
+      const fechaTermino = new Date(contrato.fechaTermino);
+      const plazoTotal = Number(contrato.plazo);
+      const ultimaRentaPagada = ultimasRentasPorContrato[contrato.id] || 0;
+      const rentasFaltantes = plazoTotal - ultimaRentaPagada;
+      
+      // Calcular renta total mensual (suma de todas las rentas)
+      const rentaTotal = 
+        (Number(contrato.montoMensual) || 0) + 
+        (Number(contrato.rentaAdministracion) || 0) + 
+        (Number(contrato.rentaClubTim) || 0);
+      
+      // Calcular fecha de inicio de proyección (desde la última renta pagada)
+      const mesesPagados = ultimaRentaPagada;
+      const fechaInicioProyeccion = new Date(fechaInicio);
+      fechaInicioProyeccion.setMonth(fechaInicioProyeccion.getMonth() + mesesPagados);
+      
+      // Iterar por cada mes del año
+      let rentasProyectadas = 0;
+      for (let mesNumero = 1; mesNumero <= 12 && rentasProyectadas < rentasFaltantes; mesNumero++) {
+        const primerDiaMes = new Date(anio, mesNumero - 1, 1);
+        const ultimoDiaMes = new Date(anio, mesNumero, 0);
+        
+        // Verificar si el mes está dentro del periodo de proyección
+        if (primerDiaMes >= fechaInicioProyeccion && primerDiaMes <= fechaTermino) {
+          datos[contrato.id][mesNumero] = rentaTotal;
+          rentasProyectadas++;
+        }
+      }
     }
   }
 
