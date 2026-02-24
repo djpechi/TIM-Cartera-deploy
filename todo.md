@@ -747,5 +747,9 @@
 - [x] Revisar formato de datos (fechas, números, etc.)
 - [x] Corregir el problema identificado en el parser (detección automática de columnas)
 - [x] Probar la carga de archivos con archivo real
-- [ ] Investigar por qué los 12 registros procesados no se guardan (0 exitosos)
+- [x] Investigar por qué los 12 registros procesados no se guardan (0 exitosos)
+- [x] Revisar lógica de inserción en el router de carga de archivos
+- [x] Identificar validaciones o errores que impiden guardar
+- [x] Identificar problema: archivo tiene folios AA pero se seleccionó tipo Tim Transp (AB)
+- [ ] Probar carga con tipo de archivo correcto (Tim Value para folios AA)
 - [ ] Verificar que el procesamiento funcione correctamente

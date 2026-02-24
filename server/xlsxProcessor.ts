@@ -274,11 +274,15 @@ export function processTimValueFile(buffer: Buffer): ProcessResult {
     
     // Procesar filas de datos
     for (let i = headerRow + 1; i < data.length; i++) {
-      const row = data[i] as any[];
+      const row = data[i];
       if (!row || row.length === 0) continue;
       
       const folio = row[folioIdx] ? String(row[folioIdx]).trim() : '';
-      if (!folio || !folio.startsWith('AA')) continue;
+      console.log(`[DEBUG] Fila ${i}: Folio = "${folio}"`);
+      if (!folio || !folio.startsWith('AB')) {
+        console.log(`[DEBUG] Fila ${i}: Folio rechazado (vacío o no empieza con AB)`);
+        continue;
+      };
       
       try {
         const fecha = parseExcelDate(row[fechaIdx]);
