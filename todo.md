@@ -776,3 +776,17 @@
 - [x] Verificar que se muestre el contador de errores
 - [x] Verificar que los errores incluyan número de fila y folio
 - [ ] Verificar que la advertencia de tipo incorrecto se muestre
+
+## Bug CRÍTICO: Importes incorrectos en importación de archivos
+- [ ] Diagnosticar por qué los importes se están multiplicando o concatenando incorrectamente
+- [ ] Revisar la lógica de lectura de la columna de importes en xlsxProcessor.ts
+- [ ] Verificar el tipo de dato de la columna (número vs texto)
+- [ ] Revisar si hay alguna transformación incorrecta de los valores
+- [ ] Corregir la lógica de lectura de importes
+- [ ] Probar con archivo real para verificar que los importes sean correctos
+- [ ] Verificar que los importes en la base de datos sean correctos
+
+### Ejemplos de importes incorrectos:
+- $20,259,122,692.00 (debería ser ~$100-$200)
+- $2,026,130,388.00 (debería ser ~$100-$200)
+- $20,260,092,716.00 (debería ser ~$100-$200)

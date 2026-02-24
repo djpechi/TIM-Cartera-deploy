@@ -96,17 +96,17 @@ export function processTimTranspFile(buffer: Buffer): ProcessResult {
     
     const headers = (data[headerRow] as any[]).map(h => String(h || '').toLowerCase().trim());
     
-    // Detectar columnas por contenido si no se encuentran por nombre
-    let fechaIdx = headers.findIndex(h => h.includes('fecha') && !h.includes('venc'));
-    let venceIdx = headers.findIndex(h => h.includes('vence') || h.includes('vencimiento'));
-    let folioIdx = headers.findIndex(h => h.includes('folio'));
-    let clienteIdx = headers.findIndex(h => h.includes('cliente') || h.includes('nombre') || h.includes('razón'));
-    let importeIdx = headers.findIndex(h => h.includes('importe') || h.includes('total') || h.includes('saldo'));
-    let descripcionIdx = headers.findIndex(h => h.includes('descripci') || h.includes('concepto'));
-    let estatusIdx = headers.findIndex(h => h.includes('estatus') || h.includes('status'));
+    // SIEMPRE detectar columnas por contenido de la primera fila de datos (no confiar en encabezados)
+    let fechaIdx = -1;
+    let venceIdx = -1;
+    let folioIdx = -1;
+    let clienteIdx = -1;
+    let importeIdx = -1;
+    let descripcionIdx = -1;
+    let estatusIdx = -1;
     
-    // Si no encontramos las columnas por nombre, intentar detectarlas por contenido de la primera fila de datos
-    if (folioIdx === -1 || clienteIdx === -1 || importeIdx === -1) {
+    // Detectar columnas analizando el contenido de la primera fila de datos
+    if (true) {
       const firstDataRow = data[headerRow + 1] as any[];
       if (firstDataRow) {
         for (let i = 0; i < firstDataRow.length; i++) {
@@ -119,13 +119,23 @@ export function processTimTranspFile(buffer: Buffer): ProcessResult {
           if (clienteIdx === -1 && typeof value === 'string' && value.length > 10 && !value.startsWith('AB') && !value.startsWith('AA')) {
             clienteIdx = i;
           }
-          // Detectar importe (número mayor a 100)
-          if (importeIdx === -1 && typeof value === 'number' && value > 100) {
-            importeIdx = i;
+          // Detectar fecha PRIMERO (Date object, string con formato de fecha, o número de serie Excel)
+          if (fechaIdx === -1) {
+            const isDate = value instanceof Date;
+            const isDateString = typeof value === 'string' && /^\d{1,2}\/\d{1,2}\/\d{2,4}$/.test(value.trim());
+            const isExcelDateSerial = typeof value === 'number' && value > 40000 && value < 60000;
+            if (isDate || isDateString || isExcelDateSerial) {
+              fechaIdx = i;
+            }
           }
-          // Detectar fecha (Date object)
-          if (fechaIdx === -1 && value instanceof Date) {
-            fechaIdx = i;
+          // Detectar importe DESPUÉS (número mayor a 100 O string con formato de moneda, pero NO número de serie Excel)
+          if (importeIdx === -1) {
+            const isExcelDateSerial = typeof value === 'number' && value > 40000 && value < 60000;
+            const isNumber = typeof value === 'number' && value > 100 && !isExcelDateSerial;
+            const isMoneyString = typeof value === 'string' && /^[\d,]+\.\d{2}$/.test(value.trim());
+            if (isNumber || isMoneyString) {
+              importeIdx = i;
+            }
           }
         }
       }
@@ -160,7 +170,10 @@ export function processTimTranspFile(buffer: Buffer): ProcessResult {
         const fecha = parseExcelDate(row[fechaIdx]);
         const fechaVencimiento = venceIdx !== -1 ? parseExcelDate(row[venceIdx]) : null;
         const nombreCliente = row[clienteIdx] ? String(row[clienteIdx]).trim() : '';
-        const importeTotal = parseNumber(row[importeIdx]);
+        const rawImporte = row[importeIdx];
+        console.log(`[DEBUG] Fila ${i + 1}: Raw importe =`, rawImporte, `(type: ${typeof rawImporte})`);
+        const importeTotal = parseNumber(rawImporte);
+        console.log(`[DEBUG] Fila ${i + 1}: Parsed importe =`, importeTotal);
         const descripcion = row[descripcionIdx] ? String(row[descripcionIdx]) : '';
         const estatus = row[estatusIdx] ? String(row[estatusIdx]).toLowerCase() : 'normal';
         
@@ -261,17 +274,17 @@ export function processTimValueFile(buffer: Buffer): ProcessResult {
     
     const headers = (data[headerRow] as any[]).map(h => String(h || '').toLowerCase().trim());
     
-    // Detectar columnas por contenido si no se encuentran por nombre
-    let fechaIdx = headers.findIndex(h => h.includes('fecha') && !h.includes('venc'));
-    let venceIdx = headers.findIndex(h => h.includes('vence') || h.includes('vencimiento'));
-    let folioIdx = headers.findIndex(h => h.includes('folio'));
-    let clienteIdx = headers.findIndex(h => h.includes('cliente') || h.includes('nombre') || h.includes('razón'));
-    let importeIdx = headers.findIndex(h => h.includes('importe') || h.includes('total') || h.includes('saldo'));
-    let descripcionIdx = headers.findIndex(h => h.includes('descripci') || h.includes('concepto'));
-    let estatusIdx = headers.findIndex(h => h.includes('estatus') || h.includes('status'));
+    // SIEMPRE detectar columnas por contenido de la primera fila de datos (no confiar en encabezados)
+    let fechaIdx = -1;
+    let venceIdx = -1;
+    let folioIdx = -1;
+    let clienteIdx = -1;
+    let importeIdx = -1;
+    let descripcionIdx = -1;
+    let estatusIdx = -1;
     
-    // Si no encontramos las columnas por nombre, intentar detectarlas por contenido de la primera fila de datos
-    if (folioIdx === -1 || clienteIdx === -1 || importeIdx === -1) {
+    // Detectar columnas analizando el contenido de la primera fila de datos
+    if (true) {
       const firstDataRow = data[headerRow + 1] as any[];
       if (firstDataRow) {
         for (let i = 0; i < firstDataRow.length; i++) {
@@ -284,13 +297,23 @@ export function processTimValueFile(buffer: Buffer): ProcessResult {
           if (clienteIdx === -1 && typeof value === 'string' && value.length > 10 && !value.startsWith('AB') && !value.startsWith('AA')) {
             clienteIdx = i;
           }
-          // Detectar importe (número mayor a 100)
-          if (importeIdx === -1 && typeof value === 'number' && value > 100) {
-            importeIdx = i;
+          // Detectar fecha PRIMERO (Date object, string con formato de fecha, o número de serie Excel)
+          if (fechaIdx === -1) {
+            const isDate = value instanceof Date;
+            const isDateString = typeof value === 'string' && /^\d{1,2}\/\d{1,2}\/\d{2,4}$/.test(value.trim());
+            const isExcelDateSerial = typeof value === 'number' && value > 40000 && value < 60000;
+            if (isDate || isDateString || isExcelDateSerial) {
+              fechaIdx = i;
+            }
           }
-          // Detectar fecha (Date object)
-          if (fechaIdx === -1 && value instanceof Date) {
-            fechaIdx = i;
+          // Detectar importe DESPUÉS (número mayor a 100 O string con formato de moneda, pero NO número de serie Excel)
+          if (importeIdx === -1) {
+            const isExcelDateSerial = typeof value === 'number' && value > 40000 && value < 60000;
+            const isNumber = typeof value === 'number' && value > 100 && !isExcelDateSerial;
+            const isMoneyString = typeof value === 'string' && /^[\d,]+\.\d{2}$/.test(value.trim());
+            if (isNumber || isMoneyString) {
+              importeIdx = i;
+            }
           }
         }
       }
@@ -325,7 +348,10 @@ export function processTimValueFile(buffer: Buffer): ProcessResult {
         const fecha = parseExcelDate(row[fechaIdx]);
         const fechaVencimiento = venceIdx !== -1 ? parseExcelDate(row[venceIdx]) : null;
         const nombreCliente = row[clienteIdx] ? String(row[clienteIdx]).trim() : '';
-        const importeTotal = parseNumber(row[importeIdx]);
+        const rawImporte = row[importeIdx];
+        console.log(`[DEBUG] Fila ${i + 1}: Raw importe =`, rawImporte, `(type: ${typeof rawImporte})`);
+        const importeTotal = parseNumber(rawImporte);
+        console.log(`[DEBUG] Fila ${i + 1}: Parsed importe =`, importeTotal);
         const descripcion = row[descripcionIdx] ? String(row[descripcionIdx]) : '';
         const estatus = row[estatusIdx] ? String(row[estatusIdx]).toLowerCase() : 'normal';
         
