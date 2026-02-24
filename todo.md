@@ -753,3 +753,26 @@
 - [x] Identificar problema: archivo tiene folios AA pero se seleccionó tipo Tim Transp (AB)
 - [ ] Probar carga con tipo de archivo correcto (Tim Value para folios AA)
 - [ ] Verificar que el procesamiento funcione correctamente
+
+## Mejora: Mostrar Errores Específicos por Fila en Carga de Archivos
+
+### Backend - Parser
+- [x] Mejorar parser para incluir número de fila en cada error
+- [x] Agregar detección de tipo de folio incorrecto (AA vs AB)
+- [x] Incluir folio en mensaje de error cuando esté disponible
+- [x] Devolver advertencias además de errores (ej: tipo de archivo incorrecto)
+
+### Frontend - Interfaz
+- [x] Crear componente de lista de errores detallados
+- [x] Mostrar número de fila, folio y motivo para cada error
+- [x] Agregar sección expandible para errores (scroll para más de 50 errores)
+- [x] Mostrar advertencia destacada cuando tipo de archivo no coincide con folios
+- [x] Agregar resumen visual (exitosos vs rechazados)
+- [x] Usar colores y iconos para diferenciar errores y advertencias
+
+### Pruebas
+- [x] Probar con archivo que tiene folios AA en tipo Tim Transp
+- [x] Verificar que se muestren todos los errores con detalles
+- [x] Verificar que se muestre el contador de errores
+- [x] Verificar que los errores incluyan número de fila y folio
+- [ ] Verificar que la advertencia de tipo incorrecto se muestre

@@ -7,6 +7,7 @@ export interface ProcessResult {
   registrosExitosos: number;
   registrosError: number;
   errores: string[];
+  advertencias?: string[];
   data?: any[];
 }
 
@@ -130,14 +131,30 @@ export function processTimTranspFile(buffer: Buffer): ProcessResult {
       }
     }
     
+    // Detectar tipo de folios en el archivo para advertencias
+    const foliosAA: string[] = [];
+    const foliosAB: string[] = [];
+    
     // Procesar filas de datos
     for (let i = headerRow + 1; i < data.length; i++) {
       const row = data[i] as any[];
       if (!row || row.length === 0) continue;
       
       const folio = row[folioIdx] ? String(row[folioIdx]).trim() : '';
-      // Aceptar folios AB (Tim Transp) y AA (Tim Value) para mayor flexibilidad
-      if (!folio || (!folio.startsWith('AB') && !folio.startsWith('AA'))) continue;
+      
+      // Contar folios por tipo para advertencias
+      if (folio.startsWith('AA')) foliosAA.push(folio);
+      if (folio.startsWith('AB')) foliosAB.push(folio);
+      
+      // Validar que el folio sea del tipo correcto (AB para Tim Transp)
+      if (!folio) {
+        errores.push(`Fila ${i + 1}: Folio vacío o no encontrado`);
+        continue;
+      }
+      if (!folio.startsWith('AB')) {
+        errores.push(`Fila ${i + 1}: Folio "${folio}" rechazado - este archivo requiere folios que comiencen con AB (Tim Transp)`);
+        continue;
+      }
       
       try {
         const fecha = parseExcelDate(row[fechaIdx]);
@@ -178,12 +195,19 @@ export function processTimTranspFile(buffer: Buffer): ProcessResult {
       }
     }
     
+    // Generar advertencias si se detectan folios del tipo incorrecto
+    const advertencias: string[] = [];
+    if (foliosAA.length > 0 && foliosAB.length === 0) {
+      advertencias.push(`ADVERTENCIA: Este archivo contiene ${foliosAA.length} folios AA (Tim Value). Deberías seleccionar "Facturación Tim Value (Folios AA)" en lugar de "Facturación Tim Transp".`);
+    }
+    
     return {
       success: true,
       registrosProcesados: data.length - headerRow - 1,
       registrosExitosos: facturas.length,
       registrosError: errores.length,
       errores,
+      advertencias,
       data: facturas,
     };
   } catch (error) {
@@ -272,17 +296,30 @@ export function processTimValueFile(buffer: Buffer): ProcessResult {
       }
     }
     
+    // Detectar tipo de folios en el archivo para advertencias
+    const foliosAA: string[] = [];
+    const foliosAB: string[] = [];
+    
     // Procesar filas de datos
     for (let i = headerRow + 1; i < data.length; i++) {
-      const row = data[i];
+      const row = data[i] as any[];
       if (!row || row.length === 0) continue;
       
       const folio = row[folioIdx] ? String(row[folioIdx]).trim() : '';
-      console.log(`[DEBUG] Fila ${i}: Folio = "${folio}"`);
-      if (!folio || !folio.startsWith('AB')) {
-        console.log(`[DEBUG] Fila ${i}: Folio rechazado (vacío o no empieza con AB)`);
+      
+      // Contar folios por tipo para advertencias
+      if (folio.startsWith('AA')) foliosAA.push(folio);
+      if (folio.startsWith('AB')) foliosAB.push(folio);
+      
+      // Validar que el folio sea del tipo correcto (AA para Tim Value)
+      if (!folio) {
+        errores.push(`Fila ${i + 1}: Folio vacío o no encontrado`);
         continue;
-      };
+      }
+      if (!folio.startsWith('AA')) {
+        errores.push(`Fila ${i + 1}: Folio "${folio}" rechazado - este archivo requiere folios que comiencen con AA (Tim Value)`);
+        continue;
+      }
       
       try {
         const fecha = parseExcelDate(row[fechaIdx]);
@@ -323,12 +360,19 @@ export function processTimValueFile(buffer: Buffer): ProcessResult {
       }
     }
     
+    // Generar advertencias si se detectan folios del tipo incorrecto
+    const advertencias: string[] = [];
+    if (foliosAA.length > 0 && foliosAB.length === 0) {
+      advertencias.push(`ADVERTENCIA: Este archivo contiene ${foliosAA.length} folios AA (Tim Value). Deberías seleccionar "Facturación Tim Value (Folios AA)" en lugar de "Facturación Tim Transp".`);
+    }
+    
     return {
       success: true,
       registrosProcesados: data.length - headerRow - 1,
       registrosExitosos: facturas.length,
       registrosError: errores.length,
       errores,
+      advertencias,
       data: facturas,
     };
   } catch (error) {

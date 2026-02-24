@@ -293,11 +293,24 @@ export default function Upload() {
                       </ul>
                     </div>
                   )}
+                  {uploadResult.advertencias && uploadResult.advertencias.length > 0 && (
+                    <Alert variant="default" className="mt-3 border-orange-500 bg-orange-50">
+                      <AlertCircle className="h-4 w-4 text-orange-600" />
+                      <AlertTitle className="text-orange-700">Advertencias</AlertTitle>
+                      <AlertDescription>
+                        <ul className="list-disc list-inside space-y-1 text-sm text-orange-700 mt-2">
+                          {uploadResult.advertencias.map((advertencia: string, idx: number) => (
+                            <li key={idx}>{advertencia}</li>
+                          ))}
+                        </ul>
+                      </AlertDescription>
+                    </Alert>
+                  )}
                   {uploadResult.errores && uploadResult.errores.length > 0 && (
                     <div className="mt-3">
-                      <p className="font-semibold mb-1">Errores encontrados:</p>
-                      <ul className="list-disc list-inside space-y-1 text-sm">
-                        {uploadResult.errores.slice(0, 10).map((error: string, idx: number) => (
+                      <p className="font-semibold mb-1">Errores encontrados ({uploadResult.errores.length}):</p>
+                      <ul className="list-disc list-inside space-y-1 text-sm max-h-60 overflow-y-auto">
+                        {uploadResult.errores.slice(0, 50).map((error: string, idx: number) => (
                           <li key={idx}>{error}</li>
                         ))}
                         {uploadResult.errores.length > 10 && (
