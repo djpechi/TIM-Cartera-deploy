@@ -621,3 +621,48 @@
 - [x] Corregir getTotalesGlobalesPorEmpresa() para filtrar contratos activos
 - [x] Probar que contratos inactivos no aparezcan en Resumen de Deuda
 - [x] Verificar que tampoco aparezcan en Resumen Global
+
+## Módulo: Proyección de Contratos Manual
+
+### Fase 1: Schema de Base de Datos
+- [x] Crear tabla `contratos_proyeccion` (cabecera de contratos)
+- [x] Crear tabla `line_items_contrato` (equipos por contrato)
+- [x] Crear tabla `proyeccion_mensual` (pagos proyectados)
+- [x] Crear tabla `vendedores` (catálogo de vendedores)
+- [x] Agregar relaciones entre tablas
+- [x] Ejecutar migraciones con SQL directo
+
+### Fase 2: Routers tRPC y Lógica de Negocio
+- [x] Crear router `proyeccionContratos` con procedures CRUD
+- [x] Implementar lógica de cálculo para Arrendamiento Puro
+- [x] Implementar lógica de cálculo para Arrendamiento Financiero
+- [x] Implementar lógica de cálculo para Arrendamiento Crédito Simple
+- [x] Implementar cálculo automático de IVA (16%)
+- [x] Implementar generación de proyección mensual
+- [ ] Implementar cálculo de rentas vencidas vs pendientes
+- [x] Agregar validación de permisos (admin para editar/baja)
+
+### Fase 3: Frontend - Gestión de Contratos
+- [x] Agregar "Proyección de Contratos" al menú lateral
+- [x] Crear página de listado de contratos
+- [ ] Crear formulario de captura de contrato nuevo
+- [ ] Implementar captura de line items (equipos)
+- [ ] Mostrar cálculos automáticos en tiempo real
+- [ ] Crear vista de detalle de contrato con proyección
+- [ ] Implementar funcionalidad de dar de baja contrato
+- [ ] Agregar filtros y búsqueda
+
+### Fase 4: Reportes
+- [ ] Crear reporte de proyección por cliente
+- [ ] Crear reporte de proyección por grupo de clientes
+- [ ] Crear reporte de comisiones por vendedor
+- [ ] Agregar exportación a Excel
+
+### Fase 5: Pruebas y Entrega
+- [ ] Probar creación de contrato Arrendamiento Puro
+- [ ] Probar creación de contrato Arrendamiento Financiero
+- [ ] Probar creación de contrato Arrendamiento Crédito Simple
+- [ ] Verificar cálculos de proyección mensual
+- [ ] Verificar permisos de usuario (admin vs consulta)
+- [ ] Probar reportes
+- [ ] Guardar checkpoint final

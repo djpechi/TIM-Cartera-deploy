@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS vendedores (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  nombre VARCHAR(255) NOT NULL,\n  email VARCHAR(320),\n  telefono VARCHAR(50),\n  comisionPorcentaje DECIMAL(5, 2),\n  activo BOOLEAN DEFAULT TRUE NOT NULL,\n  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,\n  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute CREATE TABLE IF NOT EXISTS vendedores (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  nombre VARCHAR(255) NOT NULL,\n  email VARCHAR(320),\n  telefono VARCHAR(50),\n  comisionPorcentaje DECIMAL(5, 2),\n  activo BOOLEAN DEFAULT TRUE NOT NULL,\n  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,\n  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 631
+}

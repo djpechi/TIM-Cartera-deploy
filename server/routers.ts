@@ -13,6 +13,7 @@ import {
 } from "./xlsxProcessor";
 import { processContratosFile } from "./contratosProcessor";
 import { TRPCError } from "@trpc/server";
+import { proyeccionContratosRouter } from "./routers/proyeccionContratos";
 
 export const appRouter = router({
   system: systemRouter,
@@ -1210,6 +1211,9 @@ export const appRouter = router({
         return await db.getHistorialBajasContratos(input.limit);
       }),
   }),
+
+  // ============ Proyección de Contratos Manual ============
+  proyeccionContratos: proyeccionContratosRouter,
 });
 
 export type AppRouter = typeof appRouter;

@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS proyeccionMensualManual (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  contratoId INT NOT NULL,\n  lineItemId INT NOT NULL,\n  mes DATE NOT NULL,\n  numeroRenta INT NOT NULL,\n  montoPagoInicial DECIMAL(15, 2) DEFAULT 0.00,\n  montoComisiones DECIMAL(15, 2) DEFAULT 0.00,\n  montoRentaMensual DECIMAL(15, 2) DEFAULT 0.00,\n  montoValorResidual DECIMAL(15, 2) DEFAULT 0.00,\n  montoTotal DECIMAL(15, 2) NOT NULL,\n  estatus ENUM('pendiente', 'vencido', 'pagado') DEFAULT 'pendiente' NOT NULL,\n  fechaPago DATE,\n  montoPagado DECIMAL(15, 2),\n  generadoEn TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,\n  FOREIGN KEY (contratoId) REFERENCES contratosProyeccion(id) ON DELETE CASCADE,\n  FOREIGN KEY (lineItemId) REFERENCES lineItemsContrato(id) ON DELETE CASCADE\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute CREATE TABLE IF NOT EXISTS proyeccionMensualManual (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  contratoId INT NOT NULL,\n  lineItemId INT NOT NULL,\n  mes DATE NOT NULL,\n  numeroRenta INT NOT NULL,\n  montoPagoInicial DECIMAL(15, 2) DEFAULT 0.00,\n  montoComisiones DECIMAL(15, 2) DEFAULT 0.00,\n  montoRentaMensual DECIMAL(15, 2) DEFAULT 0.00,\n  montoValorResidual DECIMAL(15, 2) DEFAULT 0.00,\n  montoTotal DECIMAL(15, 2) NOT NULL,\n  estatus ENUM('pendiente', 'vencido', 'pagado') DEFAULT 'pendiente' NOT NULL,\n  fechaPago DATE,\n  montoPagado DECIMAL(15, 2),\n  generadoEn TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,\n  FOREIGN KEY (contratoId) REFERENCES contratosProyeccion(id) ON DELETE CASCADE,\n  FOREIGN KEY (lineItemId) REFERENCES lineItemsContrato(id) ON DELETE CASCADE\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 892
+}

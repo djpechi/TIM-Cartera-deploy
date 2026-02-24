@@ -292,3 +292,128 @@ export const auditoriaBajasContratos = mysqlTable("auditoriaBajasContratos", {
 
 export type AuditoriaBajaContrato = typeof auditoriaBajasContratos.$inferSelect;
 export type InsertAuditoriaBajaContrato = typeof auditoriaBajasContratos.$inferInsert;
+
+/**
+ * ============================================================================
+ * MÓDULO: PROYECCIÓN MANUAL DE CONTRATOS
+ * ============================================================================
+ * Sistema completo de gestión de contratos de arrendamiento con proyección
+ * financiera manual. Incluye tres tipos: Puro, Financiero y Crédito Simple.
+ */
+
+/**
+ * Vendedores - Catálogo de vendedores para cálculo de comisiones
+ */
+export const vendedores = mysqlTable("vendedores", {
+  id: int("id").autoincrement().primaryKey(),
+  nombre: varchar("nombre", { length: 255 }).notNull(),
+  email: varchar("email", { length: 320 }),
+  telefono: varchar("telefono", { length: 50 }),
+  comisionPorcentaje: decimal("comisionPorcentaje", { precision: 5, scale: 2 }), // % de comisión
+  activo: boolean("activo").default(true).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Vendedor = typeof vendedores.$inferSelect;
+export type InsertVendedor = typeof vendedores.$inferInsert;
+
+/**
+ * Contratos de Proyección Manual - Cabecera de contratos
+ */
+export const contratosProyeccion = mysqlTable("contratosProyeccion", {
+  id: int("id").autoincrement().primaryKey(),
+  numeroContrato: varchar("numeroContrato", { length: 50 }).notNull().unique(),
+  clienteId: int("clienteId").references(() => clientes.id).notNull(),
+  vendedorId: int("vendedorId").references(() => vendedores.id),
+  empresa: mysqlEnum("empresa", ["tim_transp", "tim_value"]).notNull(),
+  tipoContrato: mysqlEnum("tipoContrato", ["arrendamiento_puro", "arrendamiento_financiero", "credito_simple"]).notNull(),
+  fechaInicio: date("fechaInicio").notNull(),
+  plazo: int("plazo").notNull(), // 12, 24, 36, 48, 60 meses
+  estatus: mysqlEnum("estatus", ["activo", "cancelado"]).default("activo").notNull(),
+  fechaCancelacion: timestamp("fechaCancelacion"),
+  motivoCancelacion: text("motivoCancelacion"),
+  usuarioCancelacionId: int("usuarioCancelacionId").references(() => users.id),
+  notas: text("notas"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  creadoPorId: int("creadoPorId").references(() => users.id).notNull(),
+});
+
+export type ContratoProyeccion = typeof contratosProyeccion.$inferSelect;
+export type InsertContratoProyeccion = typeof contratosProyeccion.$inferInsert;
+
+/**
+ * Line Items de Contrato - Equipos/conceptos por contrato
+ */
+export const lineItemsContrato = mysqlTable("lineItemsContrato", {
+  id: int("id").autoincrement().primaryKey(),
+  contratoId: int("contratoId").references(() => contratosProyeccion.id).notNull(),
+  consecutivo: int("consecutivo").notNull(), // 1, 2, 3...
+  nombreEquipo: varchar("nombreEquipo", { length: 255 }).notNull(),
+  
+  // Campos comunes a todos los tipos
+  precioEquipoSinIva: decimal("precioEquipoSinIva", { precision: 15, scale: 2 }),
+  pagoInicialSinIva: decimal("pagoInicialSinIva", { precision: 15, scale: 2 }).default("0.00"),
+  comisionesSinIva: decimal("comisionesSinIva", { precision: 15, scale: 2 }).default("0.00"),
+  valorResidualSinIva: decimal("valorResidualSinIva", { precision: 15, scale: 2 }).default("0.00"),
+  
+  // Campos específicos de Arrendamiento Puro
+  mensualidadBaseSinIva: decimal("mensualidadBaseSinIva", { precision: 15, scale: 2 }),
+  serviciosAdicionalesSinIva: decimal("serviciosAdicionalesSinIva", { precision: 15, scale: 2 }).default("0.00"),
+  
+  // Campos específicos de Arrendamiento Financiero y Crédito Simple
+  tasaInteresAnual: decimal("tasaInteresAnual", { precision: 5, scale: 2 }), // Porcentaje
+  montoFinanciar: decimal("montoFinanciar", { precision: 15, scale: 2 }), // Calculado
+  
+  // Campos calculados y guardados
+  rentaMensualSinIva: decimal("rentaMensualSinIva", { precision: 15, scale: 2 }).notNull(),
+  ivaMensual: decimal("ivaMensual", { precision: 15, scale: 2 }).notNull(),
+  rentaMensualConIva: decimal("rentaMensualConIva", { precision: 15, scale: 2 }).notNull(),
+  
+  totalPagoInicialSinIva: decimal("totalPagoInicialSinIva", { precision: 15, scale: 2 }),
+  ivaPagoInicial: decimal("ivaPagoInicial", { precision: 15, scale: 2 }),
+  totalPagoInicialConIva: decimal("totalPagoInicialConIva", { precision: 15, scale: 2 }),
+  
+  totalComisionesSinIva: decimal("totalComisionesSinIva", { precision: 15, scale: 2 }),
+  ivaComisiones: decimal("ivaComisiones", { precision: 15, scale: 2 }),
+  totalComisionesConIva: decimal("totalComisionesConIva", { precision: 15, scale: 2 }),
+  
+  totalValorResidualSinIva: decimal("totalValorResidualSinIva", { precision: 15, scale: 2 }),
+  ivaValorResidual: decimal("ivaValorResidual", { precision: 15, scale: 2 }),
+  totalValorResidualConIva: decimal("totalValorResidualConIva", { precision: 15, scale: 2 }),
+  
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type LineItemContrato = typeof lineItemsContrato.$inferSelect;
+export type InsertLineItemContrato = typeof lineItemsContrato.$inferInsert;
+
+/**
+ * Proyección Mensual Manual - Pagos proyectados por contrato
+ */
+export const proyeccionMensualManual = mysqlTable("proyeccionMensualManual", {
+  id: int("id").autoincrement().primaryKey(),
+  contratoId: int("contratoId").references(() => contratosProyeccion.id).notNull(),
+  lineItemId: int("lineItemId").references(() => lineItemsContrato.id).notNull(),
+  mes: date("mes").notNull(), // Primer día del mes proyectado
+  numeroRenta: int("numeroRenta").notNull(), // 1, 2, 3... hasta plazo
+  
+  // Montos proyectados
+  montoPagoInicial: decimal("montoPagoInicial", { precision: 15, scale: 2 }).default("0.00"),
+  montoComisiones: decimal("montoComisiones", { precision: 15, scale: 2 }).default("0.00"),
+  montoRentaMensual: decimal("montoRentaMensual", { precision: 15, scale: 2 }).default("0.00"),
+  montoValorResidual: decimal("montoValorResidual", { precision: 15, scale: 2 }).default("0.00"),
+  montoTotal: decimal("montoTotal", { precision: 15, scale: 2 }).notNull(),
+  
+  // Estado del pago
+  estatus: mysqlEnum("estatus", ["pendiente", "vencido", "pagado"]).default("pendiente").notNull(),
+  fechaPago: date("fechaPago"),
+  montoPagado: decimal("montoPagado", { precision: 15, scale: 2 }),
+  
+  generadoEn: timestamp("generadoEn").defaultNow().notNull(),
+});
+
+export type ProyeccionMensualManual = typeof proyeccionMensualManual.$inferSelect;
+export type InsertProyeccionMensualManual = typeof proyeccionMensualManual.$inferInsert;
