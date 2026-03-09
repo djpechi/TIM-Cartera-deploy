@@ -790,3 +790,4 @@
 - $20,259,122,692.00 (debería ser ~$100-$200)
 - $2,026,130,388.00 (debería ser ~$100-$200)
 - $20,260,092,716.00 (debería ser ~$100-$200)
+- [x] Investigar y corregir bug: facturas con días de atraso aparecen como pagadas

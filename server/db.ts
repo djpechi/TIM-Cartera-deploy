@@ -220,17 +220,31 @@ export async function updateFacturaEstadoPago(folio: string, estadoPago: 'pendie
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   
-  await db.update(facturas).set({ estadoPago }).where(eq(facturas.folio, folio));
+  // Si se marca como pagado, resetear diasAtraso a 0 (ya no tiene sentido mostrar días de atraso)
+  const updateData: Record<string, unknown> = { estadoPago };
+  if (estadoPago === 'pagado') {
+    updateData.diasAtraso = 0;
+    updateData.interesesMoratorios = '0.00';
+    updateData.totalConIntereses = null;
+  }
+  await db.update(facturas).set(updateData as any).where(eq(facturas.folio, folio));
 }
 
 export async function updateFacturaSaldoPendiente(folio: string, saldoPendiente: number, estadoPago: 'pendiente' | 'pagado') {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   
-  await db.update(facturas).set({ 
+  // Si se marca como pagado, resetear diasAtraso a 0 (ya no tiene sentido mostrar días de atraso)
+  const updateData: Record<string, unknown> = { 
     saldoPendiente: saldoPendiente.toString(),
     estadoPago 
-  }).where(eq(facturas.folio, folio));
+  };
+  if (estadoPago === 'pagado') {
+    updateData.diasAtraso = 0;
+    updateData.interesesMoratorios = '0.00';
+    updateData.totalConIntereses = null;
+  }
+  await db.update(facturas).set(updateData as any).where(eq(facturas.folio, folio));
 }
 
 export async function upsertFactura(factura: InsertFactura) {

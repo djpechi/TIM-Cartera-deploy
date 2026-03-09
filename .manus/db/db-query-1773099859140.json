@@ -1,0 +1,230 @@
+{
+  "query": "\nSELECT \n  folio,\n  nombreCliente,\n  fecha,\n  fechaVencimiento,\n  importeTotal,\n  saldoPendiente,\n  estadoPago,\n  diasAtraso,\n  DATEDIFF(NOW(), fechaVencimiento) AS diasAtrasoActual\nFROM facturas\nWHERE estadoPago = 'pagado'\n  AND fechaVencimiento IS NOT NULL\n  AND DATEDIFF(NOW(), fechaVencimiento) > 0\nORDER BY diasAtraso DESC\nLIMIT 20;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute \nSELECT \n  folio,\n  nombreCliente,\n  fecha,\n  fechaVencimiento,\n  importeTotal,\n  saldoPendiente,\n  estadoPago,\n  diasAtraso,\n  DATEDIFF(NOW(), fechaVencimiento) AS diasAtrasoActual\nFROM facturas\nWHERE estadoPago = 'pagado'\n  AND fechaVencimiento IS NOT NULL\n  AND DATEDIFF(NOW(), fechaVencimiento) > 0\nORDER BY diasAtraso DESC\nLIMIT 20;\n",
+  "rows": [
+    {
+      "folio": "AB6600",
+      "nombreCliente": "EMBUTIDOS SAN LUIS",
+      "fecha": "2025-01-01 00:00:00",
+      "fechaVencimiento": "2025-01-31 00:00:00",
+      "importeTotal": "6960.00",
+      "saldoPendiente": "0.00",
+      "estadoPago": "pagado",
+      "diasAtraso": "374",
+      "diasAtrasoActual": "402"
+    },
+    {
+      "folio": "AB6601",
+      "nombreCliente": "ESTRUCTURAS Y PAILERIA ESPECIALIZADA",
+      "fecha": "2025-01-01 00:00:00",
+      "fechaVencimiento": "2025-01-31 00:00:00",
+      "importeTotal": "3967.20",
+      "saldoPendiente": "0.00",
+      "estadoPago": "pagado",
+      "diasAtraso": "374",
+      "diasAtrasoActual": "402"
+    },
+    {
+      "folio": "AB6602",
+      "nombreCliente": "ESTRUCTURAS Y PAILERIA ESPECIALIZADA",
+      "fecha": "2025-01-01 00:00:00",
+      "fechaVencimiento": "2025-01-31 00:00:00",
+      "importeTotal": "6960.00",
+      "saldoPendiente": "0.00",
+      "estadoPago": "pagado",
+      "diasAtraso": "374",
+      "diasAtrasoActual": "402"
+    },
+    {
+      "folio": "AB6603",
+      "nombreCliente": "EUROGAS DE SAN LUIS",
+      "fecha": "2025-01-01 00:00:00",
+      "fechaVencimiento": "2025-01-31 00:00:00",
+      "importeTotal": "6960.00",
+      "saldoPendiente": "0.00",
+      "estadoPago": "pagado",
+      "diasAtraso": "374",
+      "diasAtrasoActual": "402"
+    },
+    {
+      "folio": "AB6604",
+      "nombreCliente": "EUROGAS DE SAN LUIS",
+      "fecha": "2025-01-01 00:00:00",
+      "fechaVencimiento": "2025-01-31 00:00:00",
+      "importeTotal": "4340.40",
+      "saldoPendiente": "0.00",
+      "estadoPago": "pagado",
+      "diasAtraso": "374",
+      "diasAtrasoActual": "402"
+    },
+    {
+      "folio": "AB6605",
+      "nombreCliente": "EUROGAS DE SAN LUIS",
+      "fecha": "2025-01-01 00:00:00",
+      "fechaVencimiento": "2025-01-31 00:00:00",
+      "importeTotal": "1538.58",
+      "saldoPendiente": "0.00",
+      "estadoPago": "pagado",
+      "diasAtraso": "374",
+      "diasAtrasoActual": "402"
+    },
+    {
+      "folio": "AB6606",
+      "nombreCliente": "EUROGAS DE SAN LUIS",
+      "fecha": "2025-01-01 00:00:00",
+      "fechaVencimiento": "2025-01-31 00:00:00",
+      "importeTotal": "6960.00",
+      "saldoPendiente": "0.00",
+      "estadoPago": "pagado",
+      "diasAtraso": "374",
+      "diasAtrasoActual": "402"
+    },
+    {
+      "folio": "AB6607",
+      "nombreCliente": "EUROGAS DE SAN LUIS",
+      "fecha": "2025-01-01 00:00:00",
+      "fechaVencimiento": "2025-01-31 00:00:00",
+      "importeTotal": "14395.60",
+      "saldoPendiente": "0.00",
+      "estadoPago": "pagado",
+      "diasAtraso": "374",
+      "diasAtrasoActual": "402"
+    },
+    {
+      "folio": "AB6608",
+      "nombreCliente": "EUROGAS DE SAN LUIS",
+      "fecha": "2025-01-01 00:00:00",
+      "fechaVencimiento": "2025-01-31 00:00:00",
+      "importeTotal": "6960.00",
+      "saldoPendiente": "0.00",
+      "estadoPago": "pagado",
+      "diasAtraso": "374",
+      "diasAtrasoActual": "402"
+    },
+    {
+      "folio": "AB6609",
+      "nombreCliente": "EUROGAS DE SAN LUIS",
+      "fecha": "2025-01-01 00:00:00",
+      "fechaVencimiento": "2025-01-31 00:00:00",
+      "importeTotal": "12590.07",
+      "saldoPendiente": "0.00",
+      "estadoPago": "pagado",
+      "diasAtraso": "374",
+      "diasAtrasoActual": "402"
+    },
+    {
+      "folio": "AB6610",
+      "nombreCliente": "EUROGAS DE SAN LUIS",
+      "fecha": "2025-01-01 00:00:00",
+      "fechaVencimiento": "2025-01-31 00:00:00",
+      "importeTotal": "6960.00",
+      "saldoPendiente": "0.00",
+      "estadoPago": "pagado",
+      "diasAtraso": "374",
+      "diasAtrasoActual": "402"
+    },
+    {
+      "folio": "AB6611",
+      "nombreCliente": "EUROKING",
+      "fecha": "2025-01-01 00:00:00",
+      "fechaVencimiento": "2025-01-31 00:00:00",
+      "importeTotal": "6171.20",
+      "saldoPendiente": "0.00",
+      "estadoPago": "pagado",
+      "diasAtraso": "374",
+      "diasAtrasoActual": "402"
+    },
+    {
+      "folio": "AB6612",
+      "nombreCliente": "EUROKING",
+      "fecha": "2025-01-01 00:00:00",
+      "fechaVencimiento": "2025-01-31 00:00:00",
+      "importeTotal": "5556.40",
+      "saldoPendiente": "0.00",
+      "estadoPago": "pagado",
+      "diasAtraso": "374",
+      "diasAtrasoActual": "402"
+    },
+    {
+      "folio": "AB6613",
+      "nombreCliente": "EUROKING",
+      "fecha": "2025-01-01 00:00:00",
+      "fechaVencimiento": "2025-01-31 00:00:00",
+      "importeTotal": "5359.20",
+      "saldoPendiente": "0.00",
+      "estadoPago": "pagado",
+      "diasAtraso": "374",
+      "diasAtrasoActual": "402"
+    },
+    {
+      "folio": "AB6614",
+      "nombreCliente": "EUROKING",
+      "fecha": "2025-01-01 00:00:00",
+      "fechaVencimiento": "2025-01-31 00:00:00",
+      "importeTotal": "6960.00",
+      "saldoPendiente": "0.00",
+      "estadoPago": "pagado",
+      "diasAtraso": "374",
+      "diasAtrasoActual": "402"
+    },
+    {
+      "folio": "AB6615",
+      "nombreCliente": "EUROKING",
+      "fecha": "2025-01-01 00:00:00",
+      "fechaVencimiento": "2025-01-31 00:00:00",
+      "importeTotal": "13017.83",
+      "saldoPendiente": "0.00",
+      "estadoPago": "pagado",
+      "diasAtraso": "374",
+      "diasAtrasoActual": "402"
+    },
+    {
+      "folio": "AB6616",
+      "nombreCliente": "EUROKING",
+      "fecha": "2025-01-01 00:00:00",
+      "fechaVencimiento": "2025-01-31 00:00:00",
+      "importeTotal": "5359.20",
+      "saldoPendiente": "0.00",
+      "estadoPago": "pagado",
+      "diasAtraso": "374",
+      "diasAtrasoActual": "402"
+    },
+    {
+      "folio": "AB6617",
+      "nombreCliente": "EUROKING",
+      "fecha": "2025-01-01 00:00:00",
+      "fechaVencimiento": "2025-01-31 00:00:00",
+      "importeTotal": "6171.20",
+      "saldoPendiente": "0.00",
+      "estadoPago": "pagado",
+      "diasAtraso": "374",
+      "diasAtrasoActual": "402"
+    },
+    {
+      "folio": "AB6618",
+      "nombreCliente": "EUROKING",
+      "fecha": "2025-01-01 00:00:00",
+      "fechaVencimiento": "2025-01-31 00:00:00",
+      "importeTotal": "6171.20",
+      "saldoPendiente": "0.00",
+      "estadoPago": "pagado",
+      "diasAtraso": "374",
+      "diasAtrasoActual": "402"
+    },
+    {
+      "folio": "AB6599",
+      "nombreCliente": "EMBUTIDOS SAN LUIS",
+      "fecha": "2025-01-01 00:00:00",
+      "fechaVencimiento": "2025-01-31 00:00:00",
+      "importeTotal": "7920.49",
+      "saldoPendiente": "0.00",
+      "estadoPago": "pagado",
+      "diasAtraso": "374",
+      "diasAtrasoActual": "402"
+    }
+  ],
+  "messages": [],
+  "stdout": "folio\tnombreCliente\tfecha\tfechaVencimiento\timporteTotal\tsaldoPendiente\testadoPago\tdiasAtraso\tdiasAtrasoActual\nAB6600\tEMBUTIDOS SAN LUIS\t2025-01-01 00:00:00\t2025-01-31 00:00:00\t6960.00\t0.00\tpagado\t374\t402\nAB6601\tESTRUCTURAS Y PAILERIA ESPECIALIZADA\t2025-01-01 00:00:00\t2025-01-31 00:00:00\t3967.20\t0.00\tpagado\t374\t402\nAB6602\tESTRUCTURAS Y PAILERIA ESPECIALIZADA\t2025-01-01 00:00:00\t2025-01-31 00:00:00\t6960.00\t0.00\tpagado\t374\t402\nAB6603\tEUROGAS DE SAN LUIS\t2025-01-01 00:00:00\t2025-01-31 00:00:00\t6960.00\t0.00\tpagado\t374\t402\nAB6604\tEUROGAS DE SAN LUIS\t2025-01-01 00:00:00\t2025-01-31 00:00:00\t4340.40\t0.00\tpagado\t374\t402\nAB6605\tEUROGAS DE SAN LUIS\t2025-01-01 00:00:00\t2025-01-31 00:00:00\t1538.58\t0.00\tpagado\t374\t402\nAB6606\tEUROGAS DE SAN LUIS\t2025-01-01 00:00:00\t2025-01-31 00:00:00\t6960.00\t0.00\tpagado\t374\t402\nAB6607\tEUROGAS DE SAN LUIS\t2025-01-01 00:00:00\t2025-01-31 00:00:00\t14395.60\t0.00\tpagado\t374\t402\nAB6608\tEUROGAS DE SAN LUIS\t2025-01-01 00:00:00\t2025-01-31 00:00:00\t6960.00\t0.00\tpagado\t374\t402\nAB6609\tEUROGAS DE SAN LUIS\t2025-01-01 00:00:00\t2025-01-31 00:00:00\t12590.07\t0.00\tpagado\t374\t402\nAB6610\tEUROGAS DE SAN LUIS\t2025-01-01 00:00:00\t2025-01-31 00:00:00\t6960.00\t0.00\tpagado\t374\t402\nAB6611\tEUROKING\t2025-01-01 00:00:00\t2025-01-31 00:00:00\t6171.20\t0.00\tpagado\t374\t402\nAB6612\tEUROKING\t2025-01-01 00:00:00\t2025-01-31 00:00:00\t5556.40\t0.00\tpagado\t374\t402\nAB6613\tEUROKING\t2025-01-01 00:00:00\t2025-01-31 00:00:00\t5359.20\t0.00\tpagado\t374\t402\nAB6614\tEUROKING\t2025-01-01 00:00:00\t2025-01-31 00:00:00\t6960.00\t0.00\tpagado\t374\t402\nAB6615\tEUROKING\t2025-01-01 00:00:00\t2025-01-31 00:00:00\t13017.83\t0.00\tpagado\t374\t402\nAB6616\tEUROKING\t2025-01-01 00:00:00\t2025-01-31 00:00:00\t5359.20\t0.00\tpagado\t374\t402\nAB6617\tEUROKING\t2025-01-01 00:00:00\t2025-01-31 00:00:00\t6171.20\t0.00\tpagado\t374\t402\nAB6618\tEUROKING\t2025-01-01 00:00:00\t2025-01-31 00:00:00\t6171.20\t0.00\tpagado\t374\t402\nAB6599\tEMBUTIDOS SAN LUIS\t2025-01-01 00:00:00\t2025-01-31 00:00:00\t7920.49\t0.00\tpagado\t374\t402\n",
+  "stderr": "",
+  "execution_time_ms": 73
+}

@@ -264,6 +264,9 @@ export const appRouter = router({
                 vence.setHours(0, 0, 0, 0);
                 const diasAtraso = Math.max(0, Math.floor((hoy.getTime() - vence.getTime()) / (1000 * 60 * 60 * 24)));
                 
+                // Si la factura se marca como pagada, resetear diasAtraso a 0
+                const diasAtrasoFinal = estadoPago === 'pagado' ? 0 : diasAtraso;
+                
                 // Actualizar factura con fechas y saldo
                 await db.upsertFactura({
                   ...factura,
@@ -271,7 +274,9 @@ export const appRouter = router({
                   fechaVencimiento,
                   saldoPendiente: saldoPendiente.toString(),
                   estadoPago,
-                  diasAtraso,
+                  diasAtraso: diasAtrasoFinal,
+                  interesesMoratorios: estadoPago === 'pagado' ? '0.00' : factura.interesesMoratorios,
+                  totalConIntereses: estadoPago === 'pagado' ? null : factura.totalConIntereses,
                 } as any);
               } else {
                 // Solo actualizar saldo si no hay fechas en el archivo

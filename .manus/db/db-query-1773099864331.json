@@ -1,0 +1,13 @@
+{
+  "query": "\nSELECT COUNT(*) AS total_con_problema\nFROM facturas\nWHERE estadoPago = 'pagado'\n  AND fechaVencimiento IS NOT NULL\n  AND DATEDIFF(NOW(), fechaVencimiento) > 0;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute \nSELECT COUNT(*) AS total_con_problema\nFROM facturas\nWHERE estadoPago = 'pagado'\n  AND fechaVencimiento IS NOT NULL\n  AND DATEDIFF(NOW(), fechaVencimiento) > 0;\n",
+  "rows": [
+    {
+      "total_con_problema": "6873"
+    }
+  ],
+  "messages": [],
+  "stdout": "total_con_problema\n6873\n",
+  "stderr": "",
+  "execution_time_ms": 59
+}
