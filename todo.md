@@ -791,3 +791,11 @@
 - $2,026,130,388.00 (debería ser ~$100-$200)
 - $20,260,092,716.00 (debería ser ~$100-$200)
 - [x] Investigar y corregir bug: facturas con días de atraso aparecen como pagadas
+- [ ] Investigar y corregir problema de acceso: usuarios dados de alta no pueden entrar con URL pública
+
+## Autenticación con Google OAuth Directo
+- [ ] Configurar credenciales de Google OAuth (Client ID y Client Secret)
+- [ ] Implementar backend de autenticación con Google OAuth
+- [ ] Actualizar frontend para mostrar botón "Iniciar sesión con Google"
+- [ ] Migrar usuarios existentes al nuevo sistema de autenticación
+- [ ] Probar flujo completo de login con cuentas @leasingtim.mx y @bpads.mx

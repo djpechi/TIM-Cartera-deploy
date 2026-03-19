@@ -1,0 +1,17 @@
+{
+  "query": "\nUPDATE users SET activo = 1, updatedAt = NOW() WHERE email = 'karen@leasingtim.mx';\nSELECT id, name, email, role, activo FROM users WHERE email = 'karen@leasingtim.mx';\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute \nUPDATE users SET activo = 1, updatedAt = NOW() WHERE email = 'karen@leasingtim.mx';\nSELECT id, name, email, role, activo FROM users WHERE email = 'karen@leasingtim.mx';\n",
+  "rows": [
+    {
+      "id": "750050",
+      "name": "karen",
+      "email": "karen@leasingtim.mx",
+      "role": "consulta",
+      "activo": "1"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\temail\trole\tactivo\n750050\tkaren\tkaren@leasingtim.mx\tconsulta\t1\n",
+  "stderr": "",
+  "execution_time_ms": 70
+}

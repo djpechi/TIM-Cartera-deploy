@@ -1,0 +1,54 @@
+{
+  "query": "\nSELECT \n  id, openId, name, email, role, activo, loginMethod, createdAt, lastSignedIn\nFROM users\nORDER BY createdAt DESC;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 344B2FJrSHdkSxo.0ab51ce41b50 --database bUSGvjzrZfvVXNhQ347wq4 --execute \nSELECT \n  id, openId, name, email, role, activo, loginMethod, createdAt, lastSignedIn\nFROM users\nORDER BY createdAt DESC;\n",
+  "rows": [
+    {
+      "id": "2070074",
+      "openId": "FvkAxVhvXQWteeyC29o9KE",
+      "name": "Pedro Rodríguez",
+      "email": "direccion@leasingtim.mx",
+      "role": "consulta",
+      "activo": "1",
+      "loginMethod": "google",
+      "createdAt": "2026-02-20 23:01:48",
+      "lastSignedIn": "2026-02-24 23:30:52"
+    },
+    {
+      "id": "750050",
+      "openId": "cGExmt7mQYMq57mJrgPLri",
+      "name": "karen",
+      "email": "karen@leasingtim.mx",
+      "role": "consulta",
+      "activo": "0",
+      "loginMethod": "email",
+      "createdAt": "2026-02-13 22:34:00",
+      "lastSignedIn": "2026-02-25 23:01:26"
+    },
+    {
+      "id": "750018",
+      "openId": "7fMthi8ZE94zZyTQjtftAY",
+      "name": "Rubicel de la Cruz Torres",
+      "email": "rubicel@leasingtim.mx",
+      "role": "consulta",
+      "activo": "1",
+      "loginMethod": "google",
+      "createdAt": "2026-02-13 22:13:46",
+      "lastSignedIn": "2026-02-13 22:21:28"
+    },
+    {
+      "id": "1",
+      "openId": "bdbEXjcew6BercszDxMoQe",
+      "name": "Gerardo Tames Mosino",
+      "email": "gerardo@bpads.mx",
+      "role": "admin",
+      "activo": "1",
+      "loginMethod": "google",
+      "createdAt": "2026-02-09 00:56:43",
+      "lastSignedIn": "2026-03-18 23:03:35"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\topenId\tname\temail\trole\tactivo\tloginMethod\tcreatedAt\tlastSignedIn\n2070074\tFvkAxVhvXQWteeyC29o9KE\tPedro Rodríguez\tdireccion@leasingtim.mx\tconsulta\t1\tgoogle\t2026-02-20 23:01:48\t2026-02-24 23:30:52\n750050\tcGExmt7mQYMq57mJrgPLri\tkaren\tkaren@leasingtim.mx\tconsulta\t0\temail\t2026-02-13 22:34:00\t2026-02-25 23:01:26\n750018\t7fMthi8ZE94zZyTQjtftAY\tRubicel de la Cruz Torres\trubicel@leasingtim.mx\tconsulta\t1\tgoogle\t2026-02-13 22:13:46\t2026-02-13 22:21:28\n1\tbdbEXjcew6BercszDxMoQe\tGerardo Tames Mosino\tgerardo@bpads.mx\tadmin\t1\tgoogle\t2026-02-09 00:56:43\t2026-03-18 23:03:35\n",
+  "stderr": "",
+  "execution_time_ms": 76
+}
