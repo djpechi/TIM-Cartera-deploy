@@ -81,7 +81,7 @@ export const appRouter = router({
           usuarioId: ctx.user.id,
         });
         
-        const historialId = Number(historialResult[0].insertId);
+        const historialId = historialResult[0].id;
         
         try {
           // Decodificar archivo

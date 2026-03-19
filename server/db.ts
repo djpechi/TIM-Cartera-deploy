@@ -313,7 +313,7 @@ export async function createHistorialCarga(historial: InsertHistorialCarga) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   
-  const result = await db.insert(historialCargas).values(historial);
+  const result = await db.insert(historialCargas).values(historial).returning({ id: historialCargas.id });
   return result;
 }
 
